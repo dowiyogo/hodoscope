@@ -1,0 +1,104 @@
+# theta_scan.mac  -  generado por analysis/build_theta_scan.py
+# D ∈ [3.0, 5.0, 8.0] mm
+# θ_true ∈ [0, 5, 10, 15, 20] mrad
+# N muones por (D, θ): 2000
+# Total eventos: 30000   (beamOn calls: 15)
+
+/run/initialize
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/position 0.0 0.0 50.0 mm
+
+/run/printProgress 500
+
+# ---- D = 3.0 mm, θ = 0 mrad ------------------------------
+/analysis/setFileName theta_scan_D3.0_th0.root
+/hodoscope/det/setD 3.0 mm
+/gun/direction 0.000000 0.0 -1.000000
+/run/beamOn 2000
+
+# ---- D = 3.0 mm, θ = 5 mrad ------------------------------
+/analysis/setFileName theta_scan_D3.0_th5.root
+/hodoscope/det/setD 3.0 mm
+/gun/direction 0.005000 0.0 -0.999988
+/run/beamOn 2000
+
+# ---- D = 3.0 mm, θ = 10 mrad ------------------------------
+/analysis/setFileName theta_scan_D3.0_th10.root
+/hodoscope/det/setD 3.0 mm
+/gun/direction 0.010000 0.0 -0.999950
+/run/beamOn 2000
+
+# ---- D = 3.0 mm, θ = 15 mrad ------------------------------
+/analysis/setFileName theta_scan_D3.0_th15.root
+/hodoscope/det/setD 3.0 mm
+/gun/direction 0.014999 0.0 -0.999888
+/run/beamOn 2000
+
+# ---- D = 3.0 mm, θ = 20 mrad ------------------------------
+/analysis/setFileName theta_scan_D3.0_th20.root
+/hodoscope/det/setD 3.0 mm
+/gun/direction 0.019999 0.0 -0.999800
+/run/beamOn 2000
+
+# ---- D = 5.0 mm, θ = 0 mrad ------------------------------
+/analysis/setFileName theta_scan_D5.0_th0.root
+/hodoscope/det/setD 5.0 mm
+/gun/direction 0.000000 0.0 -1.000000
+/run/beamOn 2000
+
+# ---- D = 5.0 mm, θ = 5 mrad ------------------------------
+/analysis/setFileName theta_scan_D5.0_th5.root
+/hodoscope/det/setD 5.0 mm
+/gun/direction 0.005000 0.0 -0.999988
+/run/beamOn 2000
+
+# ---- D = 5.0 mm, θ = 10 mrad ------------------------------
+/analysis/setFileName theta_scan_D5.0_th10.root
+/hodoscope/det/setD 5.0 mm
+/gun/direction 0.010000 0.0 -0.999950
+/run/beamOn 2000
+
+# ---- D = 5.0 mm, θ = 15 mrad ------------------------------
+/analysis/setFileName theta_scan_D5.0_th15.root
+/hodoscope/det/setD 5.0 mm
+/gun/direction 0.014999 0.0 -0.999888
+/run/beamOn 2000
+
+# ---- D = 5.0 mm, θ = 20 mrad ------------------------------
+/analysis/setFileName theta_scan_D5.0_th20.root
+/hodoscope/det/setD 5.0 mm
+/gun/direction 0.019999 0.0 -0.999800
+/run/beamOn 2000
+
+# ---- D = 8.0 mm, θ = 0 mrad ------------------------------
+/analysis/setFileName theta_scan_D8.0_th0.root
+/hodoscope/det/setD 8.0 mm
+/gun/direction 0.000000 0.0 -1.000000
+/run/beamOn 2000
+
+# ---- D = 8.0 mm, θ = 5 mrad ------------------------------
+/analysis/setFileName theta_scan_D8.0_th5.root
+/hodoscope/det/setD 8.0 mm
+/gun/direction 0.005000 0.0 -0.999988
+/run/beamOn 2000
+
+# ---- D = 8.0 mm, θ = 10 mrad ------------------------------
+/analysis/setFileName theta_scan_D8.0_th10.root
+/hodoscope/det/setD 8.0 mm
+/gun/direction 0.010000 0.0 -0.999950
+/run/beamOn 2000
+
+# ---- D = 8.0 mm, θ = 15 mrad ------------------------------
+/analysis/setFileName theta_scan_D8.0_th15.root
+/hodoscope/det/setD 8.0 mm
+/gun/direction 0.014999 0.0 -0.999888
+/run/beamOn 2000
+
+# ---- D = 8.0 mm, θ = 20 mrad ------------------------------
+/analysis/setFileName theta_scan_D8.0_th20.root
+/hodoscope/det/setD 8.0 mm
+/gun/direction 0.019999 0.0 -0.999800
+/run/beamOn 2000
+
