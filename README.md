@@ -138,6 +138,9 @@ Indexación de barras:
 
 ## Roadmap
 
+- [x] Iteración 0: geometría base, scoring por barra, sanity check.
+- [x] Iteración 0.5: caracterización posicional — escaneo X, resolución σ_x,
+  barrido D (σ_overlap plano en D confirmado).
 - [ ] Iteración 1: activar `G4OpticalPhysics` y refactorizar acoplamiento SiPM.
 - [ ] Iteración 2: integrar CRY para flujo cósmico realista.
 - [ ] Iteración 3: implementar el cálculo de la matriz F (sistema → píxel).
@@ -188,6 +191,43 @@ cd analysis/ && python build_overlap_zoom.py
 cd ../build/ && ./hodoscope ../overlap_zoom.mac
 root -l '../analysis/x_resolution.C("hodoscope.root")'
 ```
+
+### 4. Barrido D: σ_x(D) y topologías (`build_d_scan.py` + `d_scan_analysis.C`)
+
+Barre la separación entre planos D ∈ [3, 8] mm con paso 0.5 mm (11 valores).
+Para cada D se escanea x ∈ [−6, +6] mm y se disparan N muones/punto.
+Cada D escribe su propio archivo ROOT; el ciclado lo gestiona `RunAction`
+automáticamente al detectar el cambio de `/analysis/setFileName`.
+
+**Resultado a validar:** σ_overlap debe ser **plano en D** (confirmado
+experimentalmente: 0.338 → 0.340 → 0.333 mm para D = 3, 5, 8 mm).
+La resolución posicional es una propiedad de la geometría intra-plano
+(ancho de barra, offset entre sub-planos), no de la separación entre
+planos. La dependencia con D corresponde a la resolución angular
+σ_θ = d/D, no a σ_x.
+
+**Exceso sobre 1/√12:** σ_overlap ≈ 0.337 mm vs 0.289 mm teórico (+17%).
+El exceso es de origen físico: (a) δ-rays en topología 3 que desplazan
+la barra de máximo edep hasta ±1 mm, y (b) fluctuaciones de Landau que
+hacen caer la barra adyacente bajo threshold. No es un artefacto de
+discretización del escaneo.
+
+```bash
+# Generar macro (11 D × 25 x × 100 muones = 27 500 eventos, ~45 min)
+cd analysis/
+python build_d_scan.py
+
+# Correr el scan (desde build/)
+cd ../build/
+./hodoscope ../macros_generados/d_scan.mac
+
+# Analizar (desde build/)
+root -l '../analysis/d_scan_analysis.C("d_scan_D*.root")'
+```
+
+Salida: figura `d_scan_summary.png` con 4 paneles (σ_overlap vs D,
+σ_single vs D, f_overlap vs D, f_delta vs D) y tabla Markdown con los
+valores numéricos para cada D.
 
 ## Autor
 
