@@ -1,0 +1,46 @@
+# Build directories
+build/
+build-*/
+cmake-build-*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Compiled
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Output (datos pesados — versionar localmente fuera de git)
+*.root
+*.png
+*.pdf
+
+# Editores e IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# ROOT
+*.d
+*.pcm
+*_C.so
+*_C.d

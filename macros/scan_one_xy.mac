@@ -1,0 +1,7 @@
+# scan_one_xy.mac — combinación (X,Y), dispara N muones
+#
+# Y, X son aliases inyectados por /control/foreach desde scan_xy.mac y
+# scan_one_y.mac respectivamente.
+
+/gun/position {X} {Y} 50.0 mm
+/run/beamOn 100

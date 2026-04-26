@@ -1,0 +1,34 @@
+# test_setD.mac
+#
+# Verifica que /hodoscope/det/setD reconstruye la geometría correctamente
+# para tres valores distintos de D dentro de una sola sesión.
+#
+# Verificación esperada: el log de Geant4 debe imprimir tres líneas con
+# la forma:
+#   [DetectorConstruction] Z centers (mm): ...  | D=5.0 mm
+#   [DetectorConstruction] Z centers (mm): ...  | D=8.0 mm
+#   [DetectorConstruction] Z centers (mm): ...  | D=3.0 mm
+#
+# Si las tres líneas aparecen con los D correctos → messenger + ReinitializeGeometry OK.
+# Si sólo aparece D=5.0 en las tres → bug en SetPlaneSeparationD (no rellenar).
+
+/run/initialize
+
+/analysis/setFileName test_setD
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/position 0 0 50 mm
+/gun/direction 0 0 -1
+
+# --- Primer bloque: D = 5.0 mm (valor por defecto) ---
+/hodoscope/det/setD 5.0 mm
+/run/beamOn 100
+
+# --- Segundo bloque: D = 8.0 mm ---
+/hodoscope/det/setD 8.0 mm
+/run/beamOn 100
+
+# --- Tercer bloque: D = 3.0 mm ---
+/hodoscope/det/setD 3.0 mm
+/run/beamOn 100

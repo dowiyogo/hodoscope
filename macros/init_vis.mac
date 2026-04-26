@@ -1,0 +1,6 @@
+# init_vis.mac — inicialización para sesión interactiva
+#
+# Inicializa el kernel y delega a vis.mac para configurar la visualización.
+
+/run/initialize
+/control/execute vis.mac

@@ -1,0 +1,43 @@
+# vis.mac — configuración de visualización OpenGL/Qt
+#
+# Ajustado para ver claramente los 4 subplanos del hodoscopio.
+# El asamble está centrado en (0,0,0) y mide ~31x31x13 mm.
+
+/vis/open OGL 800x600-0+0
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+# --- vista isométrica con un poco de elevación ----------------------------
+/vis/viewer/set/viewpointThetaPhi 60. 30.
+/vis/viewer/zoom 4.0
+
+# --- dibujar geometría -----------------------------------------------------
+/vis/drawVolume
+/vis/scene/add/axes 0 0 0 10 mm
+/vis/scene/add/scale 5 mm z 1 0 0
+/vis/scene/add/eventID
+/vis/scene/add/date
+/vis/scene/add/logo2D
+
+# --- trayectorias ---------------------------------------------------------
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+# muones en rojo, electrones en azul, fotones (gamma + ópticos) en verde
+/vis/modeling/trajectories/drawByCharge-0/set 1 red
+/vis/modeling/trajectories/drawByCharge-0/set -1 blue
+/vis/modeling/trajectories/drawByCharge-0/set 0 green
+
+# acumular trayectorias evento a evento
+/vis/scene/endOfEventAction accumulate
+
+# --- HUD ------------------------------------------------------------------
+/vis/viewer/set/style surface
+/vis/viewer/set/lineSegmentsPerCircle 50
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+/vis/viewer/refresh

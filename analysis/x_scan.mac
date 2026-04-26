@@ -1,0 +1,143 @@
+# x_scan.mac  -  generado por analysis/build_x_scan.py
+# Grilla: 61 puntos en X ∈ [-6.0, 6.0] mm, dx = 0.2 mm
+# Y fijo = 0.0 mm   (haz vertical)
+# N muones por punto: 200
+# Total eventos: 12200
+# Energía: 4.0 GeV
+
+/run/initialize
+
+# Output a x_scan.root (NO sobrescribe hodoscope.root del sanity check)
+/analysis/setFileName x_scan
+
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+/run/printProgress 2000
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -0.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -0.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -0.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -0.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.2000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.4000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.6000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.8000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 200

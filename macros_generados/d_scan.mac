@@ -1,0 +1,620 @@
+# d_scan.mac  -  generado por analysis/build_d_scan.py
+# Barrido D ∈ [3.0, 8.0] mm, dD = 0.5 mm  →  11 valores de D
+# Barrido X ∈ [-6.0, 6.0] mm, dx = 0.5 mm  →  25 puntos
+# N muones por punto: 100
+# Total eventos: 27500   (beamOn calls: 275)
+# Energía: 4.0 GeV
+
+/run/initialize
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+/run/printProgress 500
+
+# ---- D = 3.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D3.0.root
+/hodoscope/det/setD 3.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 3.5 mm ----------------------------------------
+/analysis/setFileName d_scan_D3.5.root
+/hodoscope/det/setD 3.5 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 4.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D4.0.root
+/hodoscope/det/setD 4.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 4.5 mm ----------------------------------------
+/analysis/setFileName d_scan_D4.5.root
+/hodoscope/det/setD 4.5 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 5.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D5.0.root
+/hodoscope/det/setD 5.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 5.5 mm ----------------------------------------
+/analysis/setFileName d_scan_D5.5.root
+/hodoscope/det/setD 5.5 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 6.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D6.0.root
+/hodoscope/det/setD 6.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 6.5 mm ----------------------------------------
+/analysis/setFileName d_scan_D6.5.root
+/hodoscope/det/setD 6.5 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 7.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D7.0.root
+/hodoscope/det/setD 7.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 7.5 mm ----------------------------------------
+/analysis/setFileName d_scan_D7.5.root
+/hodoscope/det/setD 7.5 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+
+# ---- D = 8.0 mm ----------------------------------------
+/analysis/setFileName d_scan_D8.0.root
+/hodoscope/det/setD 8.0 mm
+
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position -0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 0.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 1.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 2.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 3.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 4.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 5.5000 0.0000 50.0 mm
+/run/beamOn 100
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 100
+

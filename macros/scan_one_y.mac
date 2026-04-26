@@ -1,0 +1,6 @@
+# scan_one_y.mac — macro auxiliar invocado por scan_xy.mac
+#
+# Dado un valor de Y (sustituido como {Y} por el comando /control/foreach),
+# barre X y dispara muones MIP en cada combinación.
+
+/control/foreach scan_one_xy.mac X "-15 -10 -5 0 5 10 15"

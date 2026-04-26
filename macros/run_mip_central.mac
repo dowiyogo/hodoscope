@@ -1,0 +1,31 @@
+# run_mip_central.mac
+#
+# Test mínimo: 1000 muones MIP (4 GeV) verticales que entran centrados
+# por la cara superior. Sirve para verificar:
+#   - que la geometría se construye correctamente
+#   - que los SD registran energía depositada en las 4 barras esperadas
+#     (X_sup, X_inf, Y_sup, Y_inf en torno al centro)
+#   - que el TTree ROOT se llena
+#
+# Uso:
+#   ./hodoscope run_mip_central.mac
+#   root -l 'analysis/quick_look.C("hodoscope.root")'
+
+/run/initialize
+
+# Output a central.root
+/analysis/setFileName central
+
+# --- geometría: D = 5 mm (default, redundante pero documenta) ------------
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+# --- generador ----------------------------------------------------------
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/position 0.0 0.0 50.0 mm
+/gun/direction 0.0 0.0 -1.0
+
+# --- correr -------------------------------------------------------------
+/run/printProgress 100
+/run/beamOn 1000

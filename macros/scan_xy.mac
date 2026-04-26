@@ -1,0 +1,42 @@
+# scan_xy.mac
+#
+# Escaneo posicional de un haz de muones MIP verticales sobre una grilla
+# (X, Y) que cubre el área activa del hodoscopio (31 x 31 mm²).
+#
+# Por cada posición se disparan N_per_point muones; el TTree del run
+# acumula todos los eventos (la posición se identifica por las columnas
+# prim_x, prim_y).
+#
+# Esto es la base para construir la matriz de respuesta posicional del
+# detector (input para el análisis de resolución espacial y, eventualmente,
+# para la matriz de sistema F).
+#
+# Parámetros:
+#   x ∈ [-15, +15] mm en pasos de 1 mm  (31 valores)
+#   y ∈ [-15, +15] mm en pasos de 1 mm  (31 valores)
+#   N_per_point = 100 muones
+#   Total: 31 x 31 x 100 = 96 100 eventos
+#
+# Tiempo estimado en una CPU moderna serial: ~1-3 min con física estándar
+# y optical OFF. Con optical ON: x10-50.
+
+/run/initialize
+
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+# Definir el loop con /control/loop
+# /control/loop <macroFile> <param> <ini> <fin> <step>
+#
+# Como Geant4 sólo admite un loop a la vez, usamos doble nested mediante
+# foreach sobre una lista. Aquí tomamos el camino de un loop sobre Y y
+# dentro un alias para X que se sustituye desde otro macro auxiliar.
+#
+# Alternativa equivalente más simple: un script externo que regenere
+# este macro (lo dejamos en analysis/build_scan_macro.py).
+
+/control/foreach scan_one_y.mac Y "-15 -10 -5 0 5 10 15"
