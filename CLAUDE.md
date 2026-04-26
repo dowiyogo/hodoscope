@@ -54,6 +54,9 @@ detector sobre la densidad reconstruida mediante muografía?
 - MPV de Landau ~178 keV/barra para muones MIP a 4 GeV en 1 mm de EJ-200.
 - Bin central correcto en (i_X=11, j_Y=11) para haz vertical centrado.
 - Asimetría X→Y en δ-rays consistente con dirección descendente del haz.
+- σ_overlap = 0.337 mm (plano en D ∈ [3,8] mm); exceso +17% sobre 1/√12
+  atribuido a δ-rays y fluctuaciones Landau (no a discretización del scan).
+- f_overlap ≈ 0.495, f_delta ≈ 0.0034, constantes en D.
 
 ### Lo que está deliberadamente postergado
 
@@ -72,6 +75,12 @@ detector sobre la densidad reconstruida mediante muografía?
   - Escaneo X (build_x_scan.py + x_resolution.C) para ver diente de sierra.
   - Predicción analítica: RMS = 1/√12 ≈ 0.289 mm en topología overlap.
 - [ ] Iteración 1: activar `G4OpticalPhysics` y refactorizar SiPM coupling.
+- [ ] Iteración 2: integrar CRY para flujo cósmico realista.
+- [ ] Iteración 3: matriz F (sistema → píxel) y barrido de D.
+- [ ] **Iteración 0.7: caracterización 2D single-hodoscopio** ← rama `feat/single-hodoscope-characterization`
+  - Scan 2D 31×31 mm², uniformidad, eficiencia geométrica, bordes, píxeles virtuales, correlación X–Y.
+- [ ] Iteración 1.0: telescopio de dos módulos para σ_θ real ← rama `feat/telescope-two-modules` (futura, desde `main`).
+- [ ] Iteración 1.x: activar `G4OpticalPhysics` y refactorizar SiPM coupling.
 - [ ] Iteración 2: integrar CRY para flujo cósmico realista.
 - [ ] Iteración 3: matriz F (sistema → píxel) y barrido de D.
 - [ ] Iteración 4: análisis de propagación de errores ∂F/∂D, ∂F/∂offset.
@@ -167,6 +176,16 @@ root -l '../analysis/x_resolution.C("hodoscope.root")'
 # Reset rápido
 rm -f *.root *.png
 ```
+
+## Estructura de ramas
+
+| Rama | Propósito | Estado |
+|------|-----------|--------|
+| `main` | Iteraciones validadas y cerradas | estable |
+| `feat/single-hodoscope-characterization` | Iter 0.7: caracterización 2D del hodoscopio único (uniformidad, eficiencia, bordes) | activa |
+| `feat/telescope-two-modules` | Iter 1.x: geometría de dos módulos para σ_θ real (refactor DetectorConstruction) | **futura** — crear desde `main`, no desde la rama activa |
+
+**Decisión de diseño:** la medición de resolución angular real (σ_θ ≈ d_eff/D) requiere un segundo módulo hodoscopio como referencia downstream. Esa refactorización va en su propia rama para aislarla del trabajo de caracterización del hodoscopio único. No mezclar.
 
 ## Repositorio remoto
 

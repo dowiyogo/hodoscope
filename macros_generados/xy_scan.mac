@@ -1,0 +1,1941 @@
+# xy_scan.mac  -  generado por analysis/build_xy_scan.py
+# Grilla 2D: x ∈ [-15.0, 15.0] mm, y ∈ [-15.0, 15.0] mm
+# paso dxy = 1.0 mm  →  31 × 31 = 961 posiciones
+# N muones por punto: 200
+# Total eventos: 192200   (beamOn calls: 961)
+# Energía: 4.0 GeV  |  D = 5.0 mm
+
+/run/initialize
+
+/hodoscope/det/setD 5.0 mm
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+/analysis/setFileName xy_scan.root
+
+/run/printProgress 1000
+
+/gun/position -15.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 -1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 0.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 1.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 2.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 3.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 4.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 5.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 6.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 7.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 8.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 9.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 10.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 11.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 12.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 13.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 14.0000 50.0 mm
+/run/beamOn 200
+/gun/position -15.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -14.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -13.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -12.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -11.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -10.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -9.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -8.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -7.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -6.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -5.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -4.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -3.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -2.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position -1.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 0.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 1.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 2.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 3.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 4.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 5.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 6.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 7.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 8.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 9.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 10.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 11.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 12.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 13.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 14.0000 15.0000 50.0 mm
+/run/beamOn 200
+/gun/position 15.0000 15.0000 50.0 mm
+/run/beamOn 200

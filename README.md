@@ -141,7 +141,10 @@ Indexación de barras:
 - [x] Iteración 0: geometría base, scoring por barra, sanity check.
 - [x] Iteración 0.5: caracterización posicional — escaneo X, resolución σ_x,
   barrido D (σ_overlap plano en D confirmado).
-- [ ] Iteración 1: activar `G4OpticalPhysics` y refactorizar acoplamiento SiPM.
+- [ ] **Iteración 0.7: caracterización 2D single-hodoscopio** ← rama `feat/single-hodoscope-characterization`
+  - Scan 2D 31×31 mm² (uniformidad, eficiencia, bordes, píxeles virtuales).
+- [ ] Iteración 1.0: telescopio de dos módulos para σ_θ real ← rama `feat/telescope-two-modules` (futura, desde `main`).
+- [ ] Iteración 1.x: activar `G4OpticalPhysics` y refactorizar acoplamiento SiPM.
 - [ ] Iteración 2: integrar CRY para flujo cósmico realista.
 - [ ] Iteración 3: implementar el cálculo de la matriz F (sistema → píxel).
 - [ ] Iteración 4: análisis de propagación de errores ∂F/∂D, ∂F/∂offset.
@@ -228,6 +231,30 @@ root -l '../analysis/d_scan_analysis.C("d_scan_D*.root")'
 Salida: figura `d_scan_summary.png` con 4 paneles (σ_overlap vs D,
 σ_single vs D, f_overlap vs D, f_delta vs D) y tabla Markdown con los
 valores numéricos para cada D.
+
+### 5. Caracterización 2D del hodoscopio único (`build_xy_scan.py` + scripts de análisis)
+
+Scan completo sobre el área activa 31×31 mm² (grilla 1 mm, 200 muones/punto,
+192 200 eventos total). Tres análisis complementarios:
+
+```bash
+# Generar y correr el scan
+cd analysis/ && python build_xy_scan.py     # genera macros_generados/xy_scan.mac
+cd ../build/ && ./hodoscope ../macros_generados/xy_scan.mac   # ~10 min serial
+
+# Uniformidad y eficiencia (3 mapas 2D)
+root -l '../analysis/xy_uniformity.C("xy_scan.root")'
+
+# Caracterización de píxeles virtuales y correlación topológica
+root -l '../analysis/pixel_characterization.C("xy_scan.root")'
+
+# Respuesta en bordes (cortes 1D en y ∈ {0, ±10, ±14} mm)
+root -l '../analysis/edge_response.C("xy_scan.root")'
+```
+
+Salidas: `uniformity_maps.png` (mapa edep, eficiencia, N_barras),
+`pixel_characterization.png` (mapa 16×16 de píxeles, correlación topológica X–Y,
+distribución de barras encendidas), `edge_response.png` (eficiencia y σ_x vs x_true).
 
 ## Autor
 
