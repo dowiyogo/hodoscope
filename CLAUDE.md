@@ -57,6 +57,11 @@ detector sobre la densidad reconstruida mediante muografía?
 - σ_overlap = 0.337 mm (plano en D ∈ [3,8] mm); exceso +17% sobre 1/√12
   atribuido a δ-rays y fluctuaciones Landau (no a discretización del scan).
 - f_overlap ≈ 0.495, f_delta ≈ 0.0034, constantes en D.
+- **Iter 0.7 (scan 2D 31×31 mm², 961×200 muones):**
+  - `<edep_total>` zona central = 0.558 MeV, rms/mean = 23.2% (uniforme).
+  - Eficiencia geométrica central = 1.000 (cae a 0 en gaps ±14 mm).
+  - Cramér's V (correlación topológica X–Y) = 0.028 < 0.05 → planos ortogonales.
+  - Píxeles virtuales overlap×overlap: 225/256 activados (31 en bordes sin overlap).
 
 ### Lo que está deliberadamente postergado
 
@@ -71,14 +76,10 @@ detector sobre la densidad reconstruida mediante muografía?
 ## Roadmap
 
 - [x] Iteración 0: geometría base, scoring por barra, sanity check.
-- [ ] **Iteración 0.5: caracterización posicional** ← AQUÍ
-  - Escaneo X (build_x_scan.py + x_resolution.C) para ver diente de sierra.
-  - Predicción analítica: RMS = 1/√12 ≈ 0.289 mm en topología overlap.
-- [ ] Iteración 1: activar `G4OpticalPhysics` y refactorizar SiPM coupling.
-- [ ] Iteración 2: integrar CRY para flujo cósmico realista.
-- [ ] Iteración 3: matriz F (sistema → píxel) y barrido de D.
-- [ ] **Iteración 0.7: caracterización 2D single-hodoscopio** ← rama `feat/single-hodoscope-characterization`
-  - Scan 2D 31×31 mm², uniformidad, eficiencia geométrica, bordes, píxeles virtuales, correlación X–Y.
+- [x] Iteración 0.5: caracterización posicional (σ_overlap=0.337 mm, barrido D).
+- [x] Iteración 0.7: caracterización 2D single-hodoscopio ← rama `feat/single-hodoscope-characterization`
+  - Scan 2D 31×31 mm², uniformidad, eficiencia, Cramér's V=0.028, 225/256 píxeles.
+- [x] Iteración aux: multithreading (×6.7 speedup) ← rama `feat/multithreading`
 - [ ] Iteración 1.0: telescopio de dos módulos para σ_θ real ← rama `feat/telescope-two-modules` (futura, desde `main`).
 - [ ] Iteración 1.x: activar `G4OpticalPhysics` y refactorizar SiPM coupling.
 - [ ] Iteración 2: integrar CRY para flujo cósmico realista.
