@@ -31,11 +31,15 @@ public:
   void EndOfRunAction  (const G4Run* run) override;
 
 private:
-  // Bandera: el archivo ROOT fue abierto al menos una vez.
   G4bool   fFileOpen        = false;
-  // Nombre del archivo actualmente abierto (sin extensión .root).
-  // Permite detectar cambios de /analysis/setFileName entre bloques de D.
   G4String fCurrentFileName = "";
+  // En MT el ciclado manual de archivos es incompatible con SetNtupleMerging;
+  // esta bandera lo desactiva (false por defecto → modo MT seguro).
+  G4bool   fAllowFileCycling = false;
+  // Fijado en el constructor (via IsMasterThread). Determina quién llama
+  // CloseFile en el destructor: sólo el maestro cierra el archivo principal;
+  // workers nunca cierran (evita corrupción del buffer de merge).
+  G4bool   fIsMaster        = false;
 };
 
 #endif

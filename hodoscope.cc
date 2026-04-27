@@ -9,15 +9,18 @@
 //   ./hodoscope macros/script.mac     -> modo batch
 //
 // Diseño:
-//   * G4RunManagerFactory selecciona automáticamente RunManager serial o MT.
-//   * Forzamos modo serial inicialmente para depurar; luego se puede liberar.
+//   * G4RunManagerType::Default → MT con min(8, hardware_concurrency) hilos.
+//   * En modo batch, CloseFile() se llama explícitamente antes de destruir
+//     el runManager para que el merge final de NTuples sea correcto (G4 gotcha 4).
 //----------------------------------------------------------------------------
 
 #include "G4RunManagerFactory.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4AnalysisManager.hh"
 #include "Randomize.hh"
+#include <thread>
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -36,9 +39,12 @@ int main(int argc, char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // ----- Run manager (serial por ahora) -------------------------------------
+  // ----- Run manager multihilo -----------------------------------------------
   auto* runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+  G4int nThreads = std::min(8, (G4int)std::thread::hardware_concurrency());
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
 
   // ----- Inicialización del usuario -----------------------------------------
   runManager->SetUserInitialization(new DetectorConstruction());
@@ -56,6 +62,13 @@ int main(int argc, char** argv)
     G4String command  = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command + fileName);
+
+    // Cerrar el archivo de análisis ANTES de destruir el runManager.
+    // En MT, workers aún existen en este punto; CloseFile() puede completar
+    // el merge final sin encontrar buffers ya liberados.
+    auto* an = G4AnalysisManager::Instance();
+    if (an) { an->Write(); an->CloseFile(); }
+    G4cout << "[main] Analysis file closed." << G4endl;
   } else {
     // Modo interactivo: lanzar vis.mac y abrir UI
     UImanager->ApplyCommand("/control/execute init_vis.mac");

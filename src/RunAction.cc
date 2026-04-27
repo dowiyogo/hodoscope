@@ -5,6 +5,7 @@
 #include "G4AnalysisManager.hh"
 #include "G4Run.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 #include <sstream>
 #include <iomanip>
 
@@ -16,13 +17,13 @@ namespace {
   }
 }
 
-RunAction::RunAction() : G4UserRunAction()
+RunAction::RunAction() : G4UserRunAction(),
+  fIsMaster(G4Threading::IsMasterThread())
 {
   auto* an = G4AnalysisManager::Instance();
   an->SetDefaultFileType("root");
   an->SetVerboseLevel(1);
-  // SetNtupleMerging(true) se reserva para modo MT; en modo secuencial
-  // interfiere con el ciclado manual de archivos (CloseFile+OpenFile por D).
+  an->SetNtupleMerging(true);  // requerido para MT; no-op en modo serial
 
   // ----- Definir el TTree y sus branches -----------------------------------
   // Se guardan como columnas individuales por simplicidad (no arrays G4-style).
@@ -57,42 +58,44 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 {
   auto* an = G4AnalysisManager::Instance();
 
-  // Default si el macro no llama /analysis/setFileName.
-  if (an->GetFileName().empty()) an->SetFileName("hodoscope");
-  G4String reqName = an->GetFileName();
-
-  if (!fFileOpen) {
-    // Primer run de la sesión: abrir el archivo.
+  if (fIsMaster) {
+    // Maestro: abrir el archivo principal sólo en el primer run.
+    if (an->GetFileName().empty()) an->SetFileName("hodoscope");
+    if (!fFileOpen) {
+      an->OpenFile();
+      fFileOpen        = true;
+      fCurrentFileName = an->GetFileName();
+      G4cout << "[RunAction] Output file: " << fCurrentFileName << G4endl;
+    }
+    // fAllowFileCycling=false en MT → ciclado desactivado.
+  } else {
+    // Workers: abrir un buffer temporal fresco en cada run.
+    // (fFileOpen=false fue restablecido en el EndOfRunAction anterior)
     an->OpenFile();
-    fFileOpen        = true;
-    // Guardamos el nombre POST-apertura (GetFileName() devuelve "name.root" tras OpenFile).
-    fCurrentFileName = an->GetFileName();
-    G4cout << "[RunAction] Output file: " << fCurrentFileName << G4endl;
-  } else if (reqName != fCurrentFileName) {
-    // El macro cambió /analysis/setFileName (nuevo valor de D en el barrido):
-    // cerrar el archivo actual y abrir uno nuevo con el mismo esquema de NTuple.
-    // CloseFile(false) conserva las definiciones de columnas para el próximo OpenFile().
-    an->Write();
-    an->CloseFile(false);
-    an->OpenFile();
-    fCurrentFileName = an->GetFileName();   // nombre post-apertura con extensión
-    G4cout << "[RunAction] Switching output file: " << fCurrentFileName << G4endl;
+    fFileOpen = true;
   }
-  // Si reqName == fCurrentFileName: mismo archivo, sigue acumulando eventos.
 }
 
 void RunAction::EndOfRunAction(const G4Run* /*run*/)
 {
-  // NO cerramos el file aquí: lo dejamos abierto para los siguientes runs.
-  // El cierre real ocurre en el destructor (al terminar el programa).
+  auto* an = G4AnalysisManager::Instance();
+  if (fIsMaster) {
+    // Maestro: recoger los datos de los workers (ya escribieron y cerraron
+    // sus buffers) y volcarlos al archivo principal. El archivo permanece
+    // abierto para acumular el siguiente run.
+    if (fFileOpen) an->Write();
+  } else {
+    // Workers: vaciar filas al buffer de merge y cerrarlo. El maestro
+    // llamará Write() después para recoger estos datos.
+    an->Write();
+    an->CloseFile(false);  // conserva defs de columnas; fFileOpen se resetea
+    fFileOpen = false;
+  }
 }
 
 RunAction::~RunAction()
 {
-  if (fFileOpen) {
-    auto* an = G4AnalysisManager::Instance();
-    an->Write();
-    an->CloseFile();
-    G4cout << "[RunAction] Output file closed and written." << G4endl;
-  }
+  // El archivo del maestro se cierra explícitamente desde main() antes de
+  // destruir el runManager (mientras los workers aún existen). Los workers
+  // ya cerraron sus buffers en EndOfRunAction. Nada que hacer aquí.
 }

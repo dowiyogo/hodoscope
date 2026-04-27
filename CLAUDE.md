@@ -147,6 +147,30 @@ an->OpenFile();
 fCurrentFileName = an->GetFileName();   // captura nombre POST-apertura
 ```
 
+### G4 — `SetNtupleMerging(true)` es incompatible con el ciclado manual de archivos en MT
+
+**Síntoma:** en modo MT, llamar a `CloseFile(false)` + `OpenFile()` dentro de
+`BeginOfRunAction` para cambiar de archivo entre valores de D produce
+corrupción o pérdida de eventos: los hilos worker siguen escribiendo al archivo
+antiguo mientras el maestro ya abrió uno nuevo.
+
+**Causa:** `SetNtupleMerging(true)` hace que Geant4 cree un NTuple por hilo
+y los fusione al cerrar. El ciclo manual rompe esa sincronización porque los
+workers no reciben la señal de cierre entre `BeamOn` consecutivos.
+
+**Fix:** en modo MT desactivar el ciclado con `fAllowFileCycling = false` (el
+default). El barrido en D que requiere múltiples archivos debe hacerse en
+modo serial (`G4RunManagerType::Serial`) con `fAllowFileCycling = true`, o
+bien lanzando el ejecutable una vez por valor de D.
+
+```cpp
+// RunAction.cc — en BeginOfRunAction:
+if (!G4Threading::IsMasterThread()) return;
+// ...
+} else if (fAllowFileCycling && reqName != fCurrentFileName) {
+    // sólo alcanzable en modo serial con fAllowFileCycling=true
+```
+
 ---
 
 ## Convenciones de la base de código
