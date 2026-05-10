@@ -1,0 +1,16 @@
+# Validate center muon - MT
+# Batch macro for Iteration 0 baseline diagnostics.
+
+/random/setSeeds 1234567 1234568
+/analysis/setFileName ../analysis/iteration0_validation/outputs/root/validate_center_muon_MT.root
+
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/run/initialize
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+/gun/position 0.0 0.0 50.0 mm
+/run/beamOn 120

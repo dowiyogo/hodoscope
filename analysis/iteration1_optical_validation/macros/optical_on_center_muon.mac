@@ -1,0 +1,11 @@
+# Minimal macro: optical ON, central muon
+/control/verbose 0
+/run/initialize
+/generator/particle mu-
+/gun/energy 4 GeV
+/gun/position 0 0 100 mm
+/gun/direction 0 0 -1
+/run/beamOn 60
+/analysis/setFileName outputs/root/optical_on_center_muon.root
+/analysis/setVerbose 1
+/run/beamOn 0

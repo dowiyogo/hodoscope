@@ -1,0 +1,42 @@
+# Validate X scan - MT
+
+/random/setSeeds 1234567 1234568
+/analysis/setFileName ../analysis/iteration0_validation/outputs/root/validate_x_scan_MT.root
+
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/run/initialize
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+/run/printProgress 100
+
+/gun/position -6.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position -5.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position -4.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position -3.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position -2.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position -1.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 1.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 2.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 3.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 4.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 5.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 6.0 0.0 50.0 mm
+/run/beamOn 30

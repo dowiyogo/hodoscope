@@ -10,6 +10,7 @@
 //
 // Diseño:
 //   * G4RunManagerType::Default → MT con min(8, hardware_concurrency) hilos.
+//   * HODO_THREADS=1 → modo serial para validación ST.
 //   * En modo batch, CloseFile() se llama explícitamente antes de destruir
 //     el runManager para que el merge final de NTuples sea correcto (G4 gotcha 4).
 //----------------------------------------------------------------------------
@@ -20,6 +21,7 @@
 #include "G4UIExecutive.hh"
 #include "G4AnalysisManager.hh"
 #include "Randomize.hh"
+#include <cstdlib>
 #include <thread>
 
 #include "DetectorConstruction.hh"
@@ -33,18 +35,32 @@ int main(int argc, char** argv)
   G4long seed = 1234567;
   G4Random::setTheSeed(seed);
 
+  auto getRequestedThreads = []() -> G4int {
+    const char* env = std::getenv("HODO_THREADS");
+    if (!env || !*env) return -1;
+    return std::atoi(env);
+  };
+
   // ----- UI executive sólo si no se pasó macro ------------------------------
   G4UIExecutive* ui = nullptr;
   if (argc == 1) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // ----- Run manager multihilo -----------------------------------------------
-  auto* runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
-  G4int nThreads = std::min(8, (G4int)std::thread::hardware_concurrency());
-  runManager->SetNumberOfThreads(nThreads);
-  G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
+  // ----- Run manager configurable: serial para ST, MT por defecto -----------
+  G4int requestedThreads = getRequestedThreads();
+  G4RunManager* runManager = nullptr;
+  if (requestedThreads == 1) {
+    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+    G4cout << "[main] Geant4 running in SERIAL mode (HODO_THREADS=1)" << G4endl;
+  } else {
+    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+    G4int nThreads = (requestedThreads > 1)
+      ? requestedThreads
+      : std::min(8, (G4int)std::thread::hardware_concurrency());
+    runManager->SetNumberOfThreads(nThreads);
+    G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
+  }
 
   // ----- Inicialización del usuario -----------------------------------------
   runManager->SetUserInitialization(new DetectorConstruction());

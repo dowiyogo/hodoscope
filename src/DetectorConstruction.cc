@@ -327,9 +327,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 //----------------------------------------------------------------------------
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  // Read runtime env var to decide whether to enable optical physics
+  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
+  if (env_opt && std::string(env_opt) == "1") {
+    SetEnableOpticalPhysics(true);
+  } else {
+    SetEnableOpticalPhysics(false);
+  }
+
   DefineMaterials();
   auto* world = DefineVolumes();
-  DefineOpticalSurfaces();   // pintura TiO2 (skin surface)
+  DefineOpticalSurfaces();   // pintura TiO2 (skin surface) si fEnableOptical==true
   return world;
 }
 
@@ -368,6 +376,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineOpticalSurfaces()
 {
   if (!fScintLV) return;
+  if (!fEnableOptical) {
+    G4cout << "[DetectorConstruction] Optical surfaces skipped (fEnableOptical=false)" << G4endl;
+    return;
+  }
 
   auto* paintSurf = new G4OpticalSurface("TiO2_paint_surface");
   paintSurf->SetModel(unified);

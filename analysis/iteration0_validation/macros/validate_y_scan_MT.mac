@@ -1,0 +1,42 @@
+# Validate Y scan - MT
+
+/random/setSeeds 1234567 1234568
+/analysis/setFileName ../analysis/iteration0_validation/outputs/root/validate_y_scan_MT.root
+
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/run/initialize
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/direction 0.0 0.0 -1.0
+
+/run/printProgress 100
+
+/gun/position 0.0 -6.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 -5.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 -4.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 -3.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 -2.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 -1.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 0.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 1.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 2.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 3.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 4.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 5.0 50.0 mm
+/run/beamOn 30
+/gun/position 0.0 6.0 50.0 mm
+/run/beamOn 30

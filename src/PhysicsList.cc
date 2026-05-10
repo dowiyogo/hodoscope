@@ -37,11 +37,17 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   RegisterPhysics(new G4StoppingPhysics());
   RegisterPhysics(new G4IonPhysics());
 
-  // Optical physics preparado pero "casi inerte" si SCINTILLATIONYIELD no está
-  // siendo usado o las fracciones quedan a cero. Se habilita encendiendo
-  // /process/inactivate/Scintillation false desde macro.
-  auto* op = new G4OpticalPhysics();
-  RegisterPhysics(op);
+  // Optical physics: register only if HODO_ENABLE_OPTICAL=1 in env.
+  // This allows running Iteration 0 (optical off) unchanged while enabling
+  // a minimal optical transport for Iteration 1 when requested.
+  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
+  if (env_opt && std::string(env_opt) == "1") {
+    auto* op = new G4OpticalPhysics();
+    RegisterPhysics(op);
+    G4cout << "[PhysicsList] G4OpticalPhysics registered (HODO_ENABLE_OPTICAL=1)" << G4endl;
+  } else {
+    G4cout << "[PhysicsList] G4OpticalPhysics NOT registered (HODO_ENABLE_OPTICAL!=1)" << G4endl;
+  }
 }
 
 void PhysicsList::SetCuts()
