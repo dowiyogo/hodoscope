@@ -22,6 +22,7 @@ Makefile
 *.root
 *.png
 *.pdf
+/outputs/
 analysis/iteration0_validation/outputs/
 analysis/iteration1_optical_validation/outputs/
 

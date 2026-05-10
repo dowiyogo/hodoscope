@@ -1,11 +1,11 @@
 # Optical ON X scan (simple)
-/control/verbose 0
+/random/setSeeds 1234567 1234568
+/analysis/setFileName outputs/root/optical_on_x_scan.root
+/hodoscope/det/optical 1
 /run/initialize
 # simple loop via repeated macro calls could be used; here run a small sample
-/generator/particle mu-
-/gun/energy 4 GeV
-/gun/position -10 0 100 mm
-/gun/direction 0 0 -1
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/position -10.0 0.0 50.0 mm
+/gun/direction 0.0 0.0 -1.0
 /run/beamOn 120
-/analysis/setFileName outputs/root/optical_on_x_scan.root
-/run/beamOn 0
