@@ -1,0 +1,13 @@
+[  8%] Building CXX object CMakeFiles/hodoscope.dir/hodoscope.cc.o
+[ 16%] Building CXX object CMakeFiles/hodoscope.dir/src/ActionInitialization.cc.o
+[ 25%] Building CXX object CMakeFiles/hodoscope.dir/src/DetectorConstruction.cc.o
+[ 33%] Building CXX object CMakeFiles/hodoscope.dir/src/DetectorMessenger.cc.o
+[ 41%] Building CXX object CMakeFiles/hodoscope.dir/src/EventAction.cc.o
+[ 50%] Building CXX object CMakeFiles/hodoscope.dir/src/HodoscopeHit.cc.o
+[ 58%] Building CXX object CMakeFiles/hodoscope.dir/src/PhysicsList.cc.o
+[ 66%] Building CXX object CMakeFiles/hodoscope.dir/src/PrimaryGeneratorAction.cc.o
+[ 75%] Building CXX object CMakeFiles/hodoscope.dir/src/RunAction.cc.o
+[ 83%] Building CXX object CMakeFiles/hodoscope.dir/src/ScintillatorSD.cc.o
+[ 91%] Building CXX object CMakeFiles/hodoscope.dir/src/SiPMSD.cc.o
+[100%] Linking CXX executable hodoscope
+[100%] Built target hodoscope

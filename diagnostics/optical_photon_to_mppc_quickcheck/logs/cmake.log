@@ -1,0 +1,36 @@
+-- The CXX compiler identification is GNU 11.5.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found EXPAT: /usr/lib64/libexpat.so (found suitable version "2.5.0", minimum required is "2.5.0") 
+-- Found ZLIB: /usr/lib64/libz.so (found suitable version "1.2.11", minimum required is "1.2.11")  
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found XercesC: /usr/lib64/libxerces-c.so (found suitable version "3.2.5", minimum required is "3.2.5") 
+-- Found X11: /usr/include   
+-- Looking for XOpenDisplay in /usr/lib64/libX11.so;/usr/lib64/libXext.so
+-- Looking for XOpenDisplay in /usr/lib64/libX11.so;/usr/lib64/libXext.so - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for remove
+-- Looking for remove - found
+-- Looking for shmat
+-- Looking for shmat - found
+-- Looking for IceConnectionNumber in ICE
+-- Looking for IceConnectionNumber in ICE - found
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE  
+-- Found OpenGL: /usr/lib64/libOpenGL.so   
+-- Found WrapOpenGL: TRUE  
+-- Found XKB: /usr/lib64/libxkbcommon.so (found suitable version "1.0.3", minimum required is "0.5.0") 
+-- Found WrapVulkanHeaders: /usr/include  
+-- Found Geant4: /opt/hep/geant4/lib64/cmake/Geant4/Geant4Config.cmake (found version "11.4.0") 
+-- Configuring done (26.2s)
+-- Generating done (0.2s)
+-- Build files have been written to: /home/reriosto/d/hodoscope-g4-mt/build
