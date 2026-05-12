@@ -64,6 +64,51 @@
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 
+#include <algorithm>
+#include <cctype>
+#include <string>
+
+namespace {
+
+G4String toLowerCopy(const G4String& value)
+{
+  G4String lowered = value;
+  std::transform(lowered.begin(), lowered.end(), lowered.begin(),
+                 [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+  return lowered;
+}
+
+HodoscopeVariantConfig makeVariantConfig(HodoscopeVariant variant)
+{
+  switch (variant) {
+    case HodoscopeVariant::Hod2018_Vikuiti:
+      return {
+        "Hod2018_Vikuiti",
+        "VikuitiESR",
+        "thin_passive_layer_or_surface",
+        0.165 * mm,
+        0.050 * mm,
+        "BC408 (implemented as EJ200-equivalent)",
+        "S12572-100P",
+        false
+      };
+    case HodoscopeVariant::Hod2019_TiO2:
+    default:
+      return {
+        "Hod2019_TiO2",
+        "TiO2OpticalEpoxyPaint",
+        "optical_surface_only",
+        0.0 * mm,
+        0.0 * mm,
+        "BC408 (implemented as EJ200-equivalent)",
+        "S12572-100P",
+        false
+      };
+  }
+}
+
+} // namespace
+
 DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
   fBarLength    (75.0 * mm),
@@ -76,6 +121,8 @@ DetectorConstruction::DetectorConstruction()
   fNbars        ( 8 ),
   fSiPMThickness( 0.5 * mm)
 {
+  fVariant = HodoscopeVariant::Hod2019_TiO2;
+  fVariantConfig = makeVariantConfig(fVariant);
   fMessenger = new DetectorMessenger(this);
 }
 
@@ -125,6 +172,15 @@ void DetectorConstruction::DefineMaterials()
   mptScint->AddConstProperty("SCINTILLATIONYIELD1",     1.0);
   fScint->SetMaterialPropertiesTable(mptScint);
   fScint->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+
+  G4cout << "[HODO] EJ-200 optical MPT: present" << G4endl;
+  G4cout << "[HODO] EJ-200 RINDEX: present" << G4endl;
+  G4cout << "[HODO] EJ-200 ABSLENGTH: present" << G4endl;
+  G4cout << "[HODO] EJ-200 SCINTILLATIONCOMPONENT1: present" << G4endl;
+  G4cout << "[HODO] EJ-200 SCINTILLATIONYIELD: present" << G4endl;
+  G4cout << "[HODO] EJ-200 RESOLUTIONSCALE: present" << G4endl;
+  G4cout << "[HODO] EJ-200 SCINTILLATIONTIMECONSTANT1: present" << G4endl;
+  G4cout << "[HODO] EJ-200 YIELDRATIO: present" << G4endl;
 
   // Aire: necesita RINDEX para que el optical tracking funcione cuando se active.
   G4double rindAir[nE] = { 1.0003, 1.0003, 1.0003, 1.0003 };
@@ -338,6 +394,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   DefineMaterials();
   auto* world = DefineVolumes();
   DefineOpticalSurfaces();   // pintura TiO2 (skin surface) si fEnableOptical==true
+  PrintDetectorConfiguration();
   return world;
 }
 
@@ -397,6 +454,10 @@ void DetectorConstruction::DefineOpticalSurfaces()
   mptPaint->AddProperty("EFFICIENCY",   phE, effi, nE);
   paintSurf->SetMaterialPropertiesTable(mptPaint);
 
+  G4cout << "[HODO] TiO2 optical surface: present" << G4endl;
+  G4cout << "[HODO] TiO2 REFLECTIVITY: present" << G4endl;
+  G4cout << "[HODO] TiO2 EFFICIENCY: present" << G4endl;
+
   new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
 
   G4cout << "[DetectorConstruction] TiO2 paint surface defined "
@@ -437,9 +498,61 @@ void DetectorConstruction::SetPlaneSeparationD(G4double D)
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
+void DetectorConstruction::SetDetectorVariant(HodoscopeVariant variant)
+{
+  fVariant = variant;
+  fVariantConfig = makeVariantConfig(variant);
+  G4cout << "[DetectorConstruction] Detector variant set to "
+    << fVariantConfig.variantLabel << G4endl;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+void DetectorConstruction::SetDetectorVariantByName(const G4String& variantName)
+{
+  const G4String normalized = toLowerCopy(variantName);
+
+  if (normalized == "tio2" || normalized == "hod2019" ||
+      normalized == "hod2019_tio2") {
+    SetDetectorVariant(HodoscopeVariant::Hod2019_TiO2);
+    return;
+  }
+
+  if (normalized == "vikuiti" || normalized == "hod2018" ||
+      normalized == "hod2018_vikuiti") {
+    SetDetectorVariant(HodoscopeVariant::Hod2018_Vikuiti);
+    return;
+  }
+
+  G4cerr << "[DetectorConstruction] Invalid detector variant '"
+    << variantName << "'. Valid options: Hod2019, TiO2, Hod2019_TiO2, "
+    << "Hod2018, Vikuiti, Hod2018_Vikuiti." << G4endl;
+}
+
 void DetectorConstruction::SetEnableOpticalPhysics(G4bool b)
 {
   fEnableOptical = b;
   G4cout << "[DetectorConstruction] Optical physics flag = "
          << (b ? "ON" : "OFF") << G4endl;
+}
+
+void DetectorConstruction::PrintDetectorConfiguration() const
+{
+  G4cout << "[DetectorConstruction] Detector variant selected: "
+    << fVariantConfig.variantLabel << G4endl;
+  G4cout << "[DetectorConstruction] Scintillator material: "
+    << fVariantConfig.scintillatorMaterial << G4endl;
+  G4cout << "[DetectorConstruction] Reflector type: "
+    << fVariantConfig.reflectorName << G4endl;
+  G4cout << "[DetectorConstruction] Reflector thickness: "
+    << fVariantConfig.reflectorThicknessMm / mm << " mm" << G4endl;
+  G4cout << "[DetectorConstruction] Kapton thickness: "
+    << fVariantConfig.kaptonThicknessMm / mm << " mm" << G4endl;
+  G4cout << "[DetectorConstruction] Reflector model: "
+    << fVariantConfig.reflectorModel << G4endl;
+  G4cout << "[DetectorConstruction] Physical layer enabled: "
+    << (fVariantConfig.physicalLayerEnabled ? "yes" : "no") << G4endl;
+  G4cout << "[DetectorConstruction] MPPC model: "
+    << fVariantConfig.mppcModel << G4endl;
+  G4cout << "[DetectorConstruction] Optical photons: "
+    << (fEnableOptical ? "enabled" : "disabled") << G4endl;
 }

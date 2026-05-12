@@ -28,6 +28,22 @@ class G4Material;
 class G4VPhysicalVolume;
 class DetectorMessenger;
 
+enum class HodoscopeVariant {
+  Hod2019_TiO2,
+  Hod2018_Vikuiti
+};
+
+struct HodoscopeVariantConfig {
+  G4String variantLabel;
+  G4String reflectorName;
+  G4String reflectorModel;
+  G4double reflectorThicknessMm;
+  G4double kaptonThicknessMm;
+  G4String scintillatorMaterial;
+  G4String mppcModel;
+  G4bool   physicalLayerEnabled;
+};
+
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
@@ -40,16 +56,22 @@ public:
   // ---- Setters expuestos al messenger (control desde macros) -------------
   void SetPlaneSeparationD(G4double D);   // separación entre eje X e Y
   void SetEnableOpticalPhysics(G4bool b); // activa MaterialPropertiesTable
+  void SetDetectorVariant(HodoscopeVariant variant);
+  void SetDetectorVariantByName(const G4String& variantName);
 
   // ---- Getters útiles para análisis --------------------------------------
   G4double GetPlaneSeparationD() const { return fD; }
   G4int    GetNBars()           const { return fNbars; }
+  HodoscopeVariant GetDetectorVariant() const { return fVariant; }
+  const HodoscopeVariantConfig& GetDetectorVariantConfig() const { return fVariantConfig; }
+  G4bool IsOpticalEnabled() const { return fEnableOptical; }
 
 private:
   // --- pasos de construcción ----------------------------------------------
   void DefineMaterials();
   G4VPhysicalVolume* DefineVolumes();
   void DefineOpticalSurfaces();   // pintura TiO2 + (futuro) acoplamiento SiPM
+  void PrintDetectorConfiguration() const;
 
   // --- helpers para construir los 4 subplanos -----------------------------
   // axis   : 'X' o 'Y'         (plano que mide la coordenada axis)
@@ -81,6 +103,8 @@ private:
   G4LogicalVolume* fScintLV  = nullptr;
   G4LogicalVolume* fSiPMLV   = nullptr;
 
+  HodoscopeVariant        fVariant = HodoscopeVariant::Hod2019_TiO2;
+  HodoscopeVariantConfig  fVariantConfig;
   G4bool fEnableOptical = false;
 
   DetectorMessenger* fMessenger = nullptr;
