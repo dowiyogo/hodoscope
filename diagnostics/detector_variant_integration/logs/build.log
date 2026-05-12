@@ -1,0 +1,27 @@
+-- Configuring done (5.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/reriosto/d/hodoscope-g4/build
+-- Configuring done (4.8s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/reriosto/d/hodoscope-g4/build
+[  8%] Building CXX object CMakeFiles/hodoscope.dir/hodoscope.cc.o
+[ 25%] Building CXX object CMakeFiles/hodoscope.dir/src/DetectorConstruction.cc.o
+[ 25%] Building CXX object CMakeFiles/hodoscope.dir/src/DetectorMessenger.cc.o
+[ 33%] Building CXX object CMakeFiles/hodoscope.dir/src/PhysicsList.cc.o
+[ 41%] Building CXX object CMakeFiles/hodoscope.dir/src/RunAction.cc.o
+/home/reriosto/d/hodoscope-g4/src/RunAction.cc: In member function ‘virtual void RunAction::BeginOfRunAction(const G4Run*)’:
+/home/reriosto/d/hodoscope-g4/src/RunAction.cc:116:15: error: cannot ‘dynamic_cast’ ‘G4RunManager::GetRunManager()->G4RunManager::GetUserDetectorConstruction()’ (of type ‘const class G4VUserDetectorConstruction*’) to type ‘class DetectorConstruction*’ (conversion casts away constness)
+  116 |   auto* det = dynamic_cast<DetectorConstruction*>(
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  117 |       G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/hodoscope.dir/build.make:188: CMakeFiles/hodoscope.dir/src/RunAction.cc.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [CMakeFiles/Makefile2:83: CMakeFiles/hodoscope.dir/all] Error 2
+make: *** [Makefile:136: all] Error 2
+-- Configuring done (4.8s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/reriosto/d/hodoscope-g4/build
+[  8%] Building CXX object CMakeFiles/hodoscope.dir/src/RunAction.cc.o
+[ 16%] Linking CXX executable hodoscope
+[100%] Built target hodoscope

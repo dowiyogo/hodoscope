@@ -1,0 +1,18 @@
+# run_hod2019_tio2.mac
+#
+# Minimal geometry/scoring test for the default Hod2019 / TiO2 variant.
+# Optical transport remains disabled.
+
+/run/initialize
+
+/analysis/setFileName output_hod2019_tio2.root
+/hodoscope/setDetectorVariant Hod2019
+/hodoscope/det/setD 5.0 mm
+/hodoscope/det/optical false
+
+/gun/particle mu-
+/gun/energy 4.0 GeV
+/gun/position 0.0 0.0 50.0 mm
+/gun/direction 0.0 0.0 -1.0
+
+/run/beamOn 10

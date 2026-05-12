@@ -4,8 +4,12 @@
 #include "RunAction.hh"
 #include "G4AnalysisManager.hh"
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Threading.hh"
+#include "DetectorConstruction.hh"
+
+#include <fstream>
 #include <sstream>
 #include <iomanip>
 
@@ -14,6 +18,58 @@ namespace {
     std::ostringstream oss;
     oss << base << std::setw(2) << std::setfill('0') << i;
     return G4String(oss.str());
+  }
+
+  G4String makeConfigSidecarName(const G4String& rootFileName)
+  {
+    std::string path(rootFileName);
+    if (path.size() >= 5 && path.substr(path.size() - 5) == ".root") {
+      path.resize(path.size() - 5);
+    }
+    return G4String(path + "_config.txt");
+  }
+
+  void writeVariantSidecar(const G4String& rootFileName,
+            const DetectorConstruction& det)
+  {
+    const auto& cfg = det.GetDetectorVariantConfig();
+    std::ofstream out(makeConfigSidecarName(rootFileName));
+    if (!out) {
+      G4cerr << "[RunAction] Could not create detector config sidecar for "
+        << rootFileName << G4endl;
+      return;
+    }
+
+    out << "detector_variant=" << cfg.variantLabel << '\n'
+   << "scintillator_material=" << cfg.scintillatorMaterial << '\n'
+   << "reflector_name=" << cfg.reflectorName << '\n'
+   << "reflector_model=" << cfg.reflectorModel << '\n'
+   << "reflector_thickness_mm=" << cfg.reflectorThicknessMm / mm << '\n'
+   << "kapton_thickness_mm=" << cfg.kaptonThicknessMm / mm << '\n'
+   << "mppc_model=" << cfg.mppcModel << '\n'
+   << "physical_layer_enabled=" << (cfg.physicalLayerEnabled ? "true" : "false") << '\n'
+   << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n';
+  }
+
+  void logVariantSummary(const DetectorConstruction& det)
+  {
+    const auto& cfg = det.GetDetectorVariantConfig();
+    G4cout << "[RunAction] Detector variant selected: "
+      << cfg.variantLabel << G4endl;
+    G4cout << "[RunAction] Scintillator material: "
+      << cfg.scintillatorMaterial << G4endl;
+    G4cout << "[RunAction] Reflector type: "
+      << cfg.reflectorName << G4endl;
+    G4cout << "[RunAction] Reflector thickness: "
+      << cfg.reflectorThicknessMm / mm << " mm" << G4endl;
+    G4cout << "[RunAction] Kapton thickness: "
+      << cfg.kaptonThicknessMm / mm << " mm" << G4endl;
+    G4cout << "[RunAction] Reflector model: "
+      << cfg.reflectorModel << G4endl;
+    G4cout << "[RunAction] Physical layer enabled: "
+      << (cfg.physicalLayerEnabled ? "yes" : "no") << G4endl;
+    G4cout << "[RunAction] Optical photons: "
+      << (det.IsOpticalEnabled() ? "enabled" : "disabled") << G4endl;
   }
 }
 
@@ -57,6 +113,8 @@ RunAction::RunAction() : G4UserRunAction(),
 void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 {
   auto* an = G4AnalysisManager::Instance();
+  const auto* det = dynamic_cast<const DetectorConstruction*>(
+      G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   if (fIsMaster) {
     // Maestro: abrir el archivo principal sólo en el primer run.
@@ -66,6 +124,10 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
       fFileOpen        = true;
       fCurrentFileName = an->GetFileName();
       G4cout << "[RunAction] Output file: " << fCurrentFileName << G4endl;
+      if (det) {
+        logVariantSummary(*det);
+        writeVariantSidecar(fCurrentFileName, *det);
+      }
     }
     // fAllowFileCycling=false en MT → ciclado desactivado.
   } else {
