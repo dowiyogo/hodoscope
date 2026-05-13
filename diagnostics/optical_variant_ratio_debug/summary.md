@@ -101,3 +101,11 @@ root -l -b -q analysis/iteration1_optical_validation/compare_reflector_debug_mod
 ## Fix status
 
 No optical model fix was applied. This commit adds diagnostic infrastructure and fixes the diagnostic thread-count control by honoring `HODO_THREADS`.
+
+## Final conclusion
+
+The high Vikuiti/TiO2 ratio was reproducible in ST and MT. The 2x2 reflector matrix shows that the effect is dominated by reflectivity: replacing the TiO2 reflectivity set with the ESR reflectivity set gives a factor of about 12.56-13.29 even when the angular model is held fixed.
+
+The diffuse/specular change by itself does not explain the factor in this test; with TiO2 reflectivity fixed, changing diffuse to specular gives a ratio of about 0.95. The result is therefore treated as a feature of the current optical model, not as a transport, threading, TTree, or SiPMSD bug.
+
+The numerical value of the ratio remains uncalibrated. The natural next step is to measure sensitivity to `R(lambda)` and estimate the effective number of optical boundary interactions before tuning any reflectivity or roughness values.
