@@ -1,0 +1,17 @@
+Boundary status summary
+
+No dedicated OpBoundary status counter was added in this diagnostic pass.
+
+Reason:
+- the current application has no existing SteppingAction hook for detector-level boundary counters;
+- adding a new always-on stepping action would be more invasive than needed for the primary ratio diagnosis;
+- one-event verbose macros were added for future targeted traces:
+  - macros/optical_tests/boundary_debug_tio2_1event.mac
+  - macros/optical_tests/boundary_debug_vikuiti_1event.mac
+
+The available evidence from the 2x2 matrix is already decisive for the current question:
+- mode2/mode1 = 12.56171875 with the same diffuse surface and only R(lambda) changed;
+- mode3/mode1 = 0.953125 when only diffuse/specular behavior changes at TiO2 reflectivity;
+- mode4/mode3 = 13.29180328 with the same specular surface and only R(lambda) changed.
+
+Therefore the dominant driver of the high ratio is reflectivity-driven photon survival over many bounces, not an observed NoRINDEX or boundary-ordering failure.

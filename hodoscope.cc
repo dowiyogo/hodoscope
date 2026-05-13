@@ -20,6 +20,7 @@
 #include "G4UIExecutive.hh"
 #include "G4AnalysisManager.hh"
 #include "Randomize.hh"
+#include <cstdlib>
 #include <thread>
 
 #include "DetectorConstruction.hh"
@@ -43,6 +44,16 @@ int main(int argc, char** argv)
   auto* runManager =
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
   G4int nThreads = std::min(8, (G4int)std::thread::hardware_concurrency());
+  if (nThreads < 1) nThreads = 1;
+  if (const char* envThreads = std::getenv("HODO_THREADS")) {
+    const G4int requestedThreads = std::atoi(envThreads);
+    if (requestedThreads > 0) {
+      nThreads = requestedThreads;
+    } else {
+      G4cerr << "[main] Ignoring invalid HODO_THREADS="
+             << envThreads << G4endl;
+    }
+  }
   runManager->SetNumberOfThreads(nThreads);
   G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
 

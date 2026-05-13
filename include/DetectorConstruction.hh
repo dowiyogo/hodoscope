@@ -59,6 +59,7 @@ public:
   void SetPlaneSeparationD(G4double D);   // separación entre eje X e Y
   void SetEnableOpticalPhysics(G4bool b); // activa MaterialPropertiesTable
   void SetUseImprovedOpticalCoupling(G4bool b);
+  void SetReflectorDebugMode(G4int mode);
   void SetDetectorVariant(HodoscopeVariant variant);
   void SetDetectorVariantByName(const G4String& variantName);
 
@@ -69,6 +70,7 @@ public:
   const HodoscopeVariantConfig& GetDetectorVariantConfig() const { return fVariantConfig; }
   G4bool IsOpticalEnabled() const { return fEnableOptical; }
   G4bool IsImprovedOpticalCouplingEnabled() const { return fUseImprovedOpticalCoupling; }
+  G4int GetReflectorDebugMode() const { return fReflectorDebugMode; }
 
 private:
   // --- pasos de construcción ----------------------------------------------
@@ -114,6 +116,7 @@ private:
   HodoscopeVariantConfig  fVariantConfig;
   G4bool fEnableOptical = false;
   G4bool fUseImprovedOpticalCoupling = false;
+  G4int fReflectorDebugMode = 0;
 
   DetectorMessenger* fMessenger = nullptr;
 };
