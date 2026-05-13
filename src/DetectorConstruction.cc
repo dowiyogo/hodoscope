@@ -425,31 +425,50 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineOpticalSurfaces()
 {
   if (!fScintLV) return;
-
-  auto* paintSurf = new G4OpticalSurface("TiO2_paint_surface");
-  paintSurf->SetModel(unified);
-  paintSurf->SetType(dielectric_dielectric);
-  paintSurf->SetFinish(groundfrontpainted);   // Lambertian diffuse desde la cara pintada
-  paintSurf->SetSigmaAlpha(0.1);              // rugosidad ~6° (info para finish ground*)
+  if (!fEnableOptical) {
+    G4cout << "[DetectorConstruction] Optical surfaces skipped "
+           << "(fEnableOptical=false)" << G4endl;
+    return;
+  }
 
   const G4int nE = 4;
   G4double phE [nE] = { 2.38*eV, 2.70*eV, 2.92*eV, 3.10*eV };
-  G4double refl[nE] = { 0.97,    0.96,    0.93,    0.85    };
   G4double effi[nE] = { 0.0,     0.0,     0.0,     0.0     };
 
-  auto* mptPaint = new G4MaterialPropertiesTable();
-  mptPaint->AddProperty("REFLECTIVITY", phE, refl, nE);
-  mptPaint->AddProperty("EFFICIENCY",   phE, effi, nE);
-  paintSurf->SetMaterialPropertiesTable(mptPaint);
+  auto* surf = new G4OpticalSurface("Reflector_surface");
+  surf->SetModel(unified);
 
-  G4cout << "[HODO] TiO2 optical surface: present" << G4endl;
-  G4cout << "[HODO] TiO2 REFLECTIVITY: present" << G4endl;
-  G4cout << "[HODO] TiO2 EFFICIENCY: present" << G4endl;
+  auto* mpt = new G4MaterialPropertiesTable();
 
-  new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
+  if (fVariant == HodoscopeVariant::Hod2018_Vikuiti) {
+    surf->SetType(dielectric_metal);
+    surf->SetFinish(polishedfrontpainted);
+    surf->SetSigmaAlpha(0.02);
 
-  G4cout << "[DetectorConstruction] TiO2 paint surface defined "
-         << "(R~97% @ 425 nm, Lambertian diffuse)" << G4endl;
+    G4double refl[nE] = { 0.990, 0.990, 0.985, 0.970 };
+    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
+    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
+
+    G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
+           << "(specular, R>=0.985 around 425 nm)" << G4endl;
+  } else {
+    surf->SetType(dielectric_dielectric);
+    surf->SetFinish(groundfrontpainted);
+    surf->SetSigmaAlpha(0.10);
+
+    G4double refl[nE] = { 0.97, 0.96, 0.93, 0.85 };
+    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
+    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
+
+    G4cout << "[DetectorConstruction] Optical surface: TiO2 paint "
+           << "(Lambertian/diffuse, R~0.97 around 425 nm)" << G4endl;
+  }
+
+  surf->SetMaterialPropertiesTable(mpt);
+  G4cout << "[DetectorConstruction] Reflector EFFICIENCY: 0 "
+         << "(detection is handled by SiPMSD, not reflector PDE)" << G4endl;
+
+  new G4LogicalSkinSurface("Scint_reflector_skin", fScintLV, surf);
 }
 
 //----------------------------------------------------------------------------

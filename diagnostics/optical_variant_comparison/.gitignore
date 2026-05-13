@@ -1,0 +1,3 @@
+logs/*.log
+outputs/*.root
+outputs/*_config.txt
