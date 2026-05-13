@@ -1,0 +1,6 @@
+logs/*
+outputs/*
+plots/*
+!logs/.gitkeep
+!outputs/.gitkeep
+!plots/.gitkeep

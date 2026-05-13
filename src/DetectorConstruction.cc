@@ -451,30 +451,65 @@ void DetectorConstruction::DefineOpticalSurfaces()
   surf->SetModel(unified);
 
   auto* mpt = new G4MaterialPropertiesTable();
+  G4double refl[nE] = { 0.97, 0.96, 0.93, 0.85 };
 
-  if (fVariant == HodoscopeVariant::Hod2018_Vikuiti) {
-    surf->SetType(dielectric_metal);
-    surf->SetFinish(polishedfrontpainted);
-    surf->SetSigmaAlpha(0.02);
-
-    G4double refl[nE] = { 0.990, 0.990, 0.985, 0.970 };
-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
-
-    G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
-           << "(specular, R>=0.985 around 425 nm)" << G4endl;
-  } else {
+  auto setTiO2Reflectivity = [&]() {
+    refl[0] = 0.97; refl[1] = 0.96; refl[2] = 0.93; refl[3] = 0.85;
+  };
+  auto setESRReflectivity = [&]() {
+    refl[0] = 0.990; refl[1] = 0.990; refl[2] = 0.985; refl[3] = 0.970;
+  };
+  auto setDiffuseSurface = [&]() {
     surf->SetType(dielectric_dielectric);
     surf->SetFinish(groundfrontpainted);
     surf->SetSigmaAlpha(0.10);
+  };
+  auto setSpecularSurface = [&]() {
+    surf->SetType(dielectric_metal);
+    surf->SetFinish(polishedfrontpainted);
+    surf->SetSigmaAlpha(0.02);
+  };
 
-    G4double refl[nE] = { 0.97, 0.96, 0.93, 0.85 };
-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
-
+  if (fReflectorDebugMode != 0) {
+    if (fReflectorDebugMode == 1) {
+      setDiffuseSurface();
+      setTiO2Reflectivity();
+      G4cout << "[DetectorConstruction] Reflector debug mode 1: "
+             << "TiO2 reflectivity with diffuse groundfrontpainted surface"
+             << G4endl;
+    } else if (fReflectorDebugMode == 2) {
+      setDiffuseSurface();
+      setESRReflectivity();
+      G4cout << "[DetectorConstruction] Reflector debug mode 2: "
+             << "ESR reflectivity with diffuse groundfrontpainted surface"
+             << G4endl;
+    } else if (fReflectorDebugMode == 3) {
+      setSpecularSurface();
+      setTiO2Reflectivity();
+      G4cout << "[DetectorConstruction] Reflector debug mode 3: "
+             << "TiO2 reflectivity with specular polishedfrontpainted surface"
+             << G4endl;
+    } else {
+      setSpecularSurface();
+      setESRReflectivity();
+      G4cout << "[DetectorConstruction] Reflector debug mode 4: "
+             << "ESR reflectivity with specular polishedfrontpainted surface"
+             << G4endl;
+    }
+  } else if (fVariant == HodoscopeVariant::Hod2018_Vikuiti) {
+    setSpecularSurface();
+    setESRReflectivity();
+    G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
+           << "(specular, R>=0.985 around 425 nm)" << G4endl;
+  } else {
+    setDiffuseSurface();
+    setTiO2Reflectivity();
     G4cout << "[DetectorConstruction] Optical surface: TiO2 paint "
            << "(Lambertian/diffuse, R~0.97 around 425 nm)" << G4endl;
   }
+
+  mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
+  mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
 
   surf->SetMaterialPropertiesTable(mpt);
   G4cout << "[DetectorConstruction] Reflector EFFICIENCY: 0 "
@@ -596,6 +631,25 @@ void DetectorConstruction::SetUseImprovedOpticalCoupling(G4bool b)
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
+void DetectorConstruction::SetReflectorDebugMode(G4int mode)
+{
+  if (mode < 0 || mode > 4) {
+    G4cerr << "[DetectorConstruction] Invalid reflector debug mode "
+           << mode << ". Valid modes are 0..4." << G4endl;
+    return;
+  }
+
+  fReflectorDebugMode = mode;
+  fScintLV = nullptr;
+  fSiPMLV = nullptr;
+  fAssemblyPV = nullptr;
+  fScintPVs.clear();
+  fSiPMPVs.clear();
+  G4cout << "[DetectorConstruction] Reflector debug mode = "
+         << fReflectorDebugMode << G4endl;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
 void DetectorConstruction::PrintDetectorConfiguration() const
 {
   G4cout << "[DetectorConstruction] Detector variant selected: "
@@ -618,4 +672,6 @@ void DetectorConstruction::PrintDetectorConfiguration() const
     << (fEnableOptical ? "enabled" : "disabled") << G4endl;
   G4cout << "[DetectorConstruction] Improved optical coupling: "
     << (fUseImprovedOpticalCoupling ? "enabled" : "disabled") << G4endl;
+  G4cout << "[DetectorConstruction] Reflector debug mode: "
+    << fReflectorDebugMode << G4endl;
 }

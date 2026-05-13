@@ -7,12 +7,13 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
 : G4UImessenger(), fDet(det),
   fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr),
-  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr)
+  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr), fCmdReflectorDebugMode(nullptr)
 {
   fDir = new G4UIdirectory("/hodoscope/");
   fDir->SetGuidance("Hodoscope simulation control");
@@ -42,11 +43,20 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
   fCmdImprovedOptical->SetGuidance("Enable improved optical coupling surfaces for SiPM detection.");
   fCmdImprovedOptical->SetParameterName("flag", false);
   fCmdImprovedOptical->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fCmdReflectorDebugMode = new G4UIcmdWithAnInteger("/hodoscope/det/reflectorDebugMode", this);
+  fCmdReflectorDebugMode->SetGuidance("Diagnostic reflector model override.");
+  fCmdReflectorDebugMode->SetGuidance("0=physical variant, 1=TiO2 R diffuse, 2=ESR R diffuse, 3=TiO2 R specular, 4=ESR R specular.");
+  fCmdReflectorDebugMode->SetParameterName("mode", false);
+  fCmdReflectorDebugMode->SetDefaultValue(0);
+  fCmdReflectorDebugMode->SetRange("mode>=0 && mode<=4");
+  fCmdReflectorDebugMode->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 DetectorMessenger::~DetectorMessenger()
 {
   delete fCmdVariant;
+  delete fCmdReflectorDebugMode;
   delete fCmdImprovedOptical;
   delete fCmdOptical;
   delete fCmdD;
@@ -64,5 +74,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
     fDet->SetEnableOpticalPhysics(fCmdOptical->GetNewBoolValue(val));
   } else if (cmd == fCmdImprovedOptical) {
     fDet->SetUseImprovedOpticalCoupling(fCmdImprovedOptical->GetNewBoolValue(val));
+  } else if (cmd == fCmdReflectorDebugMode) {
+    fDet->SetReflectorDebugMode(fCmdReflectorDebugMode->GetNewIntValue(val));
   }
 }

@@ -18,6 +18,7 @@ class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
 
 class DetectorMessenger : public G4UImessenger
@@ -36,6 +37,7 @@ private:
   G4UIcmdWithADoubleAndUnit*  fCmdD;
   G4UIcmdWithABool*           fCmdOptical;
   G4UIcmdWithABool*           fCmdImprovedOptical;
+  G4UIcmdWithAnInteger*       fCmdReflectorDebugMode;
 };
 
 #endif

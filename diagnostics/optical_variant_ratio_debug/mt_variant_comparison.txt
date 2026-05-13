@@ -1,0 +1,25 @@
+Optical variant nph comparison
+
+TiO2:
+  file: diagnostics/optical_variant_comparison/outputs/variant_tio2_quick.root
+  tree: hodo
+  events: 100
+  total_nph: 256
+  mean_nph_per_event: 2.56
+  max_nph_per_event: 13
+  events_with_nph_gt_0: 90
+  fraction_events_with_nph_gt_0: 0.9
+
+Vikuiti:
+  file: diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+  tree: hodo
+  events: 100
+  total_nph: 3282
+  mean_nph_per_event: 32.82
+  max_nph_per_event: 89
+  events_with_nph_gt_0: 100
+  fraction_events_with_nph_gt_0: 1
+
+ratio_mean_vikuiti_over_tio2: 12.8203125
+vikuiti_gt_tio2: true
+ratio_in_expected_range_1p3_to_2p0: false

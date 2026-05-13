@@ -1,0 +1,54 @@
+Reflector debug matrix
+
+mode1_tio2R_diffuse:
+  file: diagnostics/optical_variant_ratio_debug/outputs/mode1_tio2R_diffuse.root
+  tree: hodo
+  events: 500
+  total_nph: 1280
+  mean_nph_per_event: 2.56
+  median_nph_per_event: 2
+  max_nph_per_event: 13
+  events_with_nph_gt_0: 450
+  fraction_events_with_nph_gt_0: 0.9
+  mean_edep_per_event: 0.365241
+
+mode2_esrR_diffuse:
+  file: diagnostics/optical_variant_ratio_debug/outputs/mode2_esrR_diffuse.root
+  tree: hodo
+  events: 500
+  total_nph: 16079
+  mean_nph_per_event: 32.158
+  median_nph_per_event: 31
+  max_nph_per_event: 160
+  events_with_nph_gt_0: 500
+  fraction_events_with_nph_gt_0: 1
+  mean_edep_per_event: 0.358871
+
+mode3_tio2R_specular:
+  file: diagnostics/optical_variant_ratio_debug/outputs/mode3_tio2R_specular.root
+  tree: hodo
+  events: 500
+  total_nph: 1220
+  mean_nph_per_event: 2.44
+  median_nph_per_event: 2
+  max_nph_per_event: 10
+  events_with_nph_gt_0: 447
+  fraction_events_with_nph_gt_0: 0.894
+  mean_edep_per_event: 0.367933
+
+mode4_esrR_specular:
+  file: diagnostics/optical_variant_ratio_debug/outputs/mode4_esrR_specular.root
+  tree: hodo
+  events: 500
+  total_nph: 16216
+  mean_nph_per_event: 32.432
+  median_nph_per_event: 30
+  max_nph_per_event: 189
+  events_with_nph_gt_0: 500
+  fraction_events_with_nph_gt_0: 1
+  mean_edep_per_event: 0.359250
+
+ratio_mode2_over_mode1_reflectivity_effect_diffuse: 12.56171875
+ratio_mode3_over_mode1_angular_surface_effect_tio2R: 0.953125
+ratio_mode4_over_mode3_reflectivity_effect_specular: 13.29180328
+ratio_mode4_over_mode1_total_effect: 12.66875
