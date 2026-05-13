@@ -11,8 +11,7 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
 : G4UImessenger(), fDet(det),
-  fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr),
-  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr)
+  fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr), fCmdOptical(nullptr)
 {
   fDir = new G4UIdirectory("/hodoscope/");
   fDir->SetGuidance("Hodoscope simulation control");
@@ -37,17 +36,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
   fCmdOptical->SetGuidance("Enable optical photon transport (placeholder flag).");
   fCmdOptical->SetParameterName("flag", false);
   fCmdOptical->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fCmdImprovedOptical = new G4UIcmdWithABool("/hodoscope/det/improvedOptical", this);
-  fCmdImprovedOptical->SetGuidance("Enable improved optical coupling surfaces for SiPM detection.");
-  fCmdImprovedOptical->SetParameterName("flag", false);
-  fCmdImprovedOptical->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 DetectorMessenger::~DetectorMessenger()
 {
   delete fCmdVariant;
-  delete fCmdImprovedOptical;
   delete fCmdOptical;
   delete fCmdD;
   delete fDirDet;
@@ -62,7 +55,5 @@ void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
     fDet->SetPlaneSeparationD(fCmdD->GetNewDoubleValue(val));
   } else if (cmd == fCmdOptical) {
     fDet->SetEnableOpticalPhysics(fCmdOptical->GetNewBoolValue(val));
-  } else if (cmd == fCmdImprovedOptical) {
-    fDet->SetUseImprovedOpticalCoupling(fCmdImprovedOptical->GetNewBoolValue(val));
   }
 }

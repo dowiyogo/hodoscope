@@ -23,8 +23,6 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include <vector>
-
 class G4LogicalVolume;
 class G4Material;
 class G4VPhysicalVolume;
@@ -58,7 +56,6 @@ public:
   // ---- Setters expuestos al messenger (control desde macros) -------------
   void SetPlaneSeparationD(G4double D);   // separación entre eje X e Y
   void SetEnableOpticalPhysics(G4bool b); // activa MaterialPropertiesTable
-  void SetUseImprovedOpticalCoupling(G4bool b);
   void SetDetectorVariant(HodoscopeVariant variant);
   void SetDetectorVariantByName(const G4String& variantName);
 
@@ -68,7 +65,6 @@ public:
   HodoscopeVariant GetDetectorVariant() const { return fVariant; }
   const HodoscopeVariantConfig& GetDetectorVariantConfig() const { return fVariantConfig; }
   G4bool IsOpticalEnabled() const { return fEnableOptical; }
-  G4bool IsImprovedOpticalCouplingEnabled() const { return fUseImprovedOpticalCoupling; }
 
 private:
   // --- pasos de construcción ----------------------------------------------
@@ -106,14 +102,10 @@ private:
   // --- volúmenes lógicos para el SD ---------------------------------------
   G4LogicalVolume* fScintLV  = nullptr;
   G4LogicalVolume* fSiPMLV   = nullptr;
-  G4VPhysicalVolume* fAssemblyPV = nullptr;
-  std::vector<G4VPhysicalVolume*> fScintPVs;
-  std::vector<G4VPhysicalVolume*> fSiPMPVs;
 
   HodoscopeVariant        fVariant = HodoscopeVariant::Hod2019_TiO2;
   HodoscopeVariantConfig  fVariantConfig;
   G4bool fEnableOptical = false;
-  G4bool fUseImprovedOpticalCoupling = false;
 
   DetectorMessenger* fMessenger = nullptr;
 };

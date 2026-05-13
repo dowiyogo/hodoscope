@@ -1,0 +1,177 @@
+diff --git a/hodoscope.cc b/hodoscope.cc
+index 66110ae..63a0c6e 100644
+--- a/hodoscope.cc
++++ b/hodoscope.cc
+@@ -10,6 +10,7 @@
+ //
+ // Diseño:
+ //   * G4RunManagerType::Default → MT con min(8, hardware_concurrency) hilos.
++//   * HODO_THREADS=1 → modo serial para validación ST.
+ //   * En modo batch, CloseFile() se llama explícitamente antes de destruir
+ //     el runManager para que el merge final de NTuples sea correcto (G4 gotcha 4).
+ //----------------------------------------------------------------------------
+@@ -20,6 +21,7 @@
+ #include "G4UIExecutive.hh"
+ #include "G4AnalysisManager.hh"
+ #include "Randomize.hh"
++#include <cstdlib>
+ #include <thread>
+ 
+ #include "DetectorConstruction.hh"
+@@ -33,18 +35,32 @@ int main(int argc, char** argv)
+   G4long seed = 1234567;
+   G4Random::setTheSeed(seed);
+ 
++  auto getRequestedThreads = []() -> G4int {
++    const char* env = std::getenv("HODO_THREADS");
++    if (!env || !*env) return -1;
++    return std::atoi(env);
++  };
++
+   // ----- UI executive sólo si no se pasó macro ------------------------------
+   G4UIExecutive* ui = nullptr;
+   if (argc == 1) {
+     ui = new G4UIExecutive(argc, argv);
+   }
+ 
+-  // ----- Run manager multihilo -----------------------------------------------
+-  auto* runManager =
+-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+-  G4int nThreads = std::min(8, (G4int)std::thread::hardware_concurrency());
+-  runManager->SetNumberOfThreads(nThreads);
+-  G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
++  // ----- Run manager configurable: serial para ST, MT por defecto -----------
++  G4int requestedThreads = getRequestedThreads();
++  G4RunManager* runManager = nullptr;
++  if (requestedThreads == 1) {
++    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
++    G4cout << "[main] Geant4 running in SERIAL mode (HODO_THREADS=1)" << G4endl;
++  } else {
++    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
++    G4int nThreads = (requestedThreads > 1)
++      ? requestedThreads
++      : std::min(8, (G4int)std::thread::hardware_concurrency());
++    runManager->SetNumberOfThreads(nThreads);
++    G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
++  }
+ 
+   // ----- Inicialización del usuario -----------------------------------------
+   runManager->SetUserInitialization(new DetectorConstruction());
+diff --git a/src/DetectorConstruction.cc b/src/DetectorConstruction.cc
+index 3f01c9b..ba15684 100644
+--- a/src/DetectorConstruction.cc
++++ b/src/DetectorConstruction.cc
+@@ -383,9 +383,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
+ //----------------------------------------------------------------------------
+ G4VPhysicalVolume* DetectorConstruction::Construct()
+ {
++  // Read runtime env var to decide whether to enable optical physics
++  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
++  if (env_opt && std::string(env_opt) == "1") {
++    SetEnableOpticalPhysics(true);
++  } else {
++    SetEnableOpticalPhysics(false);
++  }
++
+   DefineMaterials();
+   auto* world = DefineVolumes();
+-  DefineOpticalSurfaces();   // pintura TiO2 (skin surface)
++  DefineOpticalSurfaces();   // pintura TiO2 (skin surface) si fEnableOptical==true
+   PrintDetectorConfiguration();
+   return world;
+ }
+@@ -426,49 +434,34 @@ void DetectorConstruction::DefineOpticalSurfaces()
+ {
+   if (!fScintLV) return;
+   if (!fEnableOptical) {
+-    G4cout << "[DetectorConstruction] Optical surfaces skipped "
+-           << "(fEnableOptical=false)" << G4endl;
++    G4cout << "[DetectorConstruction] Optical surfaces skipped (fEnableOptical=false)" << G4endl;
+     return;
+   }
+ 
++  auto* paintSurf = new G4OpticalSurface("TiO2_paint_surface");
++  paintSurf->SetModel(unified);
++  paintSurf->SetType(dielectric_dielectric);
++  paintSurf->SetFinish(groundfrontpainted);   // Lambertian diffuse desde la cara pintada
++  paintSurf->SetSigmaAlpha(0.1);              // rugosidad ~6° (info para finish ground*)
++
+   const G4int nE = 4;
+   G4double phE [nE] = { 2.38*eV, 2.70*eV, 2.92*eV, 3.10*eV };
++  G4double refl[nE] = { 0.97,    0.96,    0.93,    0.85    };
+   G4double effi[nE] = { 0.0,     0.0,     0.0,     0.0     };
+ 
+-  auto* surf = new G4OpticalSurface("Reflector_surface");
+-  surf->SetModel(unified);
+-
+-  auto* mpt = new G4MaterialPropertiesTable();
+-
+-  if (fVariant == HodoscopeVariant::Hod2018_Vikuiti) {
+-    surf->SetType(dielectric_metal);
+-    surf->SetFinish(polishedfrontpainted);
+-    surf->SetSigmaAlpha(0.02);
++  auto* mptPaint = new G4MaterialPropertiesTable();
++  mptPaint->AddProperty("REFLECTIVITY", phE, refl, nE);
++  mptPaint->AddProperty("EFFICIENCY",   phE, effi, nE);
++  paintSurf->SetMaterialPropertiesTable(mptPaint);
+ 
+-    G4double refl[nE] = { 0.990, 0.990, 0.985, 0.970 };
+-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
+-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
+-
+-    G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
+-           << "(specular, R>=0.985 around 425 nm)" << G4endl;
+-  } else {
+-    surf->SetType(dielectric_dielectric);
+-    surf->SetFinish(groundfrontpainted);
+-    surf->SetSigmaAlpha(0.10);
+-
+-    G4double refl[nE] = { 0.97, 0.96, 0.93, 0.85 };
+-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
+-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
+-
+-    G4cout << "[DetectorConstruction] Optical surface: TiO2 paint "
+-           << "(Lambertian/diffuse, R~0.97 around 425 nm)" << G4endl;
+-  }
++  G4cout << "[HODO] TiO2 optical surface: present" << G4endl;
++  G4cout << "[HODO] TiO2 REFLECTIVITY: present" << G4endl;
++  G4cout << "[HODO] TiO2 EFFICIENCY: present" << G4endl;
+ 
+-  surf->SetMaterialPropertiesTable(mpt);
+-  G4cout << "[DetectorConstruction] Reflector EFFICIENCY: 0 "
+-         << "(detection is handled by SiPMSD, not reflector PDE)" << G4endl;
++  new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
+ 
+-  new G4LogicalSkinSurface("Scint_reflector_skin", fScintLV, surf);
++  G4cout << "[DetectorConstruction] TiO2 paint surface defined "
++         << "(R~97% @ 425 nm, Lambertian diffuse)" << G4endl;
+ }
+ 
+ //----------------------------------------------------------------------------
+diff --git a/src/PhysicsList.cc b/src/PhysicsList.cc
+index 5b2bad3..0d4412b 100644
+--- a/src/PhysicsList.cc
++++ b/src/PhysicsList.cc
+@@ -37,11 +37,17 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
+   RegisterPhysics(new G4StoppingPhysics());
+   RegisterPhysics(new G4IonPhysics());
+ 
+-  // Optical physics preparado pero "casi inerte" si SCINTILLATIONYIELD no está
+-  // siendo usado o las fracciones quedan a cero. Se habilita encendiendo
+-  // /process/inactivate/Scintillation false desde macro.
+-  auto* op = new G4OpticalPhysics();
+-  RegisterPhysics(op);
++  // Optical physics: register only if HODO_ENABLE_OPTICAL=1 in env.
++  // This allows running Iteration 0 (optical off) unchanged while enabling
++  // a minimal optical transport for Iteration 1 when requested.
++  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
++  if (env_opt && std::string(env_opt) == "1") {
++    auto* op = new G4OpticalPhysics();
++    RegisterPhysics(op);
++    G4cout << "[PhysicsList] G4OpticalPhysics registered (HODO_ENABLE_OPTICAL=1)" << G4endl;
++  } else {
++    G4cout << "[PhysicsList] G4OpticalPhysics NOT registered (HODO_ENABLE_OPTICAL!=1)" << G4endl;
++  }
+ }
+ 
+ void PhysicsList::SetCuts()

@@ -8,6 +8,7 @@
 /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
 /hodoscope/setDetectorVariant Hod2018
 /hodoscope/det/optical true
+/hodoscope/det/improvedOptical true
 /hodoscope/det/setD 5.0 mm
 
 /run/initialize

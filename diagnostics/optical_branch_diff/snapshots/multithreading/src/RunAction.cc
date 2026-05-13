@@ -48,9 +48,7 @@ namespace {
    << "kapton_thickness_mm=" << cfg.kaptonThicknessMm / mm << '\n'
    << "mppc_model=" << cfg.mppcModel << '\n'
    << "physical_layer_enabled=" << (cfg.physicalLayerEnabled ? "true" : "false") << '\n'
-   << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n'
-   << "improved_optical_coupling="
-   << (det.IsImprovedOpticalCouplingEnabled() ? "true" : "false") << '\n';
+   << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n';
   }
 
   void logVariantSummary(const DetectorConstruction& det)
@@ -72,8 +70,6 @@ namespace {
       << (cfg.physicalLayerEnabled ? "yes" : "no") << G4endl;
     G4cout << "[RunAction] Optical photons: "
       << (det.IsOpticalEnabled() ? "enabled" : "disabled") << G4endl;
-    G4cout << "[RunAction] Improved optical coupling: "
-      << (det.IsImprovedOpticalCouplingEnabled() ? "enabled" : "disabled") << G4endl;
   }
 }
 

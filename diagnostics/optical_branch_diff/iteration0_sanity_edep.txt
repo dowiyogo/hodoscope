@@ -1,0 +1,4 @@
+events: 20
+total_edep: 8.026836514713077
+mean_edep: 0.40134182573565386
+events_with_edep_gt_0: 20

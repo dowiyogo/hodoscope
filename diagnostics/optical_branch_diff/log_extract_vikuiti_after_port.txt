@@ -1,0 +1,70 @@
+/analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+[DetectorConstruction] Detector variant set to Hod2018_Vikuiti
+[HODO] EJ-200 SCINTILLATIONCOMPONENT1: present
+[HODO] EJ-200 SCINTILLATIONYIELD: present
+[HODO] EJ-200 SCINTILLATIONTIMECONSTANT1: present
+Checking overlaps for volume SiPM_PV:0 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:1 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:2 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:3 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:4 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:5 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:6 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:7 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:8 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:9 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:10 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:11 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:12 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:13 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:14 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:15 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:16 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:17 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:18 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:19 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:20 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:21 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:22 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:23 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:24 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:25 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:26 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:27 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:28 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:29 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:30 (G4Box) ... OK! 
+Checking overlaps for volume SiPM_PV:31 (G4Box) ... OK! 
+[DetectorConstruction] Optical surface: Vikuiti ESR (specular, R>=0.985 around 425 nm)
+[DetectorConstruction] Reflector EFFICIENCY: 0 (detection is handled by SiPMSD, not reflector PDE)
+[DetectorConstruction] Improved optical coupling defined for 32 bars: reflector border to assembly air plus polished SiPM border
+[DetectorConstruction] Detector variant selected: Hod2018_Vikuiti
+[DetectorConstruction] Reflector type: VikuitiESR
+[DetectorConstruction] MPPC model: S12572-100P
+[DetectorConstruction] Optical photons: enabled
+G4WT4 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT4 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT2 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT2 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT7 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT7 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT5 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT5 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT6 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT6 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT0 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT0 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT1 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT1 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT3 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+G4WT3 > /analysis/setFileName diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+... create file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done
+... open analysis file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done
+... open main analysis file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done
+[RunAction] Output file: diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root
+[RunAction] Detector variant selected: Hod2018_Vikuiti
+[RunAction] Reflector type: VikuitiESR
+[RunAction] Optical photons: enabled
+... write file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done
+... write file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done
+... close file : diagnostics/optical_variant_comparison/outputs/variant_vikuiti_quick.root - done

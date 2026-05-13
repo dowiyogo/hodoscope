@@ -6,7 +6,6 @@
 // Comandos expuestos:
 //   /hodoscope/det/setD <valor> <unit>  -> separación entre planos X y Y
 //   /hodoscope/det/optical <true|false> -> habilita G4 optical physics
-//   /hodoscope/det/improvedOptical <true|false> -> acoplamiento óptico SiPM
 //----------------------------------------------------------------------------
 #ifndef HODOSCOPE_DETECTOR_MESSENGER_HH
 #define HODOSCOPE_DETECTOR_MESSENGER_HH
@@ -35,7 +34,6 @@ private:
   G4UIcmdWithAString*         fCmdVariant;
   G4UIcmdWithADoubleAndUnit*  fCmdD;
   G4UIcmdWithABool*           fCmdOptical;
-  G4UIcmdWithABool*           fCmdImprovedOptical;
 };
 
 #endif

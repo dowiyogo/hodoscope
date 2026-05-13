@@ -63,7 +63,6 @@
 #include "G4RotationMatrix.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
-#include "G4LogicalBorderSurface.hh"
 
 #include <algorithm>
 #include <cctype>
@@ -191,10 +190,6 @@ void DetectorConstruction::DefineMaterials()
 
   // Silicio para el "ladrillo" del SiPM (placeholder material, el SD es lo importante).
   fSiPMMat = nist->FindOrBuildMaterial("G4_Si");
-  G4double rindSi[nE] = { 3.5, 3.5, 3.5, 3.5 };
-  auto* mptSi = new G4MaterialPropertiesTable();
-  mptSi->AddProperty("RINDEX", phE, rindSi, nE);
-  fSiPMMat->SetMaterialPropertiesTable(mptSi);
 
   // ---------------------------------------------------------------------
   // TiO2 (rutilo puro). Pintura reflectante externa (~50-100 μm) tipo
@@ -296,17 +291,15 @@ void DetectorConstruction::BuildSubplane(char axis, G4int layer,
 
     G4int copyNo = copyOffset + i;   // 0..31 globalmente
 
-    auto* scintPV = new G4PVPlacement(rot, pos, fScintLV,
-                                      "Scint_PV",  parentLV,
-                                      false, copyNo, true);
-    fScintPVs.push_back(scintPV);
+    new G4PVPlacement(rot, pos, fScintLV,
+                      "Scint_PV",  parentLV,
+                      false, copyNo, true);
 
     // SiPM acoplado a la barra. Convención de lado:
     //   X-sup, Y-sup → lado "izquierdo" (negativo en el eje del largo)
     //   X-inf, Y-inf → lado "derecho"  (positivo en el eje del largo)
     G4double signSide = (layer == 0) ? -1.0 : +1.0;
-    G4double sipmSep  = fBarLength*0.5 + fSiPMThickness*0.5;
-    if (!fUseImprovedOpticalCoupling) sipmSep += 0.05*mm;
+    G4double sipmSep  = fBarLength*0.5 + fSiPMThickness*0.5 + 0.05*mm;
 
     G4ThreeVector sipmPos;
     if (axis == 'X') {
@@ -323,20 +316,15 @@ void DetectorConstruction::BuildSubplane(char axis, G4int layer,
     }
 
     G4RotationMatrix* sipmRot = rot;  // misma rotación que la barra
-    auto* sipmPV = new G4PVPlacement(sipmRot, sipmPos, fSiPMLV,
-                                     "SiPM_PV", parentLV,
-                                     false, copyNo, true);
-    fSiPMPVs.push_back(sipmPV);
+    new G4PVPlacement(sipmRot, sipmPos, fSiPMLV,
+                      "SiPM_PV", parentLV,
+                      false, copyNo, true);
   }
 }
 
 //----------------------------------------------------------------------------
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
-  fScintPVs.clear();
-  fSiPMPVs.clear();
-  fAssemblyPV = nullptr;
-
   // ---- World ---------------------------------------------------------------
   G4double worldHalf = 50.*cm;
   auto* worldSolid = new G4Box("World", worldHalf, worldHalf, worldHalf);
@@ -357,9 +345,9 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
   auto* assLV    = new G4LogicalVolume(assSolid, fAir, "Assembly_LV");
   assLV->SetVisAttributes(G4VisAttributes::GetInvisible());
 
-  fAssemblyPV = new G4PVPlacement(nullptr, G4ThreeVector(),
-                                  assLV, "Assembly_PV", worldLV,
-                                  false, 0, true);
+  new G4PVPlacement(nullptr, G4ThreeVector(),
+                    assLV, "Assembly_PV", worldLV,
+                    false, 0, true);
 
   // ---- Cálculo de las Z de los 4 subplanos --------------------------------
   // Top de la pila a cota +Ztot/2, bottom a -Ztot/2.
@@ -395,9 +383,17 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 //----------------------------------------------------------------------------
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  // Read runtime env var to decide whether to enable optical physics
+  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
+  if (env_opt && std::string(env_opt) == "1") {
+    SetEnableOpticalPhysics(true);
+  } else {
+    SetEnableOpticalPhysics(false);
+  }
+
   DefineMaterials();
   auto* world = DefineVolumes();
-  DefineOpticalSurfaces();   // pintura TiO2 (skin surface)
+  DefineOpticalSurfaces();   // pintura TiO2 (skin surface) si fEnableOptical==true
   PrintDetectorConfiguration();
   return world;
 }
@@ -438,78 +434,34 @@ void DetectorConstruction::DefineOpticalSurfaces()
 {
   if (!fScintLV) return;
   if (!fEnableOptical) {
-    G4cout << "[DetectorConstruction] Optical surfaces skipped "
-           << "(fEnableOptical=false)" << G4endl;
+    G4cout << "[DetectorConstruction] Optical surfaces skipped (fEnableOptical=false)" << G4endl;
     return;
   }
+
+  auto* paintSurf = new G4OpticalSurface("TiO2_paint_surface");
+  paintSurf->SetModel(unified);
+  paintSurf->SetType(dielectric_dielectric);
+  paintSurf->SetFinish(groundfrontpainted);   // Lambertian diffuse desde la cara pintada
+  paintSurf->SetSigmaAlpha(0.1);              // rugosidad ~6° (info para finish ground*)
 
   const G4int nE = 4;
   G4double phE [nE] = { 2.38*eV, 2.70*eV, 2.92*eV, 3.10*eV };
+  G4double refl[nE] = { 0.97,    0.96,    0.93,    0.85    };
   G4double effi[nE] = { 0.0,     0.0,     0.0,     0.0     };
 
-  auto* surf = new G4OpticalSurface("Reflector_surface");
-  surf->SetModel(unified);
+  auto* mptPaint = new G4MaterialPropertiesTable();
+  mptPaint->AddProperty("REFLECTIVITY", phE, refl, nE);
+  mptPaint->AddProperty("EFFICIENCY",   phE, effi, nE);
+  paintSurf->SetMaterialPropertiesTable(mptPaint);
 
-  auto* mpt = new G4MaterialPropertiesTable();
+  G4cout << "[HODO] TiO2 optical surface: present" << G4endl;
+  G4cout << "[HODO] TiO2 REFLECTIVITY: present" << G4endl;
+  G4cout << "[HODO] TiO2 EFFICIENCY: present" << G4endl;
 
-  if (fVariant == HodoscopeVariant::Hod2018_Vikuiti) {
-    surf->SetType(dielectric_metal);
-    surf->SetFinish(polishedfrontpainted);
-    surf->SetSigmaAlpha(0.02);
+  new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
 
-    G4double refl[nE] = { 0.990, 0.990, 0.985, 0.970 };
-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
-
-    G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
-           << "(specular, R>=0.985 around 425 nm)" << G4endl;
-  } else {
-    surf->SetType(dielectric_dielectric);
-    surf->SetFinish(groundfrontpainted);
-    surf->SetSigmaAlpha(0.10);
-
-    G4double refl[nE] = { 0.97, 0.96, 0.93, 0.85 };
-    mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
-    mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
-
-    G4cout << "[DetectorConstruction] Optical surface: TiO2 paint "
-           << "(Lambertian/diffuse, R~0.97 around 425 nm)" << G4endl;
-  }
-
-  surf->SetMaterialPropertiesTable(mpt);
-  G4cout << "[DetectorConstruction] Reflector EFFICIENCY: 0 "
-         << "(detection is handled by SiPMSD, not reflector PDE)" << G4endl;
-
-  if (!fUseImprovedOpticalCoupling) {
-    new G4LogicalSkinSurface("Scint_reflector_skin", fScintLV, surf);
-    G4cout << "[DetectorConstruction] Legacy reflector skin applied to Scint_LV"
-           << G4endl;
-    return;
-  }
-
-  if (!fAssemblyPV || fScintPVs.size() != fSiPMPVs.size()) {
-    G4cerr << "[DetectorConstruction] Improved optical coupling requested, "
-           << "but scintillator/SiPM physical volume pairs are incomplete."
-           << G4endl;
-    return;
-  }
-
-  auto* sipmSurf = new G4OpticalSurface("SiPM_coupling_surface");
-  sipmSurf->SetModel(unified);
-  sipmSurf->SetType(dielectric_dielectric);
-  sipmSurf->SetFinish(polished);
-
-  for (std::size_t i = 0; i < fScintPVs.size(); ++i) {
-    new G4LogicalBorderSurface("Scint_to_air_reflector_border",
-                               fScintPVs[i], fAssemblyPV, surf);
-    new G4LogicalBorderSurface("Scint_to_SiPM_coupling_border",
-                               fScintPVs[i], fSiPMPVs[i], sipmSurf);
-  }
-
-  G4cout << "[DetectorConstruction] Improved optical coupling defined for "
-         << fScintPVs.size()
-         << " bars: reflector border to assembly air plus polished SiPM border"
-         << G4endl;
+  G4cout << "[DetectorConstruction] TiO2 paint surface defined "
+         << "(R~97% @ 425 nm, Lambertian diffuse)" << G4endl;
 }
 
 //----------------------------------------------------------------------------
@@ -583,19 +535,6 @@ void DetectorConstruction::SetEnableOpticalPhysics(G4bool b)
          << (b ? "ON" : "OFF") << G4endl;
 }
 
-void DetectorConstruction::SetUseImprovedOpticalCoupling(G4bool b)
-{
-  fUseImprovedOpticalCoupling = b;
-  fScintLV = nullptr;
-  fSiPMLV = nullptr;
-  fAssemblyPV = nullptr;
-  fScintPVs.clear();
-  fSiPMPVs.clear();
-  G4cout << "[DetectorConstruction] Improved optical coupling flag = "
-         << (b ? "ON" : "OFF") << G4endl;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
-}
-
 void DetectorConstruction::PrintDetectorConfiguration() const
 {
   G4cout << "[DetectorConstruction] Detector variant selected: "
@@ -616,6 +555,4 @@ void DetectorConstruction::PrintDetectorConfiguration() const
     << fVariantConfig.mppcModel << G4endl;
   G4cout << "[DetectorConstruction] Optical photons: "
     << (fEnableOptical ? "enabled" : "disabled") << G4endl;
-  G4cout << "[DetectorConstruction] Improved optical coupling: "
-    << (fUseImprovedOpticalCoupling ? "enabled" : "disabled") << G4endl;
 }

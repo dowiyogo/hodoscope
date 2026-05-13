@@ -1,0 +1,7 @@
+< 2bb0233 (HEAD -> fix/port-optical-photon-detection-to-mt, origin/feat/multithreading, feat/multithreading) Differentiate TiO2 and Vikuiti optical reflector models
+< f275288 Tighten optical log extract
+< 9b81cac Add quick optical photon MPPC diagnostic
+< 0de6db1 Add configurable hodoscope detector variants
+> 287231b (origin/feat/optical-photon-iteration1, feat/optical-photon-iteration1) Add configurable hodoscope detector variants
+> 0f886af Add Iteration 1 optical validation diagnostics
+> c898dc1 feat(optical): env-controlled minimal optical switch; add Iteration1 validation suite (macros + scripts)

@@ -1,0 +1,1331 @@
+commit 06aaa7ed2ab463249812b39aac425e40e5c2d80e
+Merge: 287231b 1efdf87 bd574ca
+Author: dowiyogo <dowiyogo@gmail.com>
+Date:   Tue May 12 21:35:33 2026 -0400
+
+    On feat/optical-photon-iteration1: pre-variant-task dirty optical diagnostics state
+
+diff --cc CMakeLists.txt
+index 9776def,9776def,0000000..07e1391
+mode 100644,100644,000000..100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@@@ -1,74 -1,74 -1,0 +1,79 @@@@
+  +#----------------------------------------------------------------------------
+  +# CMakeLists.txt — hodoscope-g4
+  +#
+  +# Build system para la simulación Geant4 del hodoscopio NA64-miniaturizado
+  +# del grupo de muografía de la Universidad de La Serena.
+  +#
+  +# Probado con Geant4 11.x compilado con soporte ROOT y Qt.
+  +#
+  +# Uso típico:
+  +#   mkdir build && cd build
+  +#   cmake ..
+  +#   make -j$(nproc)
+  +#   ./hodoscope ../macros/run_mip_central.mac
+  +#----------------------------------------------------------------------------
+  +cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+  +project(hodoscope_g4 LANGUAGES CXX)
+  +
+  +#----------------------------------------------------------------------------
+  +# Geant4: por defecto requerimos UI + visualización (Qt/OpenGL).
+  +# Se puede desactivar pasando -DWITH_GEANT4_UIVIS=OFF.
+  +#----------------------------------------------------------------------------
+  +option(WITH_GEANT4_UIVIS "Build with Geant4 UI and Vis drivers" ON)
++++option(BUILD_OPTICAL_UNIT_TEST "Build isolated optical photon unit test" OFF)
+  +if(WITH_GEANT4_UIVIS)
+  +  find_package(Geant4 REQUIRED ui_all vis_all)
+  +else()
+  +  find_package(Geant4 REQUIRED)
+  +endif()
+  +
+  +include(${Geant4_USE_FILE})
+  +
+  +#----------------------------------------------------------------------------
+  +# Estándar C++: Geant4 11 requiere al menos C++17.
+  +#----------------------------------------------------------------------------
+  +set(CMAKE_CXX_STANDARD 17)
+  +set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  +set(CMAKE_CXX_EXTENSIONS OFF)
+  +
+  +#----------------------------------------------------------------------------
+  +# Fuentes y headers.
+  +#----------------------------------------------------------------------------
+  +include_directories(${PROJECT_SOURCE_DIR}/include)
+  +
+  +file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+  +file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+  +
+  +#----------------------------------------------------------------------------
+  +# Ejecutable.
+  +#----------------------------------------------------------------------------
+  +add_executable(hodoscope hodoscope.cc ${sources} ${headers})
+  +target_link_libraries(hodoscope ${Geant4_LIBRARIES})
+  +
++++if(BUILD_OPTICAL_UNIT_TEST)
++++  add_subdirectory(test_optical)
++++endif()
++++
+  +#----------------------------------------------------------------------------
+  +# Copiar macros al directorio de build para que ./hodoscope ../macros/X.mac
+  +# funcione tanto desde build/ como con paths relativos.
+  +#----------------------------------------------------------------------------
+  +set(HODOSCOPE_MACROS
+  +  init_vis.mac
+  +  vis.mac
+  +  run_mip_central.mac
+  +  scan_xy.mac
+  +)
+  +
+  +foreach(_mac ${HODOSCOPE_MACROS})
+  +  configure_file(
+  +    ${PROJECT_SOURCE_DIR}/macros/${_mac}
+  +    ${PROJECT_BINARY_DIR}/${_mac}
+  +    COPYONLY
+  +  )
+  +endforeach()
+  +
+  +#----------------------------------------------------------------------------
+  +# Instalación opcional.
+  +#----------------------------------------------------------------------------
+  +install(TARGETS hodoscope DESTINATION bin)
+diff --cc hodoscope.cc
+index 63a0c6e,63a0c6e,0000000..3c110f9
+mode 100644,100644,000000..100644
+--- a/hodoscope.cc
++++ b/hodoscope.cc
+@@@@ -1,99 -1,99 -1,0 +1,103 @@@@
+  +//----------------------------------------------------------------------------
+  +// hodoscope.cc
+  +//
+  +// Programa principal de la simulación Geant4 del hodoscopio NA64-mini
+  +// para muografía geológica (Universidad de La Serena).
+  +//
+  +// Uso:
+  +//   ./hodoscope                       -> abre UI interactivo (vis.mac)
+  +//   ./hodoscope macros/script.mac     -> modo batch
+  +//
+  +// Diseño:
+  +//   * G4RunManagerType::Default → MT con min(8, hardware_concurrency) hilos.
+  +//   * HODO_THREADS=1 → modo serial para validación ST.
+  +//   * En modo batch, CloseFile() se llama explícitamente antes de destruir
+  +//     el runManager para que el merge final de NTuples sea correcto (G4 gotcha 4).
+  +//----------------------------------------------------------------------------
+  +
+  +#include "G4RunManagerFactory.hh"
+  +#include "G4UImanager.hh"
+  +#include "G4VisExecutive.hh"
+  +#include "G4UIExecutive.hh"
+  +#include "G4AnalysisManager.hh"
+  +#include "Randomize.hh"
+  +#include <cstdlib>
+  +#include <thread>
+  +
+  +#include "DetectorConstruction.hh"
+  +#include "PhysicsList.hh"
+  +#include "ActionInitialization.hh"
+  +
+  +int main(int argc, char** argv)
+  +{
+  +  // ----- Semilla aleatoria reproducible salvo override en macro -------------
+  +  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  +  G4long seed = 1234567;
+  +  G4Random::setTheSeed(seed);
+  +
++++  const char* envOpt = std::getenv("HODO_ENABLE_OPTICAL");
++++  G4cout << "[HODO] HODO_ENABLE_OPTICAL="
++++         << (envOpt ? envOpt : "<unset>") << G4endl;
++++
+  +  auto getRequestedThreads = []() -> G4int {
+  +    const char* env = std::getenv("HODO_THREADS");
+  +    if (!env || !*env) return -1;
+  +    return std::atoi(env);
+  +  };
+  +
+  +  // ----- UI executive sólo si no se pasó macro ------------------------------
+  +  G4UIExecutive* ui = nullptr;
+  +  if (argc == 1) {
+  +    ui = new G4UIExecutive(argc, argv);
+  +  }
+  +
+  +  // ----- Run manager configurable: serial para ST, MT por defecto -----------
+  +  G4int requestedThreads = getRequestedThreads();
+  +  G4RunManager* runManager = nullptr;
+  +  if (requestedThreads == 1) {
+  +    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
+  +    G4cout << "[main] Geant4 running in SERIAL mode (HODO_THREADS=1)" << G4endl;
+  +  } else {
+  +    runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+  +    G4int nThreads = (requestedThreads > 1)
+  +      ? requestedThreads
+  +      : std::min(8, (G4int)std::thread::hardware_concurrency());
+  +    runManager->SetNumberOfThreads(nThreads);
+  +    G4cout << "[main] Geant4 running with " << nThreads << " threads" << G4endl;
+  +  }
+  +
+  +  // ----- Inicialización del usuario -----------------------------------------
+  +  runManager->SetUserInitialization(new DetectorConstruction());
+  +  runManager->SetUserInitialization(new PhysicsList());
+  +  runManager->SetUserInitialization(new ActionInitialization());
+  +
+  +  // ----- Visualización ------------------------------------------------------
+  +  auto* visManager = new G4VisExecutive("Quiet");
+  +  visManager->Initialize();
+  +
+  +  auto* UImanager = G4UImanager::GetUIpointer();
+  +
+  +  if (!ui) {
+  +    // Modo batch: ejecutar macro pasado como argumento
+  +    G4String command  = "/control/execute ";
+  +    G4String fileName = argv[1];
+  +    UImanager->ApplyCommand(command + fileName);
+  +
+  +    // Cerrar el archivo de análisis ANTES de destruir el runManager.
+  +    // En MT, workers aún existen en este punto; CloseFile() puede completar
+  +    // el merge final sin encontrar buffers ya liberados.
+  +    auto* an = G4AnalysisManager::Instance();
+  +    if (an) { an->Write(); an->CloseFile(); }
+  +    G4cout << "[main] Analysis file closed." << G4endl;
+  +  } else {
+  +    // Modo interactivo: lanzar vis.mac y abrir UI
+  +    UImanager->ApplyCommand("/control/execute init_vis.mac");
+  +    ui->SessionStart();
+  +    delete ui;
+  +  }
+  +
+  +  // ----- Liberación ---------------------------------------------------------
+  +  delete visManager;
+  +  delete runManager;
+  +  return 0;
+  +}
+diff --cc include/DetectorConstruction.hh
+index 1fadd6c,1fadd6c,0000000..f727029
+mode 100644,100644,000000..100644
+--- a/include/DetectorConstruction.hh
++++ b/include/DetectorConstruction.hh
+@@@@ -1,113 -1,113 -1,0 +1,121 @@@@
+  +//----------------------------------------------------------------------------
+  +// DetectorConstruction.hh
+  +//
+  +// Construye el hodoscopio NA64-mini:
+  +//   - 4 subplanos (X_sup, X_inf, Y_sup, Y_inf), 8 barras de EJ-200 c/u
+  +//   - Ofssets relativos: 2 mm entre subplanos paralelos, D = 5 mm entre ejes
+  +//   - 32 SiPMs como volúmenes lógicos delgados acoplados a cada barra
+  +//
+  +// Notación (consistente con la spec del proyecto):
+  +//   D       : separación entre el plano X y el plano Y       (default 5 mm)
+  +//   gap     : aire entre barras paralelas dentro de un plano (1 mm)
+  +//   sepZ    : separación vertical entre subplanos sup/inf    (2 mm)
+  +//   offset  : desplazamiento del subplano inferior           (2 mm)
+  +//   nbars   : número de barras por subplano                  (8)
+  +//
+  +// El asamble se centra en (0, 0, 0) del World. Coordenadas internas
+  +// equivalentes a la spec original (esquina en 0) tras aplicar offset global.
+  +//----------------------------------------------------------------------------
+  +
+  +#ifndef HODOSCOPE_DETECTOR_CONSTRUCTION_HH
+  +#define HODOSCOPE_DETECTOR_CONSTRUCTION_HH
+  +
+  +#include "G4VUserDetectorConstruction.hh"
+  +#include "globals.hh"
+  +
++++#include <vector>
++++
+  +class G4LogicalVolume;
+  +class G4Material;
+  +class G4VPhysicalVolume;
+  +class DetectorMessenger;
+  +
+  +enum class HodoscopeVariant {
+  +  Hod2019_TiO2,
+  +  Hod2018_Vikuiti
+  +};
+  +
+  +struct HodoscopeVariantConfig {
+  +  G4String variantLabel;
+  +  G4String reflectorName;
+  +  G4String reflectorModel;
+  +  G4double reflectorThicknessMm;
+  +  G4double kaptonThicknessMm;
+  +  G4String scintillatorMaterial;
+  +  G4String mppcModel;
+  +  G4bool   physicalLayerEnabled;
+  +};
+  +
+  +class DetectorConstruction : public G4VUserDetectorConstruction
+  +{
+  +public:
+  +  DetectorConstruction();
+  +  ~DetectorConstruction() override;
+  +
+  +  G4VPhysicalVolume* Construct() override;
+  +  void ConstructSDandField() override;
+  +
+  +  // ---- Setters expuestos al messenger (control desde macros) -------------
+  +  void SetPlaneSeparationD(G4double D);   // separación entre eje X e Y
+  +  void SetEnableOpticalPhysics(G4bool b); // activa MaterialPropertiesTable
++++  void SetUseImprovedOpticalCoupling(G4bool b);
+  +  void SetDetectorVariant(HodoscopeVariant variant);
+  +  void SetDetectorVariantByName(const G4String& variantName);
+  +
+  +  // ---- Getters útiles para análisis --------------------------------------
+  +  G4double GetPlaneSeparationD() const { return fD; }
+  +  G4int    GetNBars()           const { return fNbars; }
+  +  HodoscopeVariant GetDetectorVariant() const { return fVariant; }
+  +  const HodoscopeVariantConfig& GetDetectorVariantConfig() const { return fVariantConfig; }
+  +  G4bool IsOpticalEnabled() const { return fEnableOptical; }
++++  G4bool IsImprovedOpticalCouplingEnabled() const { return fUseImprovedOpticalCoupling; }
+  +
+  +private:
+  +  // --- pasos de construcción ----------------------------------------------
+  +  void DefineMaterials();
+  +  G4VPhysicalVolume* DefineVolumes();
+  +  void DefineOpticalSurfaces();   // pintura TiO2 + (futuro) acoplamiento SiPM
+  +  void PrintDetectorConfiguration() const;
+  +
+  +  // --- helpers para construir los 4 subplanos -----------------------------
+  +  // axis   : 'X' o 'Y'         (plano que mide la coordenada axis)
+  +  // layer  : 0 = superior, 1 = inferior
+  +  // zCenter: posición Z central del subplano dentro del asamble
+  +  // copyOffset : índice de la primera barra en este subplano (0, 8, 16, 24)
+  +  void BuildSubplane(char axis, G4int layer, G4double zCenter,
+  +                     G4int copyOffset, G4LogicalVolume* parentLV);
+  +
+  +  // --- materiales ---------------------------------------------------------
+  +  G4Material* fAir       = nullptr;
+  +  G4Material* fScint     = nullptr;  // EJ-200 (PVT-based)
+  +  G4Material* fSiPMMat   = nullptr;  // silicio (placeholder)
+  +  G4Material* fTiO2      = nullptr;  // pintura reflectante (rutilo puro)
+  +
+  +  // --- parámetros geométricos (modificables desde macro) -------------------
+  +  G4double fBarLength;    // 75 mm
+  +  G4double fBarWidth;     // 3 mm
+  +  G4double fBarThickness; // 1 mm
+  +  G4double fGap;          // 1 mm  aire entre barras de un mismo subplano
+  +  G4double fSepZ;         // 2 mm  entre subplano sup e inf
+  +  G4double fOffset;       // 2 mm  shift del subplano inferior
+  +  G4double fD;            // 5 mm  separación entre eje X y eje Y
+  +  G4int    fNbars;        // 8
+  +
+  +  G4double fSiPMThickness; // 0.5 mm (placeholder)
+  +
+  +  // --- volúmenes lógicos para el SD ---------------------------------------
+  +  G4LogicalVolume* fScintLV  = nullptr;
+  +  G4LogicalVolume* fSiPMLV   = nullptr;
++++  G4VPhysicalVolume* fAssemblyPV = nullptr;
++++  std::vector<G4VPhysicalVolume*> fScintPVs;
++++  std::vector<G4VPhysicalVolume*> fSiPMPVs;
+  +
+  +  HodoscopeVariant        fVariant = HodoscopeVariant::Hod2019_TiO2;
+  +  HodoscopeVariantConfig  fVariantConfig;
+  +  G4bool fEnableOptical = false;
++++  G4bool fUseImprovedOpticalCoupling = false;
+  +
+  +  DetectorMessenger* fMessenger = nullptr;
+  +};
+  +
+  +#endif
+diff --cc include/DetectorMessenger.hh
+index 92b0c08,92b0c08,0000000..29045d3
+mode 100644,100644,000000..100644
+--- a/include/DetectorMessenger.hh
++++ b/include/DetectorMessenger.hh
+@@@@ -1,39 -1,39 -1,0 +1,41 @@@@
+  +//----------------------------------------------------------------------------
+  +// DetectorMessenger.hh
+  +//
+  +// Comandos UI para modificar parámetros de geometría desde macros.
+  +//
+  +// Comandos expuestos:
+  +//   /hodoscope/det/setD <valor> <unit>  -> separación entre planos X y Y
+  +//   /hodoscope/det/optical <true|false> -> habilita G4 optical physics
++++//   /hodoscope/det/improvedOptical <true|false> -> acoplamiento óptico SiPM
+  +//----------------------------------------------------------------------------
+  +#ifndef HODOSCOPE_DETECTOR_MESSENGER_HH
+  +#define HODOSCOPE_DETECTOR_MESSENGER_HH
+  +
+  +#include "G4UImessenger.hh"
+  +#include "globals.hh"
+  +
+  +class DetectorConstruction;
+  +class G4UIdirectory;
+  +class G4UIcmdWithADoubleAndUnit;
+  +class G4UIcmdWithABool;
+  +class G4UIcmdWithAString;
+  +
+  +class DetectorMessenger : public G4UImessenger
+  +{
+  +public:
+  +  explicit DetectorMessenger(DetectorConstruction* det);
+  +  ~DetectorMessenger() override;
+  +
+  +  void SetNewValue(G4UIcommand* cmd, G4String val) override;
+  +
+  +private:
+  +  DetectorConstruction*       fDet;
+  +  G4UIdirectory*              fDir;
+  +  G4UIdirectory*              fDirDet;
+  +  G4UIcmdWithAString*         fCmdVariant;
+  +  G4UIcmdWithADoubleAndUnit*  fCmdD;
+  +  G4UIcmdWithABool*           fCmdOptical;
++++  G4UIcmdWithABool*           fCmdImprovedOptical;
+  +};
+  +
+  +#endif
+diff --cc src/DetectorConstruction.cc
+index ba15684,ba15684,0000000..f9967f3
+mode 100644,100644,000000..100644
+--- a/src/DetectorConstruction.cc
++++ b/src/DetectorConstruction.cc
+@@@@ -1,558 -1,558 -1,0 +1,615 @@@@
+  +//----------------------------------------------------------------------------
+  +// DetectorConstruction.cc
+  +//
+  +// Construye el hodoscopio NA64-mini.
+  +//
+  +// Convención de coordenadas (mirar desde +Z, "el haz cae en -Z"):
+  +//
+  +//                   +Z (hacia los cósmicos)
+  +//                    |
+  +//                    |
+  +//   ┌───────── X-sup ───────────┐   z =  +6.0 mm
+  +//   ┌───────── X-inf ───────────┐   z =  +3.0 mm     (offset +2 mm en X)
+  +//
+  +//          ↕  D = 5 mm  (separación entre ejes)
+  +//
+  +//   ┌───────── Y-sup ───────────┐   z =  -3.0 mm
+  +//   ┌───────── Y-inf ───────────┐   z =  -6.0 mm     (offset +2 mm en Y)
+  +//                    |
+  +//                    +X →
+  +//
+  +// Las barras del PLANO X son largas en Y (75 mm) y están separadas en X.
+  +//   → el plano X reconstruye la coordenada X del muón.
+  +// Las barras del PLANO Y son largas en X (75 mm) y están separadas en Y.
+  +//   → el plano Y reconstruye la coordenada Y del muón.
+  +//
+  +// SiPMs (volúmenes lógicos delgados, sin física óptica todavía):
+  +//   - X-sup: en Y-  (extremo Y< de cada barra)
+  +//   - X-inf: en Y+  (lado opuesto, según la spec del proyecto)
+  +//   - Y-sup: en X-  (extremo X< de cada barra)
+  +//   - Y-inf: en X+  (lado opuesto)
+  +//
+  +// Numeración de barras (índice global):
+  +//   0..7   X-sup
+  +//   8..15  X-inf   (i_local = índice - 8)
+  +//   16..23 Y-sup
+  +//   24..31 Y-inf
+  +//
+  +// El offset global del asamble se elige tal que el centro geométrico está
+  +// en (0,0,0). En el sistema interno de cada subplano, la barra i tiene
+  +// centro x_i = -((nbars-1)/2)*pitch + i*pitch  con pitch = ancho + gap.
+  +// Para nbars=8, ancho=3, gap=1: pitch=4, x_i = -14 + 4*i mm.
+  +//----------------------------------------------------------------------------
+  +
+  +#include "DetectorConstruction.hh"
+  +#include "DetectorMessenger.hh"
+  +
+  +#include "G4Material.hh"
+  +#include "G4NistManager.hh"
+  +#include "G4Box.hh"
+  +#include "G4LogicalVolume.hh"
+  +#include "G4PVPlacement.hh"
+  +#include "G4SystemOfUnits.hh"
+  +#include "G4PhysicalConstants.hh"
+  +#include "G4UserLimits.hh"
+  +#include "G4SDManager.hh"
+  +#include "G4VisAttributes.hh"
+  +#include "G4Colour.hh"
+  +#include "G4MaterialPropertiesTable.hh"
+  +
+  +#include "ScintillatorSD.hh"
+  +#include "SiPMSD.hh"
+  +#include "G4RunManager.hh"
+  +#include "G4RotationMatrix.hh"
+  +#include "G4OpticalSurface.hh"
+  +#include "G4LogicalSkinSurface.hh"
++++#include "G4LogicalBorderSurface.hh"
+  +
+  +#include <algorithm>
+  +#include <cctype>
+  +#include <string>
+  +
+  +namespace {
+  +
+  +G4String toLowerCopy(const G4String& value)
+  +{
+  +  G4String lowered = value;
+  +  std::transform(lowered.begin(), lowered.end(), lowered.begin(),
+  +                 [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+  +  return lowered;
+  +}
+  +
+  +HodoscopeVariantConfig makeVariantConfig(HodoscopeVariant variant)
+  +{
+  +  switch (variant) {
+  +    case HodoscopeVariant::Hod2018_Vikuiti:
+  +      return {
+  +        "Hod2018_Vikuiti",
+  +        "VikuitiESR",
+  +        "thin_passive_layer_or_surface",
+  +        0.165 * mm,
+  +        0.050 * mm,
+  +        "BC408 (implemented as EJ200-equivalent)",
+  +        "S12572-100P",
+  +        false
+  +      };
+  +    case HodoscopeVariant::Hod2019_TiO2:
+  +    default:
+  +      return {
+  +        "Hod2019_TiO2",
+  +        "TiO2OpticalEpoxyPaint",
+  +        "optical_surface_only",
+  +        0.0 * mm,
+  +        0.0 * mm,
+  +        "BC408 (implemented as EJ200-equivalent)",
+  +        "S12572-100P",
+  +        false
+  +      };
+  +  }
+  +}
+  +
+  +} // namespace
+  +
+  +DetectorConstruction::DetectorConstruction()
+  +: G4VUserDetectorConstruction(),
+  +  fBarLength    (75.0 * mm),
+  +  fBarWidth     ( 3.0 * mm),
+  +  fBarThickness ( 1.0 * mm),
+  +  fGap          ( 1.0 * mm),
+  +  fSepZ         ( 2.0 * mm),
+  +  fOffset       ( 2.0 * mm),
+  +  fD            ( 5.0 * mm),
+  +  fNbars        ( 8 ),
+  +  fSiPMThickness( 0.5 * mm)
+  +{
+  +  fVariant = HodoscopeVariant::Hod2019_TiO2;
+  +  fVariantConfig = makeVariantConfig(fVariant);
+  +  fMessenger = new DetectorMessenger(this);
+  +}
+  +
+  +DetectorConstruction::~DetectorConstruction()
+  +{
+  +  delete fMessenger;
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +void DetectorConstruction::DefineMaterials()
+  +{
+  +  if (fScint) return;   // materiales ya definidos en la primera llamada
+  +  auto* nist = G4NistManager::Instance();
+  +
+  +  // Aire: tomado del NIST.
+  +  fAir = nist->FindOrBuildMaterial("G4_AIR");
+  +
+  +  // EJ-200: PVT-based plastic scintillator.
+  +  // Composición típica: H/C ratio = 5.17/4.69 (atómica)
+  +  // Densidad nominal: 1.023 g/cm^3
+  +  // Masa molar relativa: 5.17*1.008 + 4.69*12.011 = 5.211 + 56.332 = 61.543
+  +  // Fracciones másicas: f_H ≈ 0.0847, f_C ≈ 0.9153
+  +  G4double densityEJ200 = 1.023 * g/cm3;
+  +  G4Element* elH = nist->FindOrBuildElement("H");
+  +  G4Element* elC = nist->FindOrBuildElement("C");
+  +
+  +  auto* ej200 = new G4Material("EJ200", densityEJ200, 2);
+  +  ej200->AddElement(elH, 0.0847);   // FRACCIÓN MÁSICA (no atómica)
+  +  ej200->AddElement(elC, 0.9153);
+  +  fScint = ej200;
+  +
+  +  // Propiedades ópticas (sólo se "encienden" si fEnableOptical=true via macro).
+  +  // Definidas siempre para que el camino quede listo.
+  +  const G4int nE = 4;
+  +  G4double phE [nE] = { 2.38*eV, 2.70*eV, 2.92*eV, 3.10*eV }; // ~520, 460, 425, 400 nm
+  +  G4double rind[nE] = { 1.58, 1.58, 1.58, 1.58 };
+  +  G4double abs [nE] = { 3.8*m, 3.8*m, 3.8*m, 3.8*m };          // bulk attenuation length
+  +  G4double scnt[nE] = { 0.05, 0.30, 1.00, 0.20 };              // emission spectrum aproximado de EJ-200
+  +
+  +  auto* mptScint = new G4MaterialPropertiesTable();
+  +  mptScint->AddProperty("RINDEX",      phE, rind, nE);
+  +  mptScint->AddProperty("ABSLENGTH",   phE, abs , nE);
+  +  mptScint->AddProperty("SCINTILLATIONCOMPONENT1", phE, scnt, nE);
+  +  mptScint->AddConstProperty("SCINTILLATIONYIELD",      10000./MeV);
+  +  mptScint->AddConstProperty("RESOLUTIONSCALE",         1.0);
+  +  mptScint->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 2.1*ns);
+  +  mptScint->AddConstProperty("SCINTILLATIONYIELD1",     1.0);
+  +  fScint->SetMaterialPropertiesTable(mptScint);
+  +  fScint->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+  +
+  +  G4cout << "[HODO] EJ-200 optical MPT: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 RINDEX: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 ABSLENGTH: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 SCINTILLATIONCOMPONENT1: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 SCINTILLATIONYIELD: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 RESOLUTIONSCALE: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 SCINTILLATIONTIMECONSTANT1: present" << G4endl;
+  +  G4cout << "[HODO] EJ-200 YIELDRATIO: present" << G4endl;
+  +
+  +  // Aire: necesita RINDEX para que el optical tracking funcione cuando se active.
+  +  G4double rindAir[nE] = { 1.0003, 1.0003, 1.0003, 1.0003 };
+  +  auto* mptAir = new G4MaterialPropertiesTable();
+  +  mptAir->AddProperty("RINDEX", phE, rindAir, nE);
+  +  fAir->SetMaterialPropertiesTable(mptAir);
+  +
+  +  // Silicio para el "ladrillo" del SiPM (placeholder material, el SD es lo importante).
+  +  fSiPMMat = nist->FindOrBuildMaterial("G4_Si");
++++  G4double rindSi[nE] = { 3.5, 3.5, 3.5, 3.5 };
++++  auto* mptSi = new G4MaterialPropertiesTable();
++++  mptSi->AddProperty("RINDEX", phE, rindSi, nE);
++++  fSiPMMat->SetMaterialPropertiesTable(mptSi);
+  +
+  +  // ---------------------------------------------------------------------
+  +  // TiO2 (rutilo puro). Pintura reflectante externa (~50-100 μm) tipo
+  +  // Eljen EJ-510. Este material se mantiene definido aunque NO se construya
+  +  // un volumen físico de TiO2 en esta iteración (se modela vía
+  +  // G4OpticalSurface, ver DefineOpticalSurfaces). Queda listo para una
+  +  // iteración futura donde se quiera evaluar el aporte al MS:
+  +  //
+  +  //   - 50 μm de TiO2 puro (ρ=4.06 g/cm³) en cada cara → ≲0.3 mrad de MS
+  +  //     adicional para muones MIP a 4 GeV (sub-dominante vs ~11 mrad
+  +  //     intrínseco por la separación D=5 mm).
+  +  //
+  +  // Notas:
+  +  //   - La pintura real es TiO2 disperso en aglutinante polimérico
+  +  //     (densidad efectiva ~1.5-2 g/cm³). Aquí usamos rutilo puro como
+  +  //     cota superior.
+  +  //   - El material no lleva propiedades ópticas: el modelado óptico se
+  +  //     hace en la superficie del centellador (la luz no se propaga
+  +  //     dentro del TiO2 en el modelo "groundfrontpainted").
+  +  // ---------------------------------------------------------------------
+  +  G4Element* elTi = nist->FindOrBuildElement("Ti");
+  +  G4Element* elO  = nist->FindOrBuildElement("O");
+  +  fTiO2 = new G4Material("TiO2_paint", 4.06*g/cm3, 2);
+  +  fTiO2->AddElement(elTi, 1);
+  +  fTiO2->AddElement(elO,  2);
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +void DetectorConstruction::BuildSubplane(char axis, G4int layer,
+  +                                         G4double zCenter, G4int copyOffset,
+  +                                         G4LogicalVolume* parentLV)
+  +{
+  +  // pitch = ancho de barra + gap (centro a centro)
+  +  const G4double pitch = fBarWidth + fGap;            // 4 mm
+  +  const G4double half  = (fNbars - 1) * pitch / 2.;   // 14 mm para 8 barras
+  +  const G4double dShift = (layer == 1) ? fOffset : 0.;
+  +
+  +  // Tamaño de la barra (orientación canónica "X-bar": largo en Y, ancho en X,
+  +  // espesor en Z). Para el plano Y NO se cambia el LV — se rota el placement
+  +  // 90° alrededor de Z más abajo.
+  +  //
+  +  // BUG-FIX (iter 0.1): la versión anterior creaba un G4Box con orientación
+  +  // distinta en función de 'axis' pero el LV se construía SOLO la primera vez
+  +  // (guard `if (!fScintLV)`). Como BuildSubplane se llama primero con axis='X',
+  +  // el LV quedaba con orientación X y se reutilizaba para el plano Y, donde
+  +  // todas las 8 barras pasaban a solaparse en y=0 y la reconstrucción
+  +  // angular en Y fallaba.
+  +
+  +  if (!fScintLV) {
+  +    G4Box* barSolid = new G4Box("Bar_solid",
+  +                                fBarWidth*0.5,     // X = ancho     3 mm
+  +                                fBarLength*0.5,    // Y = largo    75 mm
+  +                                fBarThickness*0.5);// Z = espesor   1 mm
+  +    fScintLV = new G4LogicalVolume(barSolid, fScint, "Scint_LV");
+  +    // Color blanco semi-transparente: la barra está pintada con TiO2
+  +    // (la pintura se modela como G4OpticalSurface, no como volumen físico).
+  +    auto* scintVis = new G4VisAttributes(G4Colour(0.95, 0.95, 0.95, 0.7));
+  +    scintVis->SetForceSolid(true);
+  +    fScintLV->SetVisAttributes(scintVis);
+  +
+  +    // User limits: max step en el centellador para muestreo correcto del dE/dx.
+  +    fScintLV->SetUserLimits(new G4UserLimits(0.1*mm));
+  +  }
+  +
+  +  // Para el SiPM también un único LV reutilizado.
+  +  // Orientación canónica: SiPM en el extremo +Y de la barra X-canónica.
+  +  //   X = ancho de la barra      (3 mm)
+  +  //   Y = profundidad del SiPM   (0.5 mm)  ← era fBarThickness, BUG
+  +  //   Z = espesor de la barra    (1 mm)    ← era fSiPMThickness, BUG
+  +  G4Box* sipmSolid = new G4Box("SiPM_solid",
+  +                                fBarWidth*0.5,
+  +                                fSiPMThickness*0.5,
+  +                                fBarThickness*0.5);
+  +  if (!fSiPMLV) {
+  +    fSiPMLV = new G4LogicalVolume(sipmSolid, fSiPMMat, "SiPM_LV");
+  +    auto* sipmVis = new G4VisAttributes(G4Colour(1.0, 0.2, 0.2, 0.9));
+  +    sipmVis->SetForceSolid(true);
+  +    fSiPMLV->SetVisAttributes(sipmVis);
+  +  }
+  +
+  +  // Rotación común para barra y SiPM cuando estamos en plano Y:
+  +  // 90° alrededor de Z gira la orientación canónica (largo en Y) a
+  +  // largo en X. Se aplica al placement, no al LV.
+  +  G4RotationMatrix* rot = nullptr;
+  +  if (axis == 'Y') {
+  +    rot = new G4RotationMatrix();
+  +    rot->rotateZ(90.*deg);
+  +  }
+  +
+  +  // Posicionar las nbars barras del subplano.
+  +  for (G4int i = 0; i < fNbars; ++i) {
+  +    G4double posAxis = -half + i*pitch + dShift;   // posición a lo largo del eje "axis"
+  +    G4ThreeVector pos;
+  +    if (axis == 'X') {
+  +      pos = G4ThreeVector(posAxis, 0., zCenter);
+  +    } else {
+  +      pos = G4ThreeVector(0., posAxis, zCenter);
+  +    }
+  +
+  +    G4int copyNo = copyOffset + i;   // 0..31 globalmente
+  +
+--     new G4PVPlacement(rot, pos, fScintLV,
+--                       "Scint_PV",  parentLV,
+--                       false, copyNo, true);
++++    auto* scintPV = new G4PVPlacement(rot, pos, fScintLV,
++++                                      "Scint_PV",  parentLV,
++++                                      false, copyNo, true);
++++    fScintPVs.push_back(scintPV);
+  +
+  +    // SiPM acoplado a la barra. Convención de lado:
+  +    //   X-sup, Y-sup → lado "izquierdo" (negativo en el eje del largo)
+  +    //   X-inf, Y-inf → lado "derecho"  (positivo en el eje del largo)
+  +    G4double signSide = (layer == 0) ? -1.0 : +1.0;
+--     G4double sipmSep  = fBarLength*0.5 + fSiPMThickness*0.5 + 0.05*mm;
++++    G4double sipmSep  = fBarLength*0.5 + fSiPMThickness*0.5;
++++    if (!fUseImprovedOpticalCoupling) sipmSep += 0.05*mm;
+  +
+  +    G4ThreeVector sipmPos;
+  +    if (axis == 'X') {
+  +      // barra larga en Y → SiPM en Y±
+  +      // como el SiPM_LV tiene dimensiones (W/2, T/2, S/2) en (x,y,z),
+  +      // y queremos su lado largo (W) alineado con el ancho de la barra (X)
+  +      // y su lado corto (T) en Y, la geometría está bien sin rotación.
+  +      sipmPos = G4ThreeVector(posAxis, signSide*sipmSep, zCenter);
+  +    } else {
+  +      // barra larga en X → SiPM en X±
+  +      // necesitamos rotar el SiPM_LV 90° en Z para que el lado largo
+  +      // (W) quede alineado con el ancho de la barra (Y) en este caso.
+  +      sipmPos = G4ThreeVector(signSide*sipmSep, posAxis, zCenter);
+  +    }
+  +
+  +    G4RotationMatrix* sipmRot = rot;  // misma rotación que la barra
+--     new G4PVPlacement(sipmRot, sipmPos, fSiPMLV,
+--                       "SiPM_PV", parentLV,
+--                       false, copyNo, true);
++++    auto* sipmPV = new G4PVPlacement(sipmRot, sipmPos, fSiPMLV,
++++                                     "SiPM_PV", parentLV,
++++                                     false, copyNo, true);
++++    fSiPMPVs.push_back(sipmPV);
+  +  }
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
+  +{
++++  fScintPVs.clear();
++++  fSiPMPVs.clear();
++++  fAssemblyPV = nullptr;
++++
+  +  // ---- World ---------------------------------------------------------------
+  +  G4double worldHalf = 50.*cm;
+  +  auto* worldSolid = new G4Box("World", worldHalf, worldHalf, worldHalf);
+  +  auto* worldLV    = new G4LogicalVolume(worldSolid, fAir, "World_LV");
+  +  worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
+  +
+  +  auto* worldPV = new G4PVPlacement(nullptr, G4ThreeVector(),
+  +                                    worldLV, "World_PV",
+  +                                    nullptr, false, 0, true);
+  +
+  +  // ---- Asamble del hodoscopio (logical volume "contenedor", de aire) ------
+  +  G4double assXY = 0.5*( (fNbars-1)*(fBarWidth+fGap) + fBarWidth + fOffset )
+  +                   + 5.*mm + fSiPMThickness; // margen para SiPMs y aire
+  +  G4double assXY_half = std::max(assXY, fBarLength*0.5 + 5.*mm);
+  +  G4double assZ_half  = 10.*mm;
+  +
+  +  auto* assSolid = new G4Box("Assembly", assXY_half, assXY_half, assZ_half);
+  +  auto* assLV    = new G4LogicalVolume(assSolid, fAir, "Assembly_LV");
+  +  assLV->SetVisAttributes(G4VisAttributes::GetInvisible());
+  +
+--   new G4PVPlacement(nullptr, G4ThreeVector(),
+--                     assLV, "Assembly_PV", worldLV,
+--                     false, 0, true);
++++  fAssemblyPV = new G4PVPlacement(nullptr, G4ThreeVector(),
++++                                  assLV, "Assembly_PV", worldLV,
++++                                  false, 0, true);
+  +
+  +  // ---- Cálculo de las Z de los 4 subplanos --------------------------------
+  +  // Top de la pila a cota +Ztot/2, bottom a -Ztot/2.
+  +  // Distancias centro-a-centro:
+  +  //   X_sup → X_inf : barThk + sepZ
+  +  //   X_inf → Y_sup : barThk + D    (D es gap entre superficies)
+  +  //   Y_sup → Y_inf : barThk + sepZ
+  +  G4double dz_sup_inf = fBarThickness + fSepZ;
+  +  G4double dz_X_Y     = fBarThickness + fD;
+  +
+  +  G4double Z_X_sup = +(dz_sup_inf + dz_X_Y)/2.;
+  +  G4double Z_X_inf = Z_X_sup - dz_sup_inf;
+  +  G4double Z_Y_sup = Z_X_inf - dz_X_Y;
+  +  G4double Z_Y_inf = Z_Y_sup - dz_sup_inf;
+  +
+  +  G4cout << "[DetectorConstruction] Z centers (mm):"
+  +         << "  X_sup=" << Z_X_sup/mm
+  +         << "  X_inf=" << Z_X_inf/mm
+  +         << "  Y_sup=" << Z_Y_sup/mm
+  +         << "  Y_inf=" << Z_Y_inf/mm
+  +         << " | D=" << fD/mm << " mm"
+  +         << G4endl;
+  +
+  +  // ---- Construir los 4 subplanos -----------------------------------------
+  +  BuildSubplane('X', 0, Z_X_sup,  0, assLV);
+  +  BuildSubplane('X', 1, Z_X_inf,  8, assLV);
+  +  BuildSubplane('Y', 0, Z_Y_sup, 16, assLV);
+  +  BuildSubplane('Y', 1, Z_Y_inf, 24, assLV);
+  +
+  +  return worldPV;
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +G4VPhysicalVolume* DetectorConstruction::Construct()
+  +{
+  +  // Read runtime env var to decide whether to enable optical physics
+  +  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
+  +  if (env_opt && std::string(env_opt) == "1") {
+  +    SetEnableOpticalPhysics(true);
+  +  } else {
+  +    SetEnableOpticalPhysics(false);
+  +  }
+  +
+  +  DefineMaterials();
+  +  auto* world = DefineVolumes();
+  +  DefineOpticalSurfaces();   // pintura TiO2 (skin surface) si fEnableOptical==true
+  +  PrintDetectorConfiguration();
+  +  return world;
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +// Modelado óptico de la pintura blanca de TiO2 sobre las barras.
+  +//
+  +// Se utiliza el modelo 'unified' con finish 'groundfrontpainted', que es
+  +// el estándar Geant4 para pinturas reflectantes difusas delgadas.
+  +//
+  +// Comportamiento del modelo:
+  +//   - Un fotón óptico que incide sobre la superficie del centellador desde
+  +//     el lado del centellador puede:
+  +//        * reflejarse difusamente (Lambertian) con prob = REFLECTIVITY,
+  +//        * ser absorbido con prob = 1 - REFLECTIVITY.
+  +//   - No hay transmisión: el fotón nunca se propaga dentro del material
+  +//     TiO2. Por eso el material TiO2 definido en DefineMaterials no aparece
+  +//     como volumen físico — el efecto óptico está en la superficie.
+  +//
+  +// Reflectividad usada (típica EJ-510, dependiente de longitud de onda):
+  +//        2.38 eV (~520 nm)  -> 0.97
+  +//        2.70 eV (~460 nm)  -> 0.96
+  +//        2.92 eV (~425 nm)  -> 0.93   (pico de emisión EJ-200)
+  +//        3.10 eV (~400 nm)  -> 0.85
+  +//
+  +// LIMITACIÓN ACTUAL (a corregir cuando se active G4OpticalPhysics):
+  +//   La superficie pinta las 6 caras de la barra, incluyendo la cara que
+  +//   acopla al SiPM. En la realidad esa cara está sin pintar (con grasa
+  +//   óptica). Mientras la física óptica esté DESHABILITADA, las superficies
+  +//   son inertes y esto NO afecta la simulación de muones MIP.
+  +//   Cuando se active el transporte óptico, hay que:
+  +//     (a) Reestructurar el SiPM como hijo del volumen de barra (sin gap
+  +//         de aire), o
+  +//     (b) Definir G4LogicalBorderSurface(bar_PV, sipm_PV) con finish
+  +//         'polished' para sobreescribir la skin en esa cara.
+  +//----------------------------------------------------------------------------
+  +void DetectorConstruction::DefineOpticalSurfaces()
+  +{
+  +  if (!fScintLV) return;
+  +  if (!fEnableOptical) {
+  +    G4cout << "[DetectorConstruction] Optical surfaces skipped (fEnableOptical=false)" << G4endl;
+  +    return;
+  +  }
+  +
+  +  auto* paintSurf = new G4OpticalSurface("TiO2_paint_surface");
+  +  paintSurf->SetModel(unified);
+  +  paintSurf->SetType(dielectric_dielectric);
+--   paintSurf->SetFinish(groundfrontpainted);   // Lambertian diffuse desde la cara pintada
++++  paintSurf->SetFinish(fUseImprovedOpticalCoupling
++++                       ? polishedfrontpainted
++++                       : groundfrontpainted);
+  +  paintSurf->SetSigmaAlpha(0.1);              // rugosidad ~6° (info para finish ground*)
+  +
+  +  const G4int nE = 4;
+  +  G4double phE [nE] = { 2.38*eV, 2.70*eV, 2.92*eV, 3.10*eV };
+  +  G4double refl[nE] = { 0.97,    0.96,    0.93,    0.85    };
+  +  G4double effi[nE] = { 0.0,     0.0,     0.0,     0.0     };
+  +
+  +  auto* mptPaint = new G4MaterialPropertiesTable();
+  +  mptPaint->AddProperty("REFLECTIVITY", phE, refl, nE);
+  +  mptPaint->AddProperty("EFFICIENCY",   phE, effi, nE);
+  +  paintSurf->SetMaterialPropertiesTable(mptPaint);
+  +
+  +  G4cout << "[HODO] TiO2 optical surface: present" << G4endl;
+  +  G4cout << "[HODO] TiO2 REFLECTIVITY: present" << G4endl;
+  +  G4cout << "[HODO] TiO2 EFFICIENCY: present" << G4endl;
+  +
+--   new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
++++  if (!fUseImprovedOpticalCoupling) {
++++    new G4LogicalSkinSurface("Scint_paint_skin", fScintLV, paintSurf);
++++
++++    G4cout << "[DetectorConstruction] TiO2 paint surface defined "
++++           << "(R~97% @ 425 nm, Lambertian diffuse, legacy skin on all faces)"
++++           << G4endl;
++++    return;
++++  }
++++
++++  if (!fAssemblyPV || fScintPVs.size() != fSiPMPVs.size()) {
++++    G4cerr << "[DetectorConstruction] Improved optical coupling requested, "
++++           << "but scintillator/SiPM physical volume pairs are incomplete."
++++           << G4endl;
++++    return;
++++  }
++++
++++  auto* sipmSurf = new G4OpticalSurface("SiPM_detection_surface");
++++  sipmSurf->SetModel(unified);
++++  sipmSurf->SetType(dielectric_dielectric);
++++  sipmSurf->SetFinish(polished);
+  +
+--   G4cout << "[DetectorConstruction] TiO2 paint surface defined "
+--          << "(R~97% @ 425 nm, Lambertian diffuse)" << G4endl;
++++  for (std::size_t i = 0; i < fScintPVs.size(); ++i) {
++++    new G4LogicalBorderSurface("Scint_to_air_paint_border",
++++                               fScintPVs[i], fAssemblyPV, paintSurf);
++++    new G4LogicalBorderSurface("Scint_to_SiPM_detection_border",
++++                               fScintPVs[i], fSiPMPVs[i], sipmSurf);
++++  }
++++
++++  G4cout << "[DetectorConstruction] Improved optical coupling defined for "
++++         << fScintPVs.size()
++++         << " bars: paint border to assembly air plus polished SiPM detection border"
++++         << G4endl;
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +void DetectorConstruction::ConstructSDandField()
+  +{
+  +  // Tras ReinitializeGeometry() este método se llama en cada nuevo run.
+  +  // Reutilizamos el SD existente si ya fue registrado; de lo contrario
+  +  // lo creamos. Esto evita el WARNING "already exists" del G4SDManager
+  +  // y garantiza que fHCID quede correctamente inicializado en todos los runs.
+  +  auto* sdMan = G4SDManager::GetSDMpointer();
+  +
+  +  auto* scintSD = dynamic_cast<ScintillatorSD*>(
+  +      sdMan->FindSensitiveDetector("ScintSD", false));
+  +  if (!scintSD) {
+  +    scintSD = new ScintillatorSD("ScintSD", "ScintHC");
+  +    sdMan->AddNewDetector(scintSD);
+  +  }
+  +  if (fScintLV) fScintLV->SetSensitiveDetector(scintSD);
+  +
+  +  auto* sipmSD = dynamic_cast<SiPMSD*>(
+  +      sdMan->FindSensitiveDetector("SiPMSD", false));
+  +  if (!sipmSD) {
+  +    sipmSD = new SiPMSD("SiPMSD", "SiPMHC");
+  +    sdMan->AddNewDetector(sipmSD);
+  +  }
+  +  if (fSiPMLV) fSiPMLV->SetSensitiveDetector(sipmSD);
+  +}
+  +
+  +//----------------------------------------------------------------------------
+  +void DetectorConstruction::SetPlaneSeparationD(G4double D)
+  +{
+  +  fD = D;
+  +  // re-build geometry on next run start
+  +  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  +}
+  +
+  +void DetectorConstruction::SetDetectorVariant(HodoscopeVariant variant)
+  +{
+  +  fVariant = variant;
+  +  fVariantConfig = makeVariantConfig(variant);
+  +  G4cout << "[DetectorConstruction] Detector variant set to "
+  +    << fVariantConfig.variantLabel << G4endl;
+  +  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  +}
+  +
+  +void DetectorConstruction::SetDetectorVariantByName(const G4String& variantName)
+  +{
+  +  const G4String normalized = toLowerCopy(variantName);
+  +
+  +  if (normalized == "tio2" || normalized == "hod2019" ||
+  +      normalized == "hod2019_tio2") {
+  +    SetDetectorVariant(HodoscopeVariant::Hod2019_TiO2);
+  +    return;
+  +  }
+  +
+  +  if (normalized == "vikuiti" || normalized == "hod2018" ||
+  +      normalized == "hod2018_vikuiti") {
+  +    SetDetectorVariant(HodoscopeVariant::Hod2018_Vikuiti);
+  +    return;
+  +  }
+  +
+  +  G4cerr << "[DetectorConstruction] Invalid detector variant '"
+  +    << variantName << "'. Valid options: Hod2019, TiO2, Hod2019_TiO2, "
+  +    << "Hod2018, Vikuiti, Hod2018_Vikuiti." << G4endl;
+  +}
+  +
+  +void DetectorConstruction::SetEnableOpticalPhysics(G4bool b)
+  +{
+  +  fEnableOptical = b;
+  +  G4cout << "[DetectorConstruction] Optical physics flag = "
+  +         << (b ? "ON" : "OFF") << G4endl;
+  +}
+  +
++++void DetectorConstruction::SetUseImprovedOpticalCoupling(G4bool b)
++++{
++++  fUseImprovedOpticalCoupling = b;
++++  fScintLV = nullptr;
++++  fSiPMLV = nullptr;
++++  fAssemblyPV = nullptr;
++++  fScintPVs.clear();
++++  fSiPMPVs.clear();
++++  G4cout << "[DetectorConstruction] Improved optical coupling flag = "
++++         << (b ? "ON" : "OFF") << G4endl;
++++  G4RunManager::GetRunManager()->ReinitializeGeometry();
++++}
++++
+  +void DetectorConstruction::PrintDetectorConfiguration() const
+  +{
+  +  G4cout << "[DetectorConstruction] Detector variant selected: "
+  +    << fVariantConfig.variantLabel << G4endl;
+  +  G4cout << "[DetectorConstruction] Scintillator material: "
+  +    << fVariantConfig.scintillatorMaterial << G4endl;
+  +  G4cout << "[DetectorConstruction] Reflector type: "
+  +    << fVariantConfig.reflectorName << G4endl;
+  +  G4cout << "[DetectorConstruction] Reflector thickness: "
+  +    << fVariantConfig.reflectorThicknessMm / mm << " mm" << G4endl;
+  +  G4cout << "[DetectorConstruction] Kapton thickness: "
+  +    << fVariantConfig.kaptonThicknessMm / mm << " mm" << G4endl;
+  +  G4cout << "[DetectorConstruction] Reflector model: "
+  +    << fVariantConfig.reflectorModel << G4endl;
+  +  G4cout << "[DetectorConstruction] Physical layer enabled: "
+  +    << (fVariantConfig.physicalLayerEnabled ? "yes" : "no") << G4endl;
+  +  G4cout << "[DetectorConstruction] MPPC model: "
+  +    << fVariantConfig.mppcModel << G4endl;
+  +  G4cout << "[DetectorConstruction] Optical photons: "
+  +    << (fEnableOptical ? "enabled" : "disabled") << G4endl;
++++  G4cout << "[DetectorConstruction] Improved optical coupling: "
++++    << (fUseImprovedOpticalCoupling ? "enabled" : "disabled") << G4endl;
+  +}
+diff --cc src/DetectorMessenger.cc
+index a30243f,a30243f,0000000..b46cd78
+mode 100644,100644,000000..100644
+--- a/src/DetectorMessenger.cc
++++ b/src/DetectorMessenger.cc
+@@@@ -1,59 -1,59 -1,0 +1,68 @@@@
+  +//----------------------------------------------------------------------------
+  +// DetectorMessenger.cc
+  +//----------------------------------------------------------------------------
+  +#include "DetectorMessenger.hh"
+  +#include "DetectorConstruction.hh"
+  +
+  +#include "G4UIdirectory.hh"
+  +#include "G4UIcmdWithADoubleAndUnit.hh"
+  +#include "G4UIcmdWithABool.hh"
+  +#include "G4UIcmdWithAString.hh"
+  +
+  +DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
+  +: G4UImessenger(), fDet(det),
+--   fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr), fCmdOptical(nullptr)
++++  fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr),
++++  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr)
+  +{
+  +  fDir = new G4UIdirectory("/hodoscope/");
+  +  fDir->SetGuidance("Hodoscope simulation control");
+  +
+  +  fDirDet = new G4UIdirectory("/hodoscope/det/");
+  +  fDirDet->SetGuidance("Geometry parameters");
+  +
+  +  fCmdVariant = new G4UIcmdWithAString("/hodoscope/setDetectorVariant", this);
+  +  fCmdVariant->SetGuidance("Set the detector variant: Hod2019/TiO2 or Hod2018/Vikuiti.");
+  +  fCmdVariant->SetParameterName("variant", false);
+  +  fCmdVariant->AvailableForStates(G4State_PreInit, G4State_Idle);
+  +
+  +  fCmdD = new G4UIcmdWithADoubleAndUnit("/hodoscope/det/setD", this);
+  +  fCmdD->SetGuidance("Set plane separation D between X and Y planes.");
+  +  fCmdD->SetParameterName("D", false);
+  +  fCmdD->SetUnitCategory("Length");
+  +  fCmdD->SetDefaultUnit("mm");
+  +  fCmdD->SetRange("D>0.");
+  +  fCmdD->AvailableForStates(G4State_PreInit, G4State_Idle);
+  +
+  +  fCmdOptical = new G4UIcmdWithABool("/hodoscope/det/optical", this);
+  +  fCmdOptical->SetGuidance("Enable optical photon transport (placeholder flag).");
+  +  fCmdOptical->SetParameterName("flag", false);
+  +  fCmdOptical->AvailableForStates(G4State_PreInit, G4State_Idle);
++++
++++  fCmdImprovedOptical = new G4UIcmdWithABool("/hodoscope/det/improvedOptical", this);
++++  fCmdImprovedOptical->SetGuidance("Enable improved optical coupling surfaces for SiPM detection.");
++++  fCmdImprovedOptical->SetParameterName("flag", false);
++++  fCmdImprovedOptical->AvailableForStates(G4State_PreInit, G4State_Idle);
+  +}
+  +
+  +DetectorMessenger::~DetectorMessenger()
+  +{
+  +  delete fCmdVariant;
++++  delete fCmdImprovedOptical;
+  +  delete fCmdOptical;
+  +  delete fCmdD;
+  +  delete fDirDet;
+  +  delete fDir;
+  +}
+  +
+  +void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
+  +{
+  +  if (cmd == fCmdVariant) {
+  +    fDet->SetDetectorVariantByName(val);
+  +  } else if (cmd == fCmdD) {
+  +    fDet->SetPlaneSeparationD(fCmdD->GetNewDoubleValue(val));
+  +  } else if (cmd == fCmdOptical) {
+  +    fDet->SetEnableOpticalPhysics(fCmdOptical->GetNewBoolValue(val));
++++  } else if (cmd == fCmdImprovedOptical) {
++++    fDet->SetUseImprovedOpticalCoupling(fCmdImprovedOptical->GetNewBoolValue(val));
+  +  }
+  +}
+diff --cc src/PhysicsList.cc
+index 0d4412b,0d4412b,0000000..3007f58
+mode 100644,100644,000000..100644
+--- a/src/PhysicsList.cc
++++ b/src/PhysicsList.cc
+@@@@ -1,60 -1,60 -1,0 +1,66 @@@@
+  +//----------------------------------------------------------------------------
+  +// PhysicsList.cc
+  +//
+  +// Composición:
+  +//   - G4DecayPhysics                  decaimientos
+  +//   - G4RadioactiveDecayPhysics       no esencial pero sin costo apreciable
+  +//   - G4EmStandardPhysics_option4     EM precisa
+  +//   - FTFP_BERT-like hadronic         (vía G4HadronPhysicsFTFP_BERT, etc.)
+  +//   - G4OpticalPhysics                preparado, registrado pero deshabilitado
+  +//                                     por defecto a través del flag externo.
+  +//
+  +// Para muones MIP el dE/dx viene de G4EmStandardPhysics_option4. Con
+  +// G4UserLimits(MaxStep=0.1mm) en la barra (1 mm), garantizamos varios pasos
+  +// dentro del centellador.
+  +//----------------------------------------------------------------------------
+  +#include "PhysicsList.hh"
+  +
+  +#include "G4DecayPhysics.hh"
+  +#include "G4RadioactiveDecayPhysics.hh"
+  +#include "G4EmStandardPhysics_option4.hh"
+  +#include "G4HadronPhysicsFTFP_BERT.hh"
+  +#include "G4HadronElasticPhysics.hh"
+  +#include "G4StoppingPhysics.hh"
+  +#include "G4IonPhysics.hh"
+  +#include "G4OpticalPhysics.hh"
+  +#include "G4SystemOfUnits.hh"
+  +
+  +PhysicsList::PhysicsList() : G4VModularPhysicsList()
+  +{
+  +  SetVerboseLevel(1);
+  +
++++  const char* env_opt_raw = std::getenv("HODO_ENABLE_OPTICAL");
++++  const G4String env_opt_value = env_opt_raw ? G4String(env_opt_raw) : G4String("<unset>");
++++  G4cout << "[HODO] HODO_ENABLE_OPTICAL=" << env_opt_value << G4endl;
++++
+  +  RegisterPhysics(new G4DecayPhysics());
+  +  RegisterPhysics(new G4RadioactiveDecayPhysics());
+  +  RegisterPhysics(new G4EmStandardPhysics_option4());
+  +  RegisterPhysics(new G4HadronElasticPhysics());
+  +  RegisterPhysics(new G4HadronPhysicsFTFP_BERT());
+  +  RegisterPhysics(new G4StoppingPhysics());
+  +  RegisterPhysics(new G4IonPhysics());
+  +
+  +  // Optical physics: register only if HODO_ENABLE_OPTICAL=1 in env.
+  +  // This allows running Iteration 0 (optical off) unchanged while enabling
+  +  // a minimal optical transport for Iteration 1 when requested.
+  +  const char* env_opt = std::getenv("HODO_ENABLE_OPTICAL");
+  +  if (env_opt && std::string(env_opt) == "1") {
+  +    auto* op = new G4OpticalPhysics();
+  +    RegisterPhysics(op);
++++    G4cout << "[HODO] Optical physics ENABLED" << G4endl;
+  +    G4cout << "[PhysicsList] G4OpticalPhysics registered (HODO_ENABLE_OPTICAL=1)" << G4endl;
+  +  } else {
++++    G4cout << "[HODO] Optical physics DISABLED" << G4endl;
+  +    G4cout << "[PhysicsList] G4OpticalPhysics NOT registered (HODO_ENABLE_OPTICAL!=1)" << G4endl;
+  +  }
+  +}
+  +
+  +void PhysicsList::SetCuts()
+  +{
+  +  // Cuts globales por rango: 0.1 mm (electrones, photones, positrones)
+  +  defaultCutValue = 0.1 * mm;
+  +  SetCutValue(defaultCutValue, "gamma");
+  +  SetCutValue(defaultCutValue, "e-");
+  +  SetCutValue(defaultCutValue, "e+");
+  +}
+diff --cc src/RunAction.cc
+index f6af501,f6af501,0000000..bf0f2fd
+mode 100644,100644,000000..100644
+--- a/src/RunAction.cc
++++ b/src/RunAction.cc
+@@@@ -1,163 -1,163 -1,0 +1,167 @@@@
+  +//----------------------------------------------------------------------------
+  +// RunAction.cc
+  +//----------------------------------------------------------------------------
+  +#include "RunAction.hh"
+  +#include "G4AnalysisManager.hh"
+  +#include "G4Run.hh"
+  +#include "G4RunManager.hh"
+  +#include "G4SystemOfUnits.hh"
+  +#include "G4Threading.hh"
+  +#include "DetectorConstruction.hh"
+  +
+  +#include <fstream>
+  +#include <sstream>
+  +#include <iomanip>
+  +
+  +namespace {
+  +  G4String idxName(const G4String& base, int i) {
+  +    std::ostringstream oss;
+  +    oss << base << std::setw(2) << std::setfill('0') << i;
+  +    return G4String(oss.str());
+  +  }
+  +
+  +  G4String makeConfigSidecarName(const G4String& rootFileName)
+  +  {
+  +    std::string path(rootFileName);
+  +    if (path.size() >= 5 && path.substr(path.size() - 5) == ".root") {
+  +      path.resize(path.size() - 5);
+  +    }
+  +    return G4String(path + "_config.txt");
+  +  }
+  +
+  +  void writeVariantSidecar(const G4String& rootFileName,
+  +            const DetectorConstruction& det)
+  +  {
+  +    const auto& cfg = det.GetDetectorVariantConfig();
+  +    std::ofstream out(makeConfigSidecarName(rootFileName));
+  +    if (!out) {
+  +      G4cerr << "[RunAction] Could not create detector config sidecar for "
+  +        << rootFileName << G4endl;
+  +      return;
+  +    }
+  +
+  +    out << "detector_variant=" << cfg.variantLabel << '\n'
+  +   << "scintillator_material=" << cfg.scintillatorMaterial << '\n'
+  +   << "reflector_name=" << cfg.reflectorName << '\n'
+  +   << "reflector_model=" << cfg.reflectorModel << '\n'
+  +   << "reflector_thickness_mm=" << cfg.reflectorThicknessMm / mm << '\n'
+  +   << "kapton_thickness_mm=" << cfg.kaptonThicknessMm / mm << '\n'
+  +   << "mppc_model=" << cfg.mppcModel << '\n'
+  +   << "physical_layer_enabled=" << (cfg.physicalLayerEnabled ? "true" : "false") << '\n'
+--    << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n';
++++   << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n'
++++   << "improved_optical_coupling="
++++   << (det.IsImprovedOpticalCouplingEnabled() ? "true" : "false") << '\n';
+  +  }
+  +
+  +  void logVariantSummary(const DetectorConstruction& det)
+  +  {
+  +    const auto& cfg = det.GetDetectorVariantConfig();
+  +    G4cout << "[RunAction] Detector variant selected: "
+  +      << cfg.variantLabel << G4endl;
+  +    G4cout << "[RunAction] Scintillator material: "
+  +      << cfg.scintillatorMaterial << G4endl;
+  +    G4cout << "[RunAction] Reflector type: "
+  +      << cfg.reflectorName << G4endl;
+  +    G4cout << "[RunAction] Reflector thickness: "
+  +      << cfg.reflectorThicknessMm / mm << " mm" << G4endl;
+  +    G4cout << "[RunAction] Kapton thickness: "
+  +      << cfg.kaptonThicknessMm / mm << " mm" << G4endl;
+  +    G4cout << "[RunAction] Reflector model: "
+  +      << cfg.reflectorModel << G4endl;
+  +    G4cout << "[RunAction] Physical layer enabled: "
+  +      << (cfg.physicalLayerEnabled ? "yes" : "no") << G4endl;
+  +    G4cout << "[RunAction] Optical photons: "
+  +      << (det.IsOpticalEnabled() ? "enabled" : "disabled") << G4endl;
++++    G4cout << "[RunAction] Improved optical coupling: "
++++      << (det.IsImprovedOpticalCouplingEnabled() ? "enabled" : "disabled") << G4endl;
+  +  }
+  +}
+  +
+  +RunAction::RunAction() : G4UserRunAction(),
+  +  fIsMaster(G4Threading::IsMasterThread())
+  +{
+  +  auto* an = G4AnalysisManager::Instance();
+  +  an->SetDefaultFileType("root");
+  +  an->SetVerboseLevel(1);
+  +  an->SetNtupleMerging(true);  // requerido para MT; no-op en modo serial
+  +
+  +  // ----- Definir el TTree y sus branches -----------------------------------
+  +  // Se guardan como columnas individuales por simplicidad (no arrays G4-style).
+  +  an->CreateNtuple("hodo", "Hodoscope per-event tree");
+  +
+  +  // 0..6: primario
+  +  an->CreateNtupleIColumn("eventID");
+  +  an->CreateNtupleDColumn("prim_x");      // mm
+  +  an->CreateNtupleDColumn("prim_y");
+  +  an->CreateNtupleDColumn("prim_z");
+  +  an->CreateNtupleDColumn("prim_px");
+  +  an->CreateNtupleDColumn("prim_py");
+  +  an->CreateNtupleDColumn("prim_pz");
+  +  an->CreateNtupleDColumn("prim_E");      // MeV
+  +
+  +  // 8..39: edep[32]
+  +  for (int i = 0; i < 32; ++i)
+  +    an->CreateNtupleDColumn(idxName("edep_", i));
+  +
+  +  // 40..71: nph[32]
+  +  for (int i = 0; i < 32; ++i)
+  +    an->CreateNtupleIColumn(idxName("nph_", i));
+  +
+  +  // 72..103: tfirst[32]
+  +  for (int i = 0; i < 32; ++i)
+  +    an->CreateNtupleDColumn(idxName("tfirst_", i));
+  +
+  +  an->FinishNtuple();
+  +}
+  +
+  +void RunAction::BeginOfRunAction(const G4Run* /*run*/)
+  +{
+  +  auto* an = G4AnalysisManager::Instance();
+  +  const auto* det = dynamic_cast<const DetectorConstruction*>(
+  +      G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  +
+  +  if (fIsMaster) {
+  +    // Maestro: abrir el archivo principal sólo en el primer run.
+  +    if (an->GetFileName().empty()) an->SetFileName("hodoscope");
+  +    if (!fFileOpen) {
+  +      an->OpenFile();
+  +      fFileOpen        = true;
+  +      fCurrentFileName = an->GetFileName();
+  +      G4cout << "[RunAction] Output file: " << fCurrentFileName << G4endl;
+  +      if (det) {
+  +        logVariantSummary(*det);
+  +        writeVariantSidecar(fCurrentFileName, *det);
+  +      }
+  +    }
+  +    // fAllowFileCycling=false en MT → ciclado desactivado.
+  +  } else {
+  +    // Workers: abrir un buffer temporal fresco en cada run.
+  +    // (fFileOpen=false fue restablecido en el EndOfRunAction anterior)
+  +    an->OpenFile();
+  +    fFileOpen = true;
+  +  }
+  +}
+  +
+  +void RunAction::EndOfRunAction(const G4Run* /*run*/)
+  +{
+  +  auto* an = G4AnalysisManager::Instance();
+  +  if (fIsMaster) {
+  +    // Maestro: recoger los datos de los workers (ya escribieron y cerraron
+  +    // sus buffers) y volcarlos al archivo principal. El archivo permanece
+  +    // abierto para acumular el siguiente run.
+  +    if (fFileOpen) an->Write();
+  +  } else {
+  +    // Workers: vaciar filas al buffer de merge y cerrarlo. El maestro
+  +    // llamará Write() después para recoger estos datos.
+  +    an->Write();
+  +    an->CloseFile(false);  // conserva defs de columnas; fFileOpen se resetea
+  +    fFileOpen = false;
+  +  }
+  +}
+  +
+  +RunAction::~RunAction()
+  +{
+  +  // El archivo del maestro se cierra explícitamente desde main() antes de
+  +  // destruir el runManager (mientras los workers aún existen). Los workers
+  +  // ya cerraron sus buffers en EndOfRunAction. Nada que hacer aquí.
+  +}
