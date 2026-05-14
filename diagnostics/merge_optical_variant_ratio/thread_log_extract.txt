@@ -1,0 +1,278 @@
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:[main] Geant4 running with 1 threads
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4WT0 > [thread 0]   Number of events processed : 100
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_ST.log:G4WT0 > [thread 0]   User=1.100000s Real=1.098601s Sys=0.000000s [Cpu=100.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:[main] Geant4 running with 1 threads
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4WT0 > [thread 0]   Number of events processed : 100
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_ST.log:G4WT0 > [thread 0]   User=4.460000s Real=4.457659s Sys=0.000000s [Cpu=100.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:[main] Geant4 running with 8 threads
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT3 > ### Run 0 starts on worker thread 3.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT2 > ### Run 0 starts on worker thread 2.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT1 > ### Run 0 starts on worker thread 1.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT7 > ### Run 0 starts on worker thread 7.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT4 > ### Run 0 starts on worker thread 4.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT6 > ### Run 0 starts on worker thread 6.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT5 > ### Run 0 starts on worker thread 5.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT6 > [thread 6] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT6 > [thread 6] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT6 > [thread 6]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT2 > [thread 2] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT2 > [thread 2] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT6 > [thread 6]   User=13.070000s Real=2.535542s Sys=0.020000s [Cpu=516.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT2 > [thread 2]   Number of events processed : 20
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT2 > [thread 2]   User=3.940000s Real=1.392865s Sys=0.000000s [Cpu=282.9%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT4 > [thread 4] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT4 > [thread 4] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT5 > [thread 5] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT5 > [thread 5] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT5 > [thread 5]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT4 > [thread 4]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT5 > [thread 5]   User=13.070000s Real=2.535752s Sys=0.020000s [Cpu=516.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT4 > [thread 4]   User=14.540000s Real=2.785182s Sys=0.030000s [Cpu=523.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT1 > [thread 1] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT0 > [thread 0]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT0 > [thread 0]   User=14.550000s Real=2.785518s Sys=0.030000s [Cpu=523.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT1 > [thread 1] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT1 > [thread 1]   Number of events processed : 20
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT7 > [thread 7] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT7 > [thread 7] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT3 > [thread 3] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT3 > [thread 3] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT3 > [thread 3]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT1 > [thread 1]   User=3.850000s Real=1.379945s Sys=0.000000s [Cpu=279.0%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT3 > [thread 3]   User=14.550000s Real=2.785521s Sys=0.030000s [Cpu=523.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT7 > [thread 7]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT8.log:G4WT7 > [thread 7]   User=14.540000s Real=2.785458s Sys=0.030000s [Cpu=523.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:[main] Geant4 running with 8 threads
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT2 > ### Run 0 starts on worker thread 2.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT6 > ### Run 0 starts on worker thread 6.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT3 > ### Run 0 starts on worker thread 3.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT5 > ### Run 0 starts on worker thread 5.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT1 > ### Run 0 starts on worker thread 1.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT4 > ### Run 0 starts on worker thread 4.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT7 > ### Run 0 starts on worker thread 7.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT7 > [thread 7] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT7 > [thread 7] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT7 > [thread 7]   Number of events processed : 20
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT5 > [thread 5] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT7 > [thread 7]   User=12.650000s Real=5.009459s Sys=0.000000s [Cpu=252.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT6 > [thread 6] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT5 > [thread 5] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT5 > [thread 5]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT5 > [thread 5]   User=59.460000s Real=10.861510s Sys=0.010000s [Cpu=547.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT6 > [thread 6] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT6 > [thread 6]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT2 > [thread 2] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT3 > [thread 3] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT2 > [thread 2] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT2 > [thread 2]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT1 > [thread 1] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT2 > [thread 2]   User=59.950000s Real=11.111410s Sys=0.020000s [Cpu=539.7%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT3 > [thread 3] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT3 > [thread 3]   Number of events processed : 20
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT4 > [thread 4] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT3 > [thread 3]   User=13.830000s Real=5.156061s Sys=0.000000s [Cpu=268.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT0 > [thread 0]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT1 > [thread 1] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT1 > [thread 1]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT0 > [thread 0]   User=59.460000s Real=10.861164s Sys=0.010000s [Cpu=547.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT4 > [thread 4] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT6 > [thread 6]   User=59.950000s Real=11.111343s Sys=0.020000s [Cpu=539.7%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT1 > [thread 1]   User=59.460000s Real=10.861382s Sys=0.010000s [Cpu=547.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT4 > [thread 4]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT8.log:G4WT4 > [thread 4]   User=59.460000s Real=10.861342s Sys=0.010000s [Cpu=547.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:[main] Geant4 running with 16 threads
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:Event modulo is reduced to 6 (was 10) to distribute events to all threads.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:Event modulo is reduced to 6 (was 10) to distribute events to all threads.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT7 > ### Run 0 starts on worker thread 7.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT6 > ### Run 0 starts on worker thread 6.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT13 > ### Run 0 starts on worker thread 13.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT9 > ### Run 0 starts on worker thread 9.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT14 > ### Run 0 starts on worker thread 14.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT5 > ### Run 0 starts on worker thread 5.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT1 > ### Run 0 starts on worker thread 1.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT2 > ### Run 0 starts on worker thread 2.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT4 > ### Run 0 starts on worker thread 4.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT3 > ### Run 0 starts on worker thread 3.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT8 > ### Run 0 starts on worker thread 8.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT15 > ### Run 0 starts on worker thread 15.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT12 > ### Run 0 starts on worker thread 12.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT11 > ### Run 0 starts on worker thread 11.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT10 > ### Run 0 starts on worker thread 10.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT1 > [thread 1] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT1 > [thread 1] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT1 > [thread 1]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT14 > [thread 14] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT15 > [thread 15] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT1 > [thread 1]   User=4.580000s Real=0.581809s Sys=0.000000s [Cpu=787.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT15 > [thread 15] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT5 > [thread 5] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT12 > [thread 12] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT12 > [thread 12] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT12 > [thread 12]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT12 > [thread 12]   User=25.520000s Real=1.940403s Sys=0.080000s [Cpu=1319.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT3 > [thread 3] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT10 > [thread 10] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT7 > [thread 7] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT4 > [thread 4] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT5 > [thread 5] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT7 > [thread 7] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT3 > [thread 3] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT13 > [thread 13] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT15 > [thread 15]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT7 > [thread 7]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT10 > [thread 10] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT6 > [thread 6] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT9 > [thread 9] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT3 > [thread 3]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT5 > [thread 5]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT2 > [thread 2] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT4 > [thread 4] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT8 > [thread 8] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT10 > [thread 10]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT3 > [thread 3]   User=25.520000s Real=1.944227s Sys=0.140000s [Cpu=1319.8%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT2 > [thread 2] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT8 > [thread 8] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT2 > [thread 2]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT15 > [thread 15]   User=25.520000s Real=1.943362s Sys=0.140000s [Cpu=1320.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT6 > [thread 6] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT9 > [thread 9] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT2 > [thread 2]   User=25.520000s Real=1.949380s Sys=0.180000s [Cpu=1318.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT10 > [thread 10]   User=22.200000s Real=1.697566s Sys=0.030000s [Cpu=1309.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT13 > [thread 13] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT5 > [thread 5]   User=25.520000s Real=1.950264s Sys=0.190000s [Cpu=1318.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT11 > [thread 11] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT8 > [thread 8]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT7 > [thread 7]   User=25.530000s Real=1.951072s Sys=0.190000s [Cpu=1318.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT13 > [thread 13]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT11 > [thread 11] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT9 > [thread 9]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT0 > [thread 0]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT0 > [thread 0]   User=25.530000s Real=1.951230s Sys=0.190000s [Cpu=1318.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT9 > [thread 9]   User=25.530000s Real=1.951177s Sys=0.190000s [Cpu=1318.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT8 > [thread 8]   User=25.520000s Real=1.943625s Sys=0.140000s [Cpu=1320.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT13 > [thread 13]   User=25.530000s Real=1.951313s Sys=0.190000s [Cpu=1318.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT6 > [thread 6]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT11 > [thread 11]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT6 > [thread 6]   User=25.530000s Real=1.951286s Sys=0.190000s [Cpu=1318.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT4 > [thread 4]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT11 > [thread 11]   User=22.200000s Real=1.697890s Sys=0.030000s [Cpu=1309.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT14 > [thread 14] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT4 > [thread 4]   User=25.520000s Real=1.946886s Sys=0.170000s [Cpu=1319.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT14 > [thread 14]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_tio2_MT16.log:G4WT14 > [thread 14]   User=25.520000s Real=1.950548s Sys=0.190000s [Cpu=1318.1%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:  << in Multi-threaded mode >> 
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:[main] Geant4 running with 16 threads
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4TaskRunManager :: Using G4ThreadPool...
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:Verbose level for worker thread                    0
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:Event modulo is reduced to 6 (was 10) to distribute events to all threads.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:Event modulo is reduced to 6 (was 10) to distribute events to all threads.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT12 > ### Run 0 starts on worker thread 12.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT6 > ### Run 0 starts on worker thread 6.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT13 > ### Run 0 starts on worker thread 13.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT3 > ### Run 0 starts on worker thread 3.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT8 > ### Run 0 starts on worker thread 8.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT0 > ### Run 0 starts on worker thread 0.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT5 > ### Run 0 starts on worker thread 5.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT2 > ### Run 0 starts on worker thread 2.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT9 > ### Run 0 starts on worker thread 9.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT11 > ### Run 0 starts on worker thread 11.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT15 > ### Run 0 starts on worker thread 15.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT1 > ### Run 0 starts on worker thread 1.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT7 > ### Run 0 starts on worker thread 7.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT4 > ### Run 0 starts on worker thread 4.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT14 > ### Run 0 starts on worker thread 14.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT10 > ### Run 0 starts on worker thread 10.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT4 > [thread 4] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT4 > [thread 4] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT4 > [thread 4]   Number of events processed : 10
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT11 > [thread 11] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT11 > [thread 11] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT11 > [thread 11]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT13 > [thread 13] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT4 > [thread 4]   User=14.260000s Real=1.981389s Sys=0.000000s [Cpu=719.7%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT13 > [thread 13] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT13 > [thread 13]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT6 > [thread 6] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT6 > [thread 6] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT13 > [thread 13]   User=99.360000s Real=7.370139s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT11 > [thread 11]   User=99.360000s Real=7.369881s Sys=0.310000s [Cpu=1352.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT0 > [thread 0] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT7 > [thread 7] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT7 > [thread 7] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT7 > [thread 7]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT6 > [thread 6]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT0 > [thread 0] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT0 > [thread 0]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT6 > [thread 6]   User=99.860000s Real=7.619537s Sys=0.310000s [Cpu=1314.6%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT7 > [thread 7]   User=99.360000s Real=7.369953s Sys=0.310000s [Cpu=1352.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT0 > [thread 0]   User=99.360000s Real=7.370006s Sys=0.310000s [Cpu=1352.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT15 > [thread 15] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT15 > [thread 15] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT15 > [thread 15]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT3 > [thread 3] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT3 > [thread 3] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT15 > [thread 15]   User=99.360000s Real=7.370054s Sys=0.310000s [Cpu=1352.4%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT3 > [thread 3]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT5 > [thread 5] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT5 > [thread 5] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT5 > [thread 5]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT3 > [thread 3]   User=99.360000s Real=7.370208s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT5 > [thread 5]   User=99.360000s Real=7.370175s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT1 > [thread 1] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT1 > [thread 1] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT1 > [thread 1]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT1 > [thread 1]   User=99.360000s Real=7.370158s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT2 > [thread 2] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT2 > [thread 2] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT2 > [thread 2]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT12 > [thread 12] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT12 > [thread 12] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT12 > [thread 12]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT2 > [thread 2]   User=99.360000s Real=7.370257s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT12 > [thread 12]   User=99.860000s Real=7.620328s Sys=0.310000s [Cpu=1314.5%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT14 > [thread 14] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT14 > [thread 14] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT14 > [thread 14]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT8 > [thread 8] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT10 > [thread 10] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT10 > [thread 10] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT10 > [thread 10]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT10 > [thread 10]   User=99.360000s Real=7.367750s Sys=0.270000s [Cpu=1352.2%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT8 > [thread 8] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT14 > [thread 14]   User=99.360000s Real=7.370156s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT8 > [thread 8]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT8 > [thread 8]   User=99.360000s Real=7.370268s Sys=0.310000s [Cpu=1352.3%]
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT9 > [thread 9] Thread-local run terminated.
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT9 > [thread 9] Run Summary
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT9 > [thread 9]   Number of events processed : 6
+diagnostics/merge_optical_variant_ratio/logs/run_vikuiti_MT16.log:G4WT9 > [thread 9]   User=99.360000s Real=7.370464s Sys=0.310000s [Cpu=1352.3%]

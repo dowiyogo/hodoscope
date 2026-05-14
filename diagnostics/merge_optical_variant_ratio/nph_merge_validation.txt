@@ -1,0 +1,17 @@
+Optical variant nph merge validation
+
+TiO2 ST mean nph/event: 2.56
+Vikuiti ST mean nph/event: 32.82
+ratio ST: 12.8203125
+TiO2 MT8 mean nph/event: 2.56
+Vikuiti MT8 mean nph/event: 32.82
+ratio MT8: 12.8203125
+TiO2 MT16 mean nph/event: 2.56
+Vikuiti MT16 mean nph/event: 32.82
+ratio MT16: 12.8203125
+
+TiO2 nph > 0 in ST, MT8, MT16: true
+Vikuiti nph > 0 in ST, MT8, MT16: true
+Vikuiti > TiO2 in ST, MT8, MT16: true
+HODO_THREADS=16 completed without crash: true
+ROOT written for 16-thread TiO2 and Vikuiti runs: true
