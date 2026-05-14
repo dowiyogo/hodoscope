@@ -19,9 +19,12 @@ Makefile
 *.exe
 
 # Output (datos pesados — versionar localmente fuera de git)
+outputs/
+analysis/*/outputs/
 *.root
 *.png
 *.pdf
+*_config.txt
 
 # Editores e IDEs
 .vscode/
