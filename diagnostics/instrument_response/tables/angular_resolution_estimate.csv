@@ -1,0 +1,6 @@
+baseline_mm,variant_pair,sigma_x_hod2018_mm,sigma_y_hod2018_mm,sigma_x_hod2019_mm,sigma_y_hod2019_mm,sigma_theta_x_rad,sigma_theta_y_rad,sigma_theta_x_mrad,sigma_theta_y_mrad,method
+50,Hod2018/Vikuiti + Hod2019/TiO2,0.0997405,0.365248,0.0778484,0.200715,0.0025305,0.00833529,2.5305,8.33529,two_module_parametric
+100,Hod2018/Vikuiti + Hod2019/TiO2,0.0997405,0.365248,0.0778484,0.200715,0.00126525,0.00416764,1.26525,4.16764,two_module_parametric
+200,Hod2018/Vikuiti + Hod2019/TiO2,0.0997405,0.365248,0.0778484,0.200715,0.000632624,0.00208382,0.632624,2.08382,two_module_parametric
+500,Hod2018/Vikuiti + Hod2019/TiO2,0.0997405,0.365248,0.0778484,0.200715,0.00025305,0.000833529,0.25305,0.833529,two_module_parametric
+1000,Hod2018/Vikuiti + Hod2019/TiO2,0.0997405,0.365248,0.0778484,0.200715,0.000126525,0.000416764,0.126525,0.416764,two_module_parametric
