@@ -1,0 +1,17 @@
+variant,variant_label,estimator,coordinate,region,entries,bias_mm,sigma_mm,robust_sigma_mm,edep_threshold_mev,nph_threshold
+tio2,Hod2019/TiO2,edep,x,all,360,0.0139443,0.197464,0.197464,0.0,0.0
+tio2,Hod2019/TiO2,edep,x,central,245,0.0219283,0.237891,0.237891,0.0,0.0
+tio2,Hod2019/TiO2,edep,y,all,361,-0.0125144,0.229161,0.229161,0.0,0.0
+tio2,Hod2019/TiO2,edep,y,central,245,-0.0282654,0.229254,0.229254,0.0,0.0
+tio2,Hod2019/TiO2,nph,x,all,236,0.00423729,0.0649564,0.0649564,0.0,0.0
+tio2,Hod2019/TiO2,nph,x,central,164,0.00609756,0.0778484,0.0778484,0.0,0.0
+tio2,Hod2019/TiO2,nph,y,all,235,-0.015846,0.163524,0.163524,0.0,0.0
+tio2,Hod2019/TiO2,nph,y,central,152,-0.0266917,0.200715,0.200715,0.0,0.0
+vikuiti,Hod2018/Vikuiti,edep,x,all,360,0.00436655,0.0705982,0.0705982,0.0,0.0
+vikuiti,Hod2018/Vikuiti,edep,x,central,245,0.00641616,0.0855011,0.0855011,0.0,0.0
+vikuiti,Hod2018/Vikuiti,edep,y,all,360,-0.0145584,0.294437,0.294437,0.0,0.0
+vikuiti,Hod2018/Vikuiti,edep,y,central,245,-0.021392,0.356707,0.356707,0.0,0.0
+vikuiti,Hod2018/Vikuiti,nph,x,all,357,0.00319866,0.082318,0.082318,0.0,0.0
+vikuiti,Hod2018/Vikuiti,nph,x,central,243,0.00469926,0.0997405,0.0997405,0.0,0.0
+vikuiti,Hod2018/Vikuiti,nph,y,all,358,-0.0122923,0.30227,0.30227,0.0,0.0
+vikuiti,Hod2018/Vikuiti,nph,y,central,245,-0.0179618,0.365248,0.365248,0.0,0.0

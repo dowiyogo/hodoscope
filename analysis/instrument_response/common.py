@@ -137,11 +137,14 @@ def robust_stats(values: object) -> dict[str, float]:
         return {"entries": 0, "bias": math.nan, "sigma": math.nan, "rms_robust": math.nan}
     median = float(np.median(arr))
     mad = float(np.median(np.abs(arr - median)))
+    robust = 1.4826 * mad
+    if robust == 0.0 and arr.size > 1:
+        robust = float(np.std(arr))
     return {
         "entries": int(arr.size),
         "bias": float(np.mean(arr)),
         "sigma": float(np.std(arr)),
-        "rms_robust": 1.4826 * mad,
+        "rms_robust": robust,
     }
 
 
