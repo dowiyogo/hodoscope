@@ -62,6 +62,8 @@ public:
   void SetReflectorDebugMode(G4int mode);
   void SetDetectorVariant(HodoscopeVariant variant);
   void SetDetectorVariantByName(const G4String& variantName);
+  void SetTio2EpoxyEffectiveR425(G4double r);
+  void SetTio2EpoxySurfaceMode(const G4String& mode);
 
   // ---- Getters útiles para análisis --------------------------------------
   G4double GetPlaneSeparationD() const { return fD; }
@@ -71,6 +73,8 @@ public:
   G4bool IsOpticalEnabled() const { return fEnableOptical; }
   G4bool IsImprovedOpticalCouplingEnabled() const { return fUseImprovedOpticalCoupling; }
   G4int GetReflectorDebugMode() const { return fReflectorDebugMode; }
+  G4double GetTio2EpoxyEffectiveR425() const { return fTio2EpoxyEffectiveR425; }
+  const G4String& GetTio2EpoxySurfaceMode() const { return fTio2EpoxySurfaceMode; }
 
 private:
   // --- pasos de construcción ----------------------------------------------
@@ -117,6 +121,8 @@ private:
   G4bool fEnableOptical = false;
   G4bool fUseImprovedOpticalCoupling = false;
   G4int fReflectorDebugMode = 0;
+  G4double fTio2EpoxyEffectiveR425 = -1.0;
+  G4String fTio2EpoxySurfaceMode = "default";
 
   DetectorMessenger* fMessenger = nullptr;
 };

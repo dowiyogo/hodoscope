@@ -456,6 +456,13 @@ void DetectorConstruction::DefineOpticalSurfaces()
   auto setTiO2Reflectivity = [&]() {
     refl[0] = 0.97; refl[1] = 0.96; refl[2] = 0.93; refl[3] = 0.85;
   };
+  auto setEffectiveTiO2EpoxyReflectivity = [&]() {
+    setTiO2Reflectivity();
+    const G4double scale = fTio2EpoxyEffectiveR425 / 0.93;
+    for (G4int i = 0; i < nE; ++i) {
+      refl[i] = std::min(0.999, refl[i] * scale);
+    }
+  };
   auto setESRReflectivity = [&]() {
     refl[0] = 0.990; refl[1] = 0.990; refl[2] = 0.985; refl[3] = 0.970;
   };
@@ -501,12 +508,29 @@ void DetectorConstruction::DefineOpticalSurfaces()
     setESRReflectivity();
     G4cout << "[DetectorConstruction] Optical surface: Vikuiti ESR "
            << "(specular, R>=0.985 around 425 nm)" << G4endl;
+  } else if (fVariant == HodoscopeVariant::Hod2019_TiO2 &&
+             fTio2EpoxyEffectiveR425 >= 0.0) {
+    if (fTio2EpoxySurfaceMode == "specular") {
+      setSpecularSurface();
+    } else {
+      setDiffuseSurface();
+    }
+    setEffectiveTiO2EpoxyReflectivity();
+    G4cout << "[DetectorConstruction] Optical surface: TiO2+epoxy effective "
+           << "override enabled, R425=" << fTio2EpoxyEffectiveR425
+           << ", surface_mode=" << fTio2EpoxySurfaceMode << G4endl;
   } else {
     setDiffuseSurface();
     setTiO2Reflectivity();
     G4cout << "[DetectorConstruction] Optical surface: TiO2 paint "
-           << "(Lambertian/diffuse, R~0.97 around 425 nm)" << G4endl;
+           << "(Lambertian/diffuse, R=0.93 around 425 nm)" << G4endl;
   }
+
+  G4cout << "[DetectorConstruction] Reflector final REFLECTIVITY:";
+  for (G4int i = 0; i < nE; ++i) {
+    G4cout << " (" << phE[i] / eV << " eV, " << refl[i] << ")";
+  }
+  G4cout << G4endl;
 
   mpt->AddProperty("REFLECTIVITY", phE, refl, nE);
   mpt->AddProperty("EFFICIENCY",   phE, effi, nE);
@@ -650,6 +674,52 @@ void DetectorConstruction::SetReflectorDebugMode(G4int mode)
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
+void DetectorConstruction::SetTio2EpoxyEffectiveR425(G4double r)
+{
+  if (r < 0.0) {
+    fTio2EpoxyEffectiveR425 = -1.0;
+  } else if (r <= 0.999) {
+    fTio2EpoxyEffectiveR425 = r;
+  } else {
+    G4cerr << "[DetectorConstruction] Invalid TiO2+epoxy R425 " << r
+           << ". Valid range is [-1 disabled] or 0..0.999." << G4endl;
+    return;
+  }
+
+  fScintLV = nullptr;
+  fSiPMLV = nullptr;
+  fAssemblyPV = nullptr;
+  fScintPVs.clear();
+  fSiPMPVs.clear();
+  G4cout << "[DetectorConstruction] TiO2+epoxy effective R425 = "
+         << (fTio2EpoxyEffectiveR425 < 0.0 ? G4String("disabled")
+                                           : G4String(std::to_string(fTio2EpoxyEffectiveR425)))
+         << G4endl;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+void DetectorConstruction::SetTio2EpoxySurfaceMode(const G4String& mode)
+{
+  const G4String normalized = toLowerCopy(mode);
+  if (normalized != "default" && normalized != "diffuse" &&
+      normalized != "specular") {
+    G4cerr << "[DetectorConstruction] Invalid TiO2+epoxy surface mode '"
+           << mode << "'. Valid modes are default, diffuse, specular."
+           << G4endl;
+    return;
+  }
+
+  fTio2EpoxySurfaceMode = normalized;
+  fScintLV = nullptr;
+  fSiPMLV = nullptr;
+  fAssemblyPV = nullptr;
+  fScintPVs.clear();
+  fSiPMPVs.clear();
+  G4cout << "[DetectorConstruction] TiO2+epoxy surface mode = "
+         << fTio2EpoxySurfaceMode << G4endl;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
 void DetectorConstruction::PrintDetectorConfiguration() const
 {
   G4cout << "[DetectorConstruction] Detector variant selected: "
@@ -674,4 +744,10 @@ void DetectorConstruction::PrintDetectorConfiguration() const
     << (fUseImprovedOpticalCoupling ? "enabled" : "disabled") << G4endl;
   G4cout << "[DetectorConstruction] Reflector debug mode: "
     << fReflectorDebugMode << G4endl;
+  G4cout << "[DetectorConstruction] TiO2+epoxy effective R425: ";
+  if (fTio2EpoxyEffectiveR425 < 0.0) G4cout << "disabled";
+  else G4cout << fTio2EpoxyEffectiveR425;
+  G4cout << G4endl;
+  G4cout << "[DetectorConstruction] TiO2+epoxy surface mode: "
+    << fTio2EpoxySurfaceMode << G4endl;
 }

@@ -50,7 +50,10 @@ namespace {
    << "physical_layer_enabled=" << (cfg.physicalLayerEnabled ? "true" : "false") << '\n'
    << "optical_photons_enabled=" << (det.IsOpticalEnabled() ? "true" : "false") << '\n'
    << "improved_optical_coupling="
-   << (det.IsImprovedOpticalCouplingEnabled() ? "true" : "false") << '\n';
+   << (det.IsImprovedOpticalCouplingEnabled() ? "true" : "false") << '\n'
+   << "reflector_debug_mode=" << det.GetReflectorDebugMode() << '\n'
+   << "tio2_epoxy_effective_r425=" << det.GetTio2EpoxyEffectiveR425() << '\n'
+   << "tio2_epoxy_surface_mode=" << det.GetTio2EpoxySurfaceMode() << '\n';
   }
 
   void logVariantSummary(const DetectorConstruction& det)
@@ -74,6 +77,14 @@ namespace {
       << (det.IsOpticalEnabled() ? "enabled" : "disabled") << G4endl;
     G4cout << "[RunAction] Improved optical coupling: "
       << (det.IsImprovedOpticalCouplingEnabled() ? "enabled" : "disabled") << G4endl;
+    G4cout << "[RunAction] Reflector debug mode: "
+      << det.GetReflectorDebugMode() << G4endl;
+    G4cout << "[RunAction] TiO2+epoxy effective R425: ";
+    if (det.GetTio2EpoxyEffectiveR425() < 0.0) G4cout << "disabled";
+    else G4cout << det.GetTio2EpoxyEffectiveR425();
+    G4cout << G4endl;
+    G4cout << "[RunAction] TiO2+epoxy surface mode: "
+      << det.GetTio2EpoxySurfaceMode() << G4endl;
   }
 }
 

@@ -6,6 +6,7 @@
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
@@ -13,7 +14,8 @@
 DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
 : G4UImessenger(), fDet(det),
   fDir(nullptr), fDirDet(nullptr), fCmdVariant(nullptr), fCmdD(nullptr),
-  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr), fCmdReflectorDebugMode(nullptr)
+  fCmdOptical(nullptr), fCmdImprovedOptical(nullptr), fCmdReflectorDebugMode(nullptr),
+  fCmdTio2EpoxyEffectiveR425(nullptr), fCmdTio2EpoxySurfaceMode(nullptr)
 {
   fDir = new G4UIdirectory("/hodoscope/");
   fDir->SetGuidance("Hodoscope simulation control");
@@ -51,10 +53,30 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* det)
   fCmdReflectorDebugMode->SetDefaultValue(0);
   fCmdReflectorDebugMode->SetRange("mode>=0 && mode<=4");
   fCmdReflectorDebugMode->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fCmdTio2EpoxyEffectiveR425 =
+      new G4UIcmdWithADouble("/hodoscope/det/tio2EpoxyEffectiveR425", this);
+  fCmdTio2EpoxyEffectiveR425->SetGuidance(
+      "Set effective TiO2+epoxy reflectivity near 425 nm for Hod2019 only.");
+  fCmdTio2EpoxyEffectiveR425->SetGuidance(
+      "Use a value in [0, 0.999]. Negative values disable the override.");
+  fCmdTio2EpoxyEffectiveR425->SetParameterName("r425", false);
+  fCmdTio2EpoxyEffectiveR425->SetDefaultValue(-1.0);
+  fCmdTio2EpoxyEffectiveR425->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  fCmdTio2EpoxySurfaceMode =
+      new G4UIcmdWithAString("/hodoscope/det/tio2EpoxySurfaceMode", this);
+  fCmdTio2EpoxySurfaceMode->SetGuidance(
+      "Set TiO2+epoxy effective surface mode: default, diffuse, or specular.");
+  fCmdTio2EpoxySurfaceMode->SetParameterName("mode", false);
+  fCmdTio2EpoxySurfaceMode->SetDefaultValue("default");
+  fCmdTio2EpoxySurfaceMode->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 DetectorMessenger::~DetectorMessenger()
 {
+  delete fCmdTio2EpoxySurfaceMode;
+  delete fCmdTio2EpoxyEffectiveR425;
   delete fCmdVariant;
   delete fCmdReflectorDebugMode;
   delete fCmdImprovedOptical;
@@ -76,5 +98,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* cmd, G4String val)
     fDet->SetUseImprovedOpticalCoupling(fCmdImprovedOptical->GetNewBoolValue(val));
   } else if (cmd == fCmdReflectorDebugMode) {
     fDet->SetReflectorDebugMode(fCmdReflectorDebugMode->GetNewIntValue(val));
+  } else if (cmd == fCmdTio2EpoxyEffectiveR425) {
+    fDet->SetTio2EpoxyEffectiveR425(fCmdTio2EpoxyEffectiveR425->GetNewDoubleValue(val));
+  } else if (cmd == fCmdTio2EpoxySurfaceMode) {
+    fDet->SetTio2EpoxySurfaceMode(val);
   }
 }

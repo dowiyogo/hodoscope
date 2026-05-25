@@ -17,6 +17,7 @@
 class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithAString;
@@ -38,6 +39,8 @@ private:
   G4UIcmdWithABool*           fCmdOptical;
   G4UIcmdWithABool*           fCmdImprovedOptical;
   G4UIcmdWithAnInteger*       fCmdReflectorDebugMode;
+  G4UIcmdWithADouble*         fCmdTio2EpoxyEffectiveR425;
+  G4UIcmdWithAString*         fCmdTio2EpoxySurfaceMode;
 };
 
 #endif
