@@ -9,7 +9,7 @@ The ideal matrix contains a simplified angular geometric acceptance proportional
 
 | Variant | Efficiency applied |
 |---|---:|
-| Hod2019/TiO2 | 0.392593 |
-| Hod2018/Vikuiti | 0.785185 |
+| Hod2019/TiO2 | 0.614555 |
+| Hod2018/Vikuiti | 0.935904 |
 
 This is not yet the voxelized inversion matrix `F`. It is an angular response product that can be consumed by later Meiga/MuYSC coupling to build `F` with realistic flux, geometry, and material paths.

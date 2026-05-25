@@ -6,8 +6,8 @@
 
 | Variant | Total efficiency | Central 29x29 mm2 efficiency | Min pixel eff. | Max pixel eff. | Mean nph total |
 |---|---:|---:|---:|---:|---:|
-| Hod2019/TiO2 | 0.392593 | 0.416327 | 0 | 1 | 4.84198 |
-| Hod2018/Vikuiti | 0.785185 | 0.991837 | 0 | 1 | 50.8099 |
+| Hod2019/TiO2 | 0.614555 | 0.657432 | 0 | 1 | 7.02218 |
+| Hod2018/Vikuiti | 0.935904 | 0.996492 | 0 | 1 | 77.897 |
 
 ## Low-efficiency pixels
 

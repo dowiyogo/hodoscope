@@ -6,7 +6,7 @@ from __future__ import annotations
 import datetime as dt
 from pathlib import Path
 
-from common import OUTDIR, TABLE_DIR, fmt, git_value, read_csv_dicts
+from common import OUTDIR, TABLE_DIR, VARIANT_ROOTS, fmt, get_uproot, git_value, read_csv_dicts
 
 
 def find_row(rows: list[dict[str, str]], **filters: str) -> dict[str, str] | None:
@@ -14,6 +14,24 @@ def find_row(rows: list[dict[str, str]], **filters: str) -> dict[str, str] | Non
         if all(row.get(key) == value for key, value in filters.items()):
             return row
     return None
+
+
+def root_entries(path: Path) -> int | str:
+    try:
+        uproot = get_uproot()
+        with uproot.open(path) as root_file:
+            return int(root_file["hodo"].num_entries)
+    except Exception as exc:
+        return f"unavailable ({exc})"
+
+
+def scan_status(path: Path) -> tuple[str, str]:
+    if not path.exists():
+        return "unknown", "unknown"
+    parts = path.read_text(encoding="utf-8").strip().split()
+    if len(parts) < 2:
+        return "unknown", "unknown"
+    return parts[0], parts[1]
 
 
 def main() -> int:
@@ -25,8 +43,25 @@ def main() -> int:
     efficiency_vikuiti = read_csv_dicts(TABLE_DIR / "virtual_pixel_efficiency_vikuiti.csv")
     rate = read_csv_dicts(TABLE_DIR / "accepted_muon_rate_estimate.csv")
     threshold = read_csv_dicts(TABLE_DIR / "threshold_sensitivity.csv")
+    expected_events = 33 * 33 * 20
+    tio2_rc, tio2_seconds = scan_status(
+        OUTDIR / "logs" / "position_scan_tio2_production.status"
+    )
+    vik_rc, vik_seconds = scan_status(
+        OUTDIR / "logs" / "position_scan_vikuiti_production.status"
+    )
+    tio2_entries = root_entries(VARIANT_ROOTS["tio2"])
+    vik_entries = root_entries(VARIANT_ROOTS["vikuiti"])
 
     optical_by_variant = {row["variant"]: row for row in optical}
+    rate_by_variant = {row["variant"]: row for row in rate}
+    production_nph_tio2 = float(rate_by_variant["tio2"]["mean_nph_total"]) if "tio2" in rate_by_variant else float("nan")
+    production_nph_vikuiti = float(rate_by_variant["vikuiti"]["mean_nph_total"]) if "vikuiti" in rate_by_variant else float("nan")
+    production_nph_ratio = (
+        production_nph_vikuiti / production_nph_tio2
+        if production_nph_tio2 > 0
+        else float("inf")
+    )
     sx_tio2 = find_row(spatial, variant="tio2", estimator="nph", coordinate="x", region="central")
     sy_tio2 = find_row(spatial, variant="tio2", estimator="nph", coordinate="y", region="central")
     sx_vik = find_row(spatial, variant="vikuiti", estimator="nph", coordinate="x", region="central")
@@ -70,9 +105,7 @@ def main() -> int:
         "rm -rf build",
         "cmake -S . -B build",
         "cmake --build build -j 16",
-        "HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_tio2_quick.mac",
-        "HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_vikuiti_quick.mac",
-        "python3.12 analysis/instrument_response/build_position_scan_macros.py --events-per-point 5 --dx 4 --dy 4",
+        "python3.12 analysis/instrument_response/build_position_scan_macros.py --events-per-point 20 --dx 1 --dy 1",
         "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/macros/position_scan_tio2.mac",
         "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/macros/position_scan_vikuiti.mac",
         "python3.12 analysis/instrument_response/spatial_resolution_analysis.py",
@@ -81,10 +114,32 @@ def main() -> int:
         "python3.12 analysis/instrument_response/accepted_muon_rate_estimate.py",
         "python3.12 analysis/instrument_response/acceptance_matrix_builder.py",
         "python3.12 analysis/instrument_response/threshold_sensitivity.py",
-        "python3.12 analysis/instrument_response/build_position_scan_macros.py --events-per-point 20 --dx 1 --dy 1",
+        "python3.12 analysis/instrument_response/build_instrument_response_summary.py",
         "```",
         "",
-        "The executed position scan was the small validation scan (`dx=dy=4 mm`, `5` events per point). The production macros (`dx=dy=1 mm`, `20` events per point) were generated after the validation run but were not executed in this stage.",
+        "The current numbers in this report are from the production position scan unless a section explicitly says otherwise.",
+        "",
+        "## Production scan configuration",
+        "",
+        f"- Branch: `{git_value(['branch', '--show-current'])}`",
+        f"- Commit used for this report: `{git_value(['rev-parse', '--short', 'HEAD'])}`",
+        "- Threads: `HODO_THREADS=16`",
+        "- Grid: `33 x 33` positions",
+        "- Range: `x,y = -16 mm ... +16 mm`",
+        "- Step: `dx=dy=1 mm`",
+        "- Events per point: `20`",
+        f"- Expected events per variant: `{expected_events}`",
+        f"- TiO2 actual events: `{tio2_entries}`",
+        f"- Vikuiti actual events: `{vik_entries}`",
+        f"- TiO2 ROOT: `{VARIANT_ROOTS['tio2']}`",
+        f"- Vikuiti ROOT: `{VARIANT_ROOTS['vikuiti']}`",
+        f"- TiO2 scan exit/duration: `{tio2_rc}`, `{tio2_seconds} s`",
+        f"- Vikuiti scan exit/duration: `{vik_rc}`, `{vik_seconds} s`",
+        f"- Report generated at: `{dt.datetime.now().isoformat(timespec='seconds')}`",
+        "",
+        "## Small scan vs production scan",
+        "",
+        "The previous validation pass used `dx=dy=4 mm` with `5` events per point. That small scan validated the full analysis chain and exposed threshold semantics, but it is not the source of the current instrument-response numbers. The current tables and summaries use the production scan with `dx=dy=1 mm` and `20` events per point.",
         "",
         "## 3. Physical configuration",
         "",
@@ -93,7 +148,15 @@ def main() -> int:
         "- Scintillator = BC408 / EJ200-equivalent",
         "- MPPC = S12572-100P label with ideal optical-photon collection volume",
         "",
-        "## 4. Optical result already validated",
+        "## 4. Optical signal",
+        "",
+        "Production position-scan mean total `nph/event`:",
+        "",
+        f"- TiO2: `{fmt(production_nph_tio2)}`",
+        f"- Vikuiti: `{fmt(production_nph_vikuiti)}`",
+        f"- Vikuiti/TiO2 ratio: `{fmt(production_nph_ratio)}`",
+        "",
+        "Earlier quick optical validation at the central gun position:",
         "",
         f"- TiO2 mean nph/event: `{optical_by_variant.get('TiO2', {}).get('mean_total_nph_per_event', '2.56')}`",
         f"- Vikuiti mean nph/event: `{optical_by_variant.get('Vikuiti', {}).get('mean_total_nph_per_event', '32.82')}`",

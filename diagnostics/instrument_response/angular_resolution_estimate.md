@@ -10,10 +10,10 @@ This is not a replacement for a Geant4 simulation with two separated hodoscopes.
 
 | L [mm] | Pair | sigma theta x [mrad] | sigma theta y [mrad] | Method |
 |---:|---|---:|---:|---|
-| 50 | Hod2018/Vikuiti + Hod2019/TiO2 | 2.5305 | 8.33529 | two_module_parametric |
-| 100 | Hod2018/Vikuiti + Hod2019/TiO2 | 1.26525 | 4.16764 | two_module_parametric |
-| 200 | Hod2018/Vikuiti + Hod2019/TiO2 | 0.632624 | 2.08382 | two_module_parametric |
-| 500 | Hod2018/Vikuiti + Hod2019/TiO2 | 0.25305 | 0.833529 | two_module_parametric |
-| 1000 | Hod2018/Vikuiti + Hod2019/TiO2 | 0.126525 | 0.416764 | two_module_parametric |
+| 50 | Hod2018/Vikuiti + Hod2019/TiO2 | 10.1438 | 10.3651 | two_module_parametric |
+| 100 | Hod2018/Vikuiti + Hod2019/TiO2 | 5.07188 | 5.18256 | two_module_parametric |
+| 200 | Hod2018/Vikuiti + Hod2019/TiO2 | 2.53594 | 2.59128 | two_module_parametric |
+| 500 | Hod2018/Vikuiti + Hod2019/TiO2 | 1.01438 | 1.03651 | two_module_parametric |
+| 1000 | Hod2018/Vikuiti + Hod2019/TiO2 | 0.507188 | 0.518256 | two_module_parametric |
 
 σθ improves approximately as `1/L`. For production studies, MuYSC/Meiga should consume a two-module acceptance model or a full Geant4 telescope response when available.
