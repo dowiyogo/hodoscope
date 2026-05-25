@@ -151,7 +151,7 @@ def robust_stats(values: object) -> dict[str, float]:
 def write_csv(path: Path, rows: list[dict[str, object]], columns: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=columns)
+        writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

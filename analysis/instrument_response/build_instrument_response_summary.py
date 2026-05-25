@@ -58,15 +58,19 @@ def sweep_lines(rows: list[dict[str, str]]) -> list[str]:
     )
     tio2 = find_row(rows, variant="tio2")
     vikuiti = find_row(rows, variant="vikuiti")
-    r095 = next(
-        (
-            row for row in rows
-            if row.get("variant") == "tio2_epoxy"
-            and row.get("surface_mode") == "diffuse"
-            and row.get("r425_effective") == "0.95"
-        ),
-        None,
-    )
+    def diffuse_row(r425: str) -> dict[str, str] | None:
+        return next(
+            (
+                row for row in rows
+                if row.get("variant") == "tio2_epoxy"
+                and row.get("surface_mode") == "diffuse"
+                and row.get("r425_effective") == r425
+            ),
+            None,
+        )
+
+    r0954 = diffuse_row("0.954")
+    r0956 = diffuse_row("0.956")
     table = [
         "| Model | R425 | Surface | Mean nph | Eff >=1 | Eff >=5 | Vikuiti/model |",
         "|---|---:|---|---:|---:|---:|---:|",
@@ -85,11 +89,12 @@ def sweep_lines(rows: list[dict[str, str]]) -> list[str]:
         "",
         f"- Default TiO2 central mean nph/event: `{tio2['mean_total_nph'] if tio2 else 'n/a'}`",
         f"- Vikuiti central mean nph/event: `{vikuiti['mean_total_nph'] if vikuiti else 'n/a'}`",
-        f"- Conservative TiO2+epoxy candidate: `R425=0.950 diffuse`, mean nph/event `{r095['mean_total_nph'] if r095 else 'n/a'}`, efficiency nph>=1 `{r095['efficiency_nph_ge_1'] if r095 else 'n/a'}`",
+        f"- Conservative TiO2+epoxy candidate: `R425=0.954 diffuse`, mean nph/event `{r0954['mean_total_nph'] if r0954 else 'n/a'}`, efficiency nph>=1 `{r0954['efficiency_nph_ge_1'] if r0954 else 'n/a'}`, efficiency nph>=5 `{r0954['efficiency_nph_ge_5'] if r0954 else 'n/a'}`",
+        f"- Upper sensitivity candidate: `R425=0.956 diffuse`, mean nph/event `{r0956['mean_total_nph'] if r0956 else 'n/a'}`, estimated npe@30% `{r0956['estimated_npe_mean_pde30'] if r0956 else 'n/a'}`",
         "",
         *table,
         "",
-        "The sweep response is very steep between `R425=0.950` and `R425=0.970`: the latter already exceeds the Vikuiti central mean. For the next scan, prefer a finer central sweep around `R425=0.955,0.960,0.965`, or use `R425=0.950 diffuse` as the conservative spatial candidate.",
+        "The fine sweep resolves the steep transition: `R425=0.954 diffuse` is close to Vikuiti/model ratio 2, while `R425=0.956 diffuse` enters the 5..15 analysis-only estimated npe@30% range. A good next step is an intermediate position scan with `dx=dy=2 mm` and `10` to `20` events per point for `R425=0.954 diffuse`; optionally add `R425=0.956 diffuse` as the upper sensitivity case.",
         "",
         "This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.",
     ]

@@ -3,8 +3,8 @@
 ## 1. Branch, commit and date
 
 - Branch: `test/optical-variant-16threads`
-- Commit: `a5026df`
-- Date: `2026-05-25T14:54:40`
+- Commit: `6f75764`
+- Date: `2026-05-25T15:45:05`
 
 ## 2. Build and execution commands
 
@@ -34,7 +34,7 @@ The current numbers in this report are from the production position scan unless 
 ## Production scan configuration
 
 - Branch: `test/optical-variant-16threads`
-- Commit used for this report: `a5026df`
+- Commit used for this report: `6f75764`
 - Threads: `HODO_THREADS=16`
 - Grid: `33 x 33` positions
 - Range: `x,y = -16 mm ... +16 mm`
@@ -47,7 +47,7 @@ The current numbers in this report are from the production position scan unless 
 - Vikuiti ROOT: `diagnostics/instrument_response/outputs/position_scan_vikuiti.root`
 - TiO2 scan exit/duration: `0`, `1008 s`
 - Vikuiti scan exit/duration: `0`, `3179 s`
-- Report generated at: `2026-05-25T14:54:41`
+- Report generated at: `2026-05-25T15:45:05`
 
 ## Small scan vs production scan
 
@@ -129,20 +129,30 @@ Hod2019 experimentally corresponds to TiO2 plus optical epoxy paint, so the pure
 
 - Default TiO2 central mean nph/event: `2.56`
 - Vikuiti central mean nph/event: `32.432`
-- Conservative TiO2+epoxy candidate: `R425=0.950 diffuse`, mean nph/event `9.3`, efficiency nph>=1 `0.964`
+- Conservative TiO2+epoxy candidate: `R425=0.954 diffuse`, mean nph/event `16.5825`, efficiency nph>=1 `0.9985`, efficiency nph>=5 `0.731`
+- Upper sensitivity candidate: `R425=0.956 diffuse`, mean nph/event `25.4465`, estimated npe@30% `7.63395`
 
 | Model | R425 | Surface | Mean nph | Eff >=1 | Eff >=5 | Vikuiti/model |
 |---|---:|---|---:|---:|---:|---:|
 | TiO2 baseline |  | default | 2.56 | 0.466 | 0.002 | 12.6688 |
 | TiO2+epoxy R425=0.930 diffuse | 0.93 | diffuse | 2.56 | 0.466 | 0.002 | 12.6688 |
 | TiO2+epoxy R425=0.950 diffuse | 0.95 | diffuse | 9.3 | 0.964 | 0.202 | 3.48731 |
+| TiO2+epoxy R425=0.952 diffuse | 0.952 | diffuse | 12.1825 | 0.988 | 0.419 | 2.66218 |
+| TiO2+epoxy R425=0.954 diffuse | 0.954 | diffuse | 16.5825 | 0.9985 | 0.731 | 1.9558 |
+| TiO2+epoxy R425=0.956 diffuse | 0.956 | diffuse | 25.4465 | 1 | 0.9645 | 1.27452 |
+| TiO2+epoxy R425=0.958 diffuse | 0.958 | diffuse | 42.9235 | 1 | 1 | 0.755577 |
+| TiO2+epoxy R425=0.960 diffuse | 0.96 | diffuse | 51.0595 | 1 | 1 | 0.635181 |
+| TiO2+epoxy R425=0.962 diffuse | 0.962 | diffuse | 62.9505 | 1 | 1 | 0.515198 |
+| TiO2+epoxy R425=0.964 diffuse | 0.964 | diffuse | 81.7035 | 1 | 1 | 0.396947 |
+| TiO2+epoxy R425=0.966 diffuse | 0.966 | diffuse | 114.338 | 1 | 1 | 0.283651 |
+| TiO2+epoxy R425=0.968 diffuse | 0.968 | diffuse | 178.917 | 1 | 1 | 0.181268 |
 | TiO2+epoxy R425=0.970 diffuse | 0.97 | diffuse | 180.59 | 1 | 1 | 0.179589 |
 | TiO2+epoxy R425=0.980 diffuse | 0.98 | diffuse | 200.97 | 1 | 1 | 0.161377 |
 | TiO2+epoxy R425=0.985 diffuse | 0.985 | diffuse | 216.076 | 1 | 1 | 0.150095 |
 | TiO2+epoxy R425=0.990 diffuse | 0.99 | diffuse | 248.068 | 1 | 1 | 0.130738 |
 | Vikuiti baseline |  | specular | 32.432 | 1 | 0.994 | 1 |
 
-The sweep response is very steep between `R425=0.950` and `R425=0.970`: the latter already exceeds the Vikuiti central mean. For the next scan, prefer a finer central sweep around `R425=0.955,0.960,0.965`, or use `R425=0.950 diffuse` as the conservative spatial candidate.
+The fine sweep resolves the steep transition: `R425=0.954 diffuse` is close to Vikuiti/model ratio 2, while `R425=0.956 diffuse` enters the 5..15 analysis-only estimated npe@30% range. A good next step is an intermediate position scan with `dx=dy=2 mm` and `10` to `20` events per point for `R425=0.954 diffuse`; optionally add `R425=0.956 diffuse` as the upper sensitivity case.
 
 This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.
 

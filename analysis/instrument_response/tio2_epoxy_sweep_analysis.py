@@ -125,6 +125,38 @@ def find_diffuse_row(rows: list[dict[str, object]], r425: float) -> dict[str, ob
     return None
 
 
+def closest_to_ratio(rows: list[dict[str, object]], target: float) -> dict[str, object] | None:
+    candidates = [
+        row for row in rows
+        if row["variant"] == "tio2_epoxy" and row["surface_mode"] == "diffuse"
+    ]
+    if not candidates:
+        return None
+    return min(candidates, key=lambda row: abs(float(row["ratio_vikuiti_to_model"]) - target))
+
+
+def pde30_candidates(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    return [
+        row for row in rows
+        if row["variant"] == "tio2_epoxy"
+        and row["surface_mode"] == "diffuse"
+        and 5.0 <= float(row["estimated_npe_mean_pde30"]) <= 15.0
+    ]
+
+
+def row_summary(row: dict[str, object] | None) -> str:
+    if row is None:
+        return "not available"
+    return (
+        f"`R425={fmt(row['r425_effective'])}` "
+        f"(mean nph `{fmt(row['mean_total_nph'])}`, "
+        f"Vikuiti/model `{fmt(row['ratio_vikuiti_to_model'])}`, "
+        f"eff>=1 `{fmt(row['efficiency_nph_ge_1'])}`, "
+        f"eff>=5 `{fmt(row['efficiency_nph_ge_5'])}`, "
+        f"est. npe@30% `{fmt(row['estimated_npe_mean_pde30'])}`)"
+    )
+
+
 def make_plots(rows: list[dict[str, object]]) -> None:
     np = get_numpy()
     plt = get_matplotlib_pyplot()
@@ -183,8 +215,15 @@ def write_markdown(rows: list[dict[str, object]], path: Path) -> None:
     best_eff5 = first_meeting(diffuse_rows, lambda row: float(row["efficiency_nph_ge_5"]) > 0.50)
     best_eff1 = first_meeting(diffuse_rows, lambda row: float(row["efficiency_nph_ge_1"]) > 0.90)
     best_npe = first_meeting(diffuse_rows, lambda row: 5.0 <= float(row["estimated_npe_mean_pde30"]) <= 15.0)
-    conservative = find_diffuse_row(diffuse_rows, 0.95)
-    aggressive = find_diffuse_row(diffuse_rows, 0.97)
+    near5 = closest_to_ratio(diffuse_rows, 5.0)
+    near3 = closest_to_ratio(diffuse_rows, 3.0)
+    near2 = closest_to_ratio(diffuse_rows, 2.0)
+    npe_rows = pde30_candidates(diffuse_rows)
+    npe_list = ", ".join(f"`R425={fmt(row['r425_effective'])}`" for row in npe_rows) or "none"
+    conservative = find_diffuse_row(diffuse_rows, 0.954) or near2
+    upper = find_diffuse_row(diffuse_rows, 0.956) or (
+        npe_rows[0] if npe_rows else None
+    )
     lines.extend(
         [
             "",
@@ -198,13 +237,17 @@ def write_markdown(rows: list[dict[str, object]], path: Path) -> None:
             f"- First diffuse R425 with efficiency_nph_ge_1 > 0.90: `{best_eff1}`.",
             f"- First diffuse R425 with efficiency_nph_ge_5 > 0.50: `{best_eff5}`.",
             f"- First diffuse R425 with estimated_npe_mean_pde30 in 5..15: `{best_npe}`.",
+            f"- Closest sampled point to Vikuiti/model ratio 5: {row_summary(near5)}.",
+            f"- Closest sampled point to ratio 3: {row_summary(near3)}.",
+            f"- Closest sampled point to ratio 2: {row_summary(near2)}.",
+            f"- Sampled diffuse points with estimated_npe_mean_pde30 in 5..15: {npe_list}.",
             "",
             "## Recommendation",
             "",
-            "The response changes steeply between `R425=0.950` and `R425=0.970`. `R425=0.950 diffuse` is the best conservative candidate from this coarse sweep: it gives high `nph >= 1` efficiency without forcing Hod2019 to exceed the Vikuiti baseline.",
-            f"`R425=0.950 diffuse` has mean nph `{fmt(conservative['mean_total_nph']) if conservative else 'n/a'}`, efficiency_nph_ge_1 `{fmt(conservative['efficiency_nph_ge_1']) if conservative else 'n/a'}`, and Vikuiti/model ratio `{fmt(conservative['ratio_vikuiti_to_model']) if conservative else 'n/a'}`.",
-            f"`R425=0.970 diffuse` is an aggressive upper sensitivity point: mean nph `{fmt(aggressive['mean_total_nph']) if aggressive else 'n/a'}` and Vikuiti/model ratio `{fmt(aggressive['ratio_vikuiti_to_model']) if aggressive else 'n/a'}`.",
-            "Before a long spatial scan, run a finer central sweep around `R425=0.955,0.960,0.965`. If only one immediate spatial candidate is needed, use `R425=0.950 diffuse`; if two are needed, pair it with one finer-grid point near the interpolated ratio target rather than jumping directly to `0.970`.",
+            "The fine sweep confirms a steep but now resolved transition between `R425=0.950` and `R425=0.958`. `R425=0.954 diffuse` is the best conservative position-scan candidate from the sampled points: it gives high `nph >= 1` efficiency, `nph >= 5` efficiency above 0.5, and keeps Hod2019 below the Vikuiti baseline.",
+            f"Conservative candidate: {row_summary(conservative)}.",
+            f"Upper sensitivity candidate: {row_summary(upper)}.",
+            "For an intermediate spatial scan, use `dx=dy=2 mm` with `10` to `20` events per point before committing to another full `33 x 33` production scan.",
             "",
             "## Limitations",
             "",
