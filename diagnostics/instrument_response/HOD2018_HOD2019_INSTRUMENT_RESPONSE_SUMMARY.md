@@ -3,8 +3,8 @@
 ## 1. Branch, commit and date
 
 - Branch: `test/optical-variant-16threads`
-- Commit: `9ff1b37`
-- Date: `2026-05-25T00:27:25`
+- Commit: `71f7e78`
+- Date: `2026-05-25T00:29:18`
 
 ## 2. Build and execution commands
 
@@ -59,8 +59,8 @@ The executed position scan was the small validation scan (`dx=dy=4 mm`, `5` even
 
 ## 7. Virtual pixel efficiency
 
-- Mean pixel efficiency TiO2: `0.195062`
-- Mean pixel efficiency Vikuiti: `0.782716`
+- Mean pixel efficiency TiO2: `0.392593`
+- Mean pixel efficiency Vikuiti: `0.785185`
 
 ## 8. Expected accepted muon rate
 

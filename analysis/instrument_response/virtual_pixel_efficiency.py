@@ -70,10 +70,10 @@ def summarize_variant(
 
     selected = nph if use == "nph" else edep
     threshold = threshold_nph if use == "nph" else threshold_edep
-    active_x = (selected[:, 0:16] > threshold).any(axis=1)
-    active_y = (selected[:, 16:32] > threshold).any(axis=1)
+    active_x = (selected[:, 0:16] >= threshold).any(axis=1)
+    active_y = (selected[:, 16:32] >= threshold).any(axis=1)
     detected = active_x & active_y
-    active_channels = (selected > threshold).sum(axis=1)
+    active_channels = (selected >= threshold).sum(axis=1)
     edep_total = edep.sum(axis=1)
     nph_total = nph.sum(axis=1)
 
