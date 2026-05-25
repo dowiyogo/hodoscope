@@ -3,8 +3,8 @@
 ## 1. Branch, commit and date
 
 - Branch: `test/optical-variant-16threads`
-- Commit: `31b3cf0`
-- Date: `2026-05-25T01:55:57`
+- Commit: `a5026df`
+- Date: `2026-05-25T14:54:40`
 
 ## 2. Build and execution commands
 
@@ -21,6 +21,11 @@ python3.12 analysis/instrument_response/angular_resolution_estimate.py
 python3.12 analysis/instrument_response/accepted_muon_rate_estimate.py
 python3.12 analysis/instrument_response/acceptance_matrix_builder.py
 python3.12 analysis/instrument_response/threshold_sensitivity.py
+python3.12 analysis/instrument_response/build_tio2_epoxy_sweep_macros.py --events 500 --r425-list "0.93,0.95,0.97,0.98,0.985,0.99" --surface-modes "diffuse"
+HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_baseline.mac
+HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_vikuiti_baseline.mac
+HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_epoxy_R425_0p950_diffuse.mac
+python3.12 analysis/instrument_response/tio2_epoxy_sweep_analysis.py
 python3.12 analysis/instrument_response/build_instrument_response_summary.py
 ```
 
@@ -29,7 +34,7 @@ The current numbers in this report are from the production position scan unless 
 ## Production scan configuration
 
 - Branch: `test/optical-variant-16threads`
-- Commit used for this report: `31b3cf0`
+- Commit used for this report: `a5026df`
 - Threads: `HODO_THREADS=16`
 - Grid: `33 x 33` positions
 - Range: `x,y = -16 mm ... +16 mm`
@@ -42,7 +47,7 @@ The current numbers in this report are from the production position scan unless 
 - Vikuiti ROOT: `diagnostics/instrument_response/outputs/position_scan_vikuiti.root`
 - TiO2 scan exit/duration: `0`, `1008 s`
 - Vikuiti scan exit/duration: `0`, `3179 s`
-- Report generated at: `2026-05-25T01:55:57`
+- Report generated at: `2026-05-25T14:54:41`
 
 ## Small scan vs production scan
 
@@ -117,6 +122,29 @@ The acceptance tables separate a simplified geometric angular response from an e
 | Hod2018/Vikuiti | 10 | 0.625207 | 0.668024 |
 | Hod2018/Vikuiti | 20 | 0.370156 | 0.395506 |
 | Hod2018/Vikuiti | 30 | 0.19123 | 0.204327 |
+
+## TiO2+epoxy reflector sensitivity
+
+Hod2019 experimentally corresponds to TiO2 plus optical epoxy paint, so the pure/default TiO2 surface model should be treated as a simplified effective model rather than a final material calibration. A central-gun sweep was run to test explicit TiO2+epoxy effective reflector overrides without changing the Hod2019 default.
+
+- Default TiO2 central mean nph/event: `2.56`
+- Vikuiti central mean nph/event: `32.432`
+- Conservative TiO2+epoxy candidate: `R425=0.950 diffuse`, mean nph/event `9.3`, efficiency nph>=1 `0.964`
+
+| Model | R425 | Surface | Mean nph | Eff >=1 | Eff >=5 | Vikuiti/model |
+|---|---:|---|---:|---:|---:|---:|
+| TiO2 baseline |  | default | 2.56 | 0.466 | 0.002 | 12.6688 |
+| TiO2+epoxy R425=0.930 diffuse | 0.93 | diffuse | 2.56 | 0.466 | 0.002 | 12.6688 |
+| TiO2+epoxy R425=0.950 diffuse | 0.95 | diffuse | 9.3 | 0.964 | 0.202 | 3.48731 |
+| TiO2+epoxy R425=0.970 diffuse | 0.97 | diffuse | 180.59 | 1 | 1 | 0.179589 |
+| TiO2+epoxy R425=0.980 diffuse | 0.98 | diffuse | 200.97 | 1 | 1 | 0.161377 |
+| TiO2+epoxy R425=0.985 diffuse | 0.985 | diffuse | 216.076 | 1 | 1 | 0.150095 |
+| TiO2+epoxy R425=0.990 diffuse | 0.99 | diffuse | 248.068 | 1 | 1 | 0.130738 |
+| Vikuiti baseline |  | specular | 32.432 | 1 | 0.994 | 1 |
+
+The sweep response is very steep between `R425=0.950` and `R425=0.970`: the latter already exceeds the Vikuiti central mean. For the next scan, prefer a finer central sweep around `R425=0.955,0.960,0.965`, or use `R425=0.950 diffuse` as the conservative spatial candidate.
+
+This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.
 
 ## 11. Connection to the abstract
 

@@ -34,9 +34,72 @@ def scan_status(path: Path) -> tuple[str, str]:
     return parts[0], parts[1]
 
 
+def sweep_lines(rows: list[dict[str, str]]) -> list[str]:
+    if not rows:
+        return [
+            "## TiO2+epoxy reflector sensitivity",
+            "",
+            "No TiO2+epoxy reflector sweep table was found for this report.",
+        ]
+
+    selected = [
+        row for row in rows
+        if row.get("variant") in {"tio2", "vikuiti"}
+        or (
+            row.get("variant") == "tio2_epoxy"
+            and row.get("surface_mode") == "diffuse"
+        )
+    ]
+    selected.sort(
+        key=lambda row: (
+            {"tio2": 0, "tio2_epoxy": 1, "vikuiti": 2}.get(row.get("variant", ""), 3),
+            float(row["r425_effective"]) if row.get("r425_effective") else 0.0,
+        )
+    )
+    tio2 = find_row(rows, variant="tio2")
+    vikuiti = find_row(rows, variant="vikuiti")
+    r095 = next(
+        (
+            row for row in rows
+            if row.get("variant") == "tio2_epoxy"
+            and row.get("surface_mode") == "diffuse"
+            and row.get("r425_effective") == "0.95"
+        ),
+        None,
+    )
+    table = [
+        "| Model | R425 | Surface | Mean nph | Eff >=1 | Eff >=5 | Vikuiti/model |",
+        "|---|---:|---|---:|---:|---:|---:|",
+    ]
+    for row in selected:
+        table.append(
+            f"| {row['label']} | {row['r425_effective']} | {row['surface_mode']} | "
+            f"{row['mean_total_nph']} | {row['efficiency_nph_ge_1']} | "
+            f"{row['efficiency_nph_ge_5']} | {row['ratio_vikuiti_to_model']} |"
+        )
+
+    return [
+        "## TiO2+epoxy reflector sensitivity",
+        "",
+        "Hod2019 experimentally corresponds to TiO2 plus optical epoxy paint, so the pure/default TiO2 surface model should be treated as a simplified effective model rather than a final material calibration. A central-gun sweep was run to test explicit TiO2+epoxy effective reflector overrides without changing the Hod2019 default.",
+        "",
+        f"- Default TiO2 central mean nph/event: `{tio2['mean_total_nph'] if tio2 else 'n/a'}`",
+        f"- Vikuiti central mean nph/event: `{vikuiti['mean_total_nph'] if vikuiti else 'n/a'}`",
+        f"- Conservative TiO2+epoxy candidate: `R425=0.950 diffuse`, mean nph/event `{r095['mean_total_nph'] if r095 else 'n/a'}`, efficiency nph>=1 `{r095['efficiency_nph_ge_1'] if r095 else 'n/a'}`",
+        "",
+        *table,
+        "",
+        "The sweep response is very steep between `R425=0.950` and `R425=0.970`: the latter already exceeds the Vikuiti central mean. For the next scan, prefer a finer central sweep around `R425=0.955,0.960,0.965`, or use `R425=0.950 diffuse` as the conservative spatial candidate.",
+        "",
+        "This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.",
+    ]
+
+
 def main() -> int:
     optical_csv = Path("diagnostics/optical_variant_comparison/summary_16threads.csv")
     optical = read_csv_dicts(optical_csv) if optical_csv.exists() else []
+    sweep_csv = Path("diagnostics/instrument_response/tio2_epoxy_sweep/tables/tio2_epoxy_reflector_sweep.csv")
+    sweep = read_csv_dicts(sweep_csv) if sweep_csv.exists() else []
     spatial = read_csv_dicts(TABLE_DIR / "spatial_resolution_summary.csv")
     angular = read_csv_dicts(TABLE_DIR / "angular_resolution_estimate.csv")
     efficiency_tio2 = read_csv_dicts(TABLE_DIR / "virtual_pixel_efficiency_tio2.csv")
@@ -114,6 +177,11 @@ def main() -> int:
         "python3.12 analysis/instrument_response/accepted_muon_rate_estimate.py",
         "python3.12 analysis/instrument_response/acceptance_matrix_builder.py",
         "python3.12 analysis/instrument_response/threshold_sensitivity.py",
+        "python3.12 analysis/instrument_response/build_tio2_epoxy_sweep_macros.py --events 500 --r425-list \"0.93,0.95,0.97,0.98,0.985,0.99\" --surface-modes \"diffuse\"",
+        "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_baseline.mac",
+        "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_vikuiti_baseline.mac",
+        "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_epoxy_R425_0p950_diffuse.mac",
+        "python3.12 analysis/instrument_response/tio2_epoxy_sweep_analysis.py",
         "python3.12 analysis/instrument_response/build_instrument_response_summary.py",
         "```",
         "",
@@ -194,6 +262,8 @@ def main() -> int:
         "## 10. Threshold sensitivity",
         "",
         *threshold_lines,
+        "",
+        *sweep_lines(sweep),
         "",
         "## 11. Connection to the abstract",
         "",
