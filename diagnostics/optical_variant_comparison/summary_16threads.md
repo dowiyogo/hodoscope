@@ -1,7 +1,7 @@
 # Optical variant comparison, 16 threads
 
 - Rama: `test/optical-variant-16threads`
-- Commit: `b6e27b5` (`b6e27b5cdeb51d2f78f20290f9c0e3cfe804e54c`)
+- Commit: `1e3149f` (`1e3149f9601e36c7fea19e17823526f3adb21df6`)
 - Threads: `16`
 - Backend de analisis: `uproot`
 - Build: `success`
@@ -19,7 +19,7 @@ cmake --build build -j 16
 mkdir -p diagnostics/optical_variant_comparison/outputs
 HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_tio2_quick.mac
 HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_vikuiti_quick.mac
-python3 analysis/optical_variant_nph_summary.py --threads 16 --build-status success --warning 'Geant4 Run10035 warning in both 16-thread quick runs: Event modulo reduced to 6 from 10 to distribute 100 events across 16 threads; runs completed successfully.'
+python3.12 analysis/optical_variant_nph_summary.py --threads 16 --build-status success --warning 'Geant4 Run10035 warning in both 16-thread quick runs: Event modulo reduced to 6 from 10 to distribute 100 events across 16 threads; runs completed successfully.'
 ```
 
 ## Comparacion
@@ -88,4 +88,4 @@ nph representa fotones ópticos recolectados idealmente por el volumen MPPC; tod
 ## Warnings y limitaciones
 
 - Geant4 Run10035 warning in both 16-thread quick runs: Event modulo reduced to 6 from 10 to distribute 100 events across 16 threads; runs completed successfully.
-- PyROOT was not available in this shell, and the ROOT environment emitted `cygpath` warnings during Python checks; the analysis used `uproot` successfully.
+- python3.12 initially lacked uproot and PyROOT in this shell; the script installed uproot dependencies with python3.12 -m pip install --user uproot awkward numpy pandas and completed with uproot.

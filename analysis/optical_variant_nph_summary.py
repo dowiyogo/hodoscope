@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.12
 """Summarize optical photon collection for the hodoscope variants.
 
 The script reads the `hodo` TTree from the TiO2 and Vikuiti ROOT outputs,
@@ -10,9 +10,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import importlib
 import math
 import statistics
 import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -27,6 +29,7 @@ DEFAULT_VIKUITI = Path(
 )
 DEFAULT_CSV = Path("diagnostics/optical_variant_comparison/summary_16threads.csv")
 DEFAULT_MD = Path("diagnostics/optical_variant_comparison/summary_16threads.md")
+BACKEND_CACHE: tuple[str, object] | None = None
 
 
 @dataclass
@@ -52,8 +55,85 @@ def git_value(args: list[str], default: str = "unknown") -> str:
         return default
 
 
-def read_with_uproot(path: Path) -> tuple[str, dict[str, list[float]]]:
-    import uproot  # type: ignore
+def import_uproot() -> tuple[object | None, str | None]:
+    try:
+        import uproot  # type: ignore
+
+        return uproot, None
+    except ImportError as first_error:
+        install_cmd = [
+            "python3.12",
+            "-m",
+            "pip",
+            "install",
+            "--user",
+            "uproot",
+            "awkward",
+            "numpy",
+            "pandas",
+        ]
+        print(
+            "uproot is not importable; trying to install Python ROOT-analysis "
+            f"dependencies with: {' '.join(install_cmd)}",
+            file=sys.stderr,
+        )
+        install = subprocess.run(install_cmd)
+        if install.returncode != 0:
+            return None, (
+                f"uproot import failed ({first_error}) and automatic install "
+                f"failed with exit code {install.returncode}"
+            )
+
+        importlib.invalidate_caches()
+        try:
+            import uproot  # type: ignore
+
+            return uproot, None
+        except Exception as second_error:
+            return None, (
+                f"uproot import failed after automatic install: {second_error}"
+            )
+
+
+def import_pyroot() -> tuple[object | None, str | None]:
+    try:
+        import ROOT  # type: ignore
+
+        return ROOT, None
+    except Exception as error:
+        return None, f"PyROOT import failed: {error}"
+
+
+def select_backend() -> tuple[str, object]:
+    global BACKEND_CACHE
+    if BACKEND_CACHE is not None:
+        return BACKEND_CACHE
+
+    uproot_module, uproot_error = import_uproot()
+    if uproot_module is not None:
+        BACKEND_CACHE = ("uproot", uproot_module)
+        return BACKEND_CACHE
+
+    root_module, root_error = import_pyroot()
+    if root_module is not None:
+        BACKEND_CACHE = ("PyROOT", root_module)
+        return BACKEND_CACHE
+
+    raise RuntimeError(
+        "Could not import a ROOT file reader.\n"
+        f"- {uproot_error}\n"
+        f"- {root_error}\n\n"
+        "Install one of the supported Python backends and rerun, for example:\n"
+        "  python3.12 -m pip install --user uproot awkward numpy pandas\n"
+        "or configure your ROOT environment so `python3.12 -c 'import ROOT'` "
+        "works."
+    )
+
+
+def read_with_uproot(
+    path: Path, uproot_module: object
+) -> tuple[str, dict[str, list[float]]]:
+    uproot = uproot_module
 
     with uproot.open(path) as root_file:
         if "hodo" in root_file:
@@ -75,9 +155,10 @@ def read_with_uproot(path: Path) -> tuple[str, dict[str, list[float]]]:
         return tree_name, {name: arrays[name].tolist() for name in CHANNELS}
 
 
-def read_with_pyroot(path: Path) -> tuple[str, dict[str, list[float]]]:
-    import ROOT  # type: ignore
-
+def read_with_pyroot(
+    path: Path, root_module: object
+) -> tuple[str, dict[str, list[float]]]:
+    ROOT = root_module
     root_file = ROOT.TFile.Open(str(path), "READ")
     if not root_file or root_file.IsZombie():
         raise RuntimeError(f"Could not open {path}")
@@ -111,12 +192,13 @@ def read_channels(path: Path) -> tuple[str, dict[str, list[float]], str]:
     if not path.exists():
         raise FileNotFoundError(path)
 
-    try:
-        tree_name, values = read_with_uproot(path)
+    backend, module = select_backend()
+    if backend == "uproot":
+        tree_name, values = read_with_uproot(path, module)
         return tree_name, values, "uproot"
-    except ModuleNotFoundError:
-        tree_name, values = read_with_pyroot(path)
-        return tree_name, values, "PyROOT"
+
+    tree_name, values = read_with_pyroot(path, module)
+    return tree_name, values, "PyROOT"
 
 
 def mean(values: Iterable[float]) -> float:
@@ -354,7 +436,7 @@ def main() -> int:
         "mkdir -p diagnostics/optical_variant_comparison/outputs",
         "HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_tio2_quick.mac",
         "HODO_THREADS=16 ./build/hodoscope macros/optical_tests/run_variant_vikuiti_quick.mac",
-        "python3 analysis/optical_variant_nph_summary.py --threads 16 --build-status success",
+        "python3.12 analysis/optical_variant_nph_summary.py --threads 16 --build-status success",
     ]
     commands = args.command or default_commands
 
