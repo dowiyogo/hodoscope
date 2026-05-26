@@ -3,8 +3,8 @@
 ## 1. Branch, commit and date
 
 - Branch: `test/optical-variant-16threads`
-- Commit: `6f75764`
-- Date: `2026-05-25T15:45:05`
+- Commit: `527b1d8`
+- Date: `2026-05-25T21:22:05`
 
 ## 2. Build and execution commands
 
@@ -26,6 +26,10 @@ HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_swe
 HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_vikuiti_baseline.mac
 HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_epoxy_R425_0p950_diffuse.mac
 python3.12 analysis/instrument_response/tio2_epoxy_sweep_analysis.py
+python3.12 analysis/instrument_response/build_tio2_epoxy_position_scan_macros.py --r425-list "0.954,0.956" --events-per-point 20 --dx 2 --dy 2
+HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_position_scan/macros/position_scan_tio2_epoxy_R425_0p954_diffuse.mac
+HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_position_scan/macros/position_scan_tio2_epoxy_R425_0p956_diffuse.mac
+python3.12 analysis/instrument_response/tio2_epoxy_position_scan_analysis.py
 python3.12 analysis/instrument_response/build_instrument_response_summary.py
 ```
 
@@ -34,7 +38,7 @@ The current numbers in this report are from the production position scan unless 
 ## Production scan configuration
 
 - Branch: `test/optical-variant-16threads`
-- Commit used for this report: `6f75764`
+- Commit used for this report: `527b1d8`
 - Threads: `HODO_THREADS=16`
 - Grid: `33 x 33` positions
 - Range: `x,y = -16 mm ... +16 mm`
@@ -47,7 +51,7 @@ The current numbers in this report are from the production position scan unless 
 - Vikuiti ROOT: `diagnostics/instrument_response/outputs/position_scan_vikuiti.root`
 - TiO2 scan exit/duration: `0`, `1008 s`
 - Vikuiti scan exit/duration: `0`, `3179 s`
-- Report generated at: `2026-05-25T15:45:05`
+- Report generated at: `2026-05-25T21:22:05`
 
 ## Small scan vs production scan
 
@@ -155,6 +159,23 @@ Hod2019 experimentally corresponds to TiO2 plus optical epoxy paint, so the pure
 The fine sweep resolves the steep transition: `R425=0.954 diffuse` is close to Vikuiti/model ratio 2, while `R425=0.956 diffuse` enters the 5..15 analysis-only estimated npe@30% range. A good next step is an intermediate position scan with `dx=dy=2 mm` and `10` to `20` events per point for `R425=0.954 diffuse`; optionally add `R425=0.956 diffuse` as the upper sensitivity case.
 
 This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.
+
+## Intermediate TiO2+epoxy position scan
+
+A `17 x 17` intermediate scan was run for the two effective TiO2+epoxy candidates selected by the central sweep.
+
+- Configuration: `dx=dy=2 mm`, `20` events per point, `HODO_THREADS=16`
+- Grid: `x,y = -16,-14,...,+16 mm`
+- Models: `R425=0.954 diffuse` and `R425=0.956 diffuse`
+
+| Model | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| TiO2+epoxy R425=0.954 diffuse | 5780 | 26.7709 | 0.845156 | 0.421107 | 0.958444 | 0.487111 | 0.469286 | 0.671046 |
+| TiO2+epoxy R425=0.956 diffuse | 5780 | 36.3042 | 0.881315 | 0.634429 | 0.995778 | 0.736889 | 0.333494 | 0.643959 |
+
+`R425=0.954 diffuse` is the conservative full-scan bracket. `R425=0.956 diffuse` is the stronger single production candidate because it improves threshold efficiency and remains below the Vikuiti production mean nph. Run both if the next production campaign should bracket systematic reflector uncertainty.
+
+The `R425` values are effective model reflectivities near 425 nm, not measured material reflectivities.
 
 ## 11. Connection to the abstract
 

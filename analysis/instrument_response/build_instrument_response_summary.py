@@ -100,11 +100,50 @@ def sweep_lines(rows: list[dict[str, str]]) -> list[str]:
     ]
 
 
+def intermediate_position_scan_lines(rows: list[dict[str, str]]) -> list[str]:
+    if not rows:
+        return [
+            "## Intermediate TiO2+epoxy position scan",
+            "",
+            "No intermediate TiO2+epoxy position-scan table was found for this report.",
+        ]
+
+    table = [
+        "| Model | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for row in rows:
+        table.append(
+            f"| {row['label']} | {row['entries']} | {row['mean_total_nph']} | "
+            f"{row['efficiency_nph_ge_1']} | {row['efficiency_nph_ge_5']} | "
+            f"{row['central_efficiency_nph_ge_1']} | {row['central_efficiency_nph_ge_5']} | "
+            f"{row['sigma_x_nph_central_mm']} | {row['sigma_y_nph_central_mm']} |"
+        )
+
+    return [
+        "## Intermediate TiO2+epoxy position scan",
+        "",
+        "A `17 x 17` intermediate scan was run for the two effective TiO2+epoxy candidates selected by the central sweep.",
+        "",
+        "- Configuration: `dx=dy=2 mm`, `20` events per point, `HODO_THREADS=16`",
+        "- Grid: `x,y = -16,-14,...,+16 mm`",
+        "- Models: `R425=0.954 diffuse` and `R425=0.956 diffuse`",
+        "",
+        *table,
+        "",
+        "`R425=0.954 diffuse` is the conservative full-scan bracket. `R425=0.956 diffuse` is the stronger single production candidate because it improves threshold efficiency and remains below the Vikuiti production mean nph. Run both if the next production campaign should bracket systematic reflector uncertainty.",
+        "",
+        "The `R425` values are effective model reflectivities near 425 nm, not measured material reflectivities.",
+    ]
+
+
 def main() -> int:
     optical_csv = Path("diagnostics/optical_variant_comparison/summary_16threads.csv")
     optical = read_csv_dicts(optical_csv) if optical_csv.exists() else []
     sweep_csv = Path("diagnostics/instrument_response/tio2_epoxy_sweep/tables/tio2_epoxy_reflector_sweep.csv")
     sweep = read_csv_dicts(sweep_csv) if sweep_csv.exists() else []
+    epoxy_position_csv = Path("diagnostics/instrument_response/tio2_epoxy_position_scan/tables/tio2_epoxy_position_scan_summary.csv")
+    epoxy_position = read_csv_dicts(epoxy_position_csv) if epoxy_position_csv.exists() else []
     spatial = read_csv_dicts(TABLE_DIR / "spatial_resolution_summary.csv")
     angular = read_csv_dicts(TABLE_DIR / "angular_resolution_estimate.csv")
     efficiency_tio2 = read_csv_dicts(TABLE_DIR / "virtual_pixel_efficiency_tio2.csv")
@@ -187,6 +226,10 @@ def main() -> int:
         "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_vikuiti_baseline.mac",
         "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_sweep/macros/sweep_tio2_epoxy_R425_0p950_diffuse.mac",
         "python3.12 analysis/instrument_response/tio2_epoxy_sweep_analysis.py",
+        "python3.12 analysis/instrument_response/build_tio2_epoxy_position_scan_macros.py --r425-list \"0.954,0.956\" --events-per-point 20 --dx 2 --dy 2",
+        "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_position_scan/macros/position_scan_tio2_epoxy_R425_0p954_diffuse.mac",
+        "HODO_THREADS=16 ./build/hodoscope diagnostics/instrument_response/tio2_epoxy_position_scan/macros/position_scan_tio2_epoxy_R425_0p956_diffuse.mac",
+        "python3.12 analysis/instrument_response/tio2_epoxy_position_scan_analysis.py",
         "python3.12 analysis/instrument_response/build_instrument_response_summary.py",
         "```",
         "",
@@ -269,6 +312,8 @@ def main() -> int:
         *threshold_lines,
         "",
         *sweep_lines(sweep),
+        "",
+        *intermediate_position_scan_lines(epoxy_position),
         "",
         "## 11. Connection to the abstract",
         "",

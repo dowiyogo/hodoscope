@@ -1,0 +1,5 @@
+outputs/
+logs/
+*.root
+*.log
+__pycache__/
