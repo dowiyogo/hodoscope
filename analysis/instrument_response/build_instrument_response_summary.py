@@ -103,35 +103,46 @@ def sweep_lines(rows: list[dict[str, str]]) -> list[str]:
 def intermediate_position_scan_lines(rows: list[dict[str, str]]) -> list[str]:
     if not rows:
         return [
-            "## Intermediate TiO2+epoxy position scan",
+            "## TiO2+epoxy production candidate",
             "",
-            "No intermediate TiO2+epoxy position-scan table was found for this report.",
+            "No TiO2+epoxy position-scan table was found for this report.",
         ]
 
+    intermediate = [row for row in rows if row.get("scan_type") == "intermediate"]
+    production = [row for row in rows if row.get("scan_type") == "production"]
     table = [
-        "| Model | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| Model | Scan | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] | est. npe@30% |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         table.append(
-            f"| {row['label']} | {row['entries']} | {row['mean_total_nph']} | "
+            f"| {row['label']} | {row.get('scan_type', 'unknown')} | {row['entries']} | {row['mean_total_nph']} | "
             f"{row['efficiency_nph_ge_1']} | {row['efficiency_nph_ge_5']} | "
             f"{row['central_efficiency_nph_ge_1']} | {row['central_efficiency_nph_ge_5']} | "
-            f"{row['sigma_x_nph_central_mm']} | {row['sigma_y_nph_central_mm']} |"
+            f"{row['sigma_x_nph_central_mm']} | {row['sigma_y_nph_central_mm']} | "
+            f"{row.get('estimated_npe_mean_pde30', 'n/a')} |"
         )
+    prod_0956 = next(
+        (
+            row for row in production
+            if row.get("r425_effective") == "0.956"
+        ),
+        None,
+    )
 
     return [
-        "## Intermediate TiO2+epoxy position scan",
+        "## TiO2+epoxy production candidate",
         "",
-        "A `17 x 17` intermediate scan was run for the two effective TiO2+epoxy candidates selected by the central sweep.",
+        "Intermediate and production scans were run for effective TiO2+epoxy reflector candidates selected by the central sweep. `R425=0.956 diffuse` was chosen for production because it improved threshold efficiency in the intermediate scan while staying below the Vikuiti production mean nph.",
         "",
-        "- Configuration: `dx=dy=2 mm`, `20` events per point, `HODO_THREADS=16`",
-        "- Grid: `x,y = -16,-14,...,+16 mm`",
-        "- Models: `R425=0.954 diffuse` and `R425=0.956 diffuse`",
+        f"- Intermediate scans available: `{len(intermediate)}`",
+        f"- Production scans available: `{len(production)}`",
+        "- Production candidate configuration: `R425=0.956 diffuse`, `dx=dy=1 mm`, `33 x 33`, `20` events per point, `HODO_THREADS=16`",
         "",
         *table,
         "",
-        "`R425=0.954 diffuse` is the conservative full-scan bracket. `R425=0.956 diffuse` is the stronger single production candidate because it improves threshold efficiency and remains below the Vikuiti production mean nph. Run both if the next production campaign should bracket systematic reflector uncertainty.",
+        f"`R425=0.956 diffuse` production entries: `{prod_0956['entries'] if prod_0956 else 'n/a'}`.",
+        "`R425=0.956 diffuse` remains the production candidate. `R425=0.954 diffuse` should stay as a conservative systematic bracket for a later run rather than being run automatically here.",
         "",
         "The `R425` values are effective model reflectivities near 425 nm, not measured material reflectivities.",
     ]

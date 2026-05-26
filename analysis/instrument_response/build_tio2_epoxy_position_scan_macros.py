@@ -30,11 +30,14 @@ def macro_text(
     xs: list[float],
     ys: list[float],
     events_per_point: int,
+    name_suffix: str,
 ) -> str:
     tag = tag_float(r425)
-    name = f"position_scan_tio2_epoxy_R425_{tag}_diffuse"
+    suffix = f"_{name_suffix}" if name_suffix else ""
+    name = f"position_scan_tio2_epoxy_R425_{tag}_diffuse{suffix}"
+    scan_label = "Production" if name_suffix == "production" else "Intermediate"
     lines = [
-        f"# Intermediate TiO2+epoxy position scan, R425={r425:.3f}, diffuse",
+        f"# {scan_label} TiO2+epoxy position scan, R425={r425:.3f}, diffuse",
         "/control/verbose 1",
         "/run/verbose 1",
         "/event/verbose 0",
@@ -71,6 +74,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ymax", type=float, default=16.0)
     parser.add_argument("--dy", type=float, default=2.0)
     parser.add_argument("--outdir", type=Path, default=DEFAULT_OUTDIR)
+    parser.add_argument(
+        "--name-suffix",
+        default="",
+        help="Optional suffix for macro and ROOT names, e.g. production.",
+    )
     return parser.parse_args()
 
 
@@ -84,8 +92,12 @@ def main() -> int:
 
     for r425 in r425_values:
         tag = tag_float(r425)
-        path = args.outdir / f"position_scan_tio2_epoxy_R425_{tag}_diffuse.mac"
-        path.write_text(macro_text(r425, xs, ys, args.events_per_point), encoding="utf-8")
+        suffix = f"_{args.name_suffix}" if args.name_suffix else ""
+        path = args.outdir / f"position_scan_tio2_epoxy_R425_{tag}_diffuse{suffix}.mac"
+        path.write_text(
+            macro_text(r425, xs, ys, args.events_per_point, args.name_suffix),
+            encoding="utf-8",
+        )
         print(
             f"Wrote {path} with {len(xs)} x {len(ys)} points, "
             f"{args.events_per_point} events/point"

@@ -3,8 +3,8 @@
 ## 1. Branch, commit and date
 
 - Branch: `test/optical-variant-16threads`
-- Commit: `527b1d8`
-- Date: `2026-05-25T21:22:05`
+- Commit: `6be5f1f`
+- Date: `2026-05-25T22:34:03`
 
 ## 2. Build and execution commands
 
@@ -38,7 +38,7 @@ The current numbers in this report are from the production position scan unless 
 ## Production scan configuration
 
 - Branch: `test/optical-variant-16threads`
-- Commit used for this report: `527b1d8`
+- Commit used for this report: `6be5f1f`
 - Threads: `HODO_THREADS=16`
 - Grid: `33 x 33` positions
 - Range: `x,y = -16 mm ... +16 mm`
@@ -51,7 +51,7 @@ The current numbers in this report are from the production position scan unless 
 - Vikuiti ROOT: `diagnostics/instrument_response/outputs/position_scan_vikuiti.root`
 - TiO2 scan exit/duration: `0`, `1008 s`
 - Vikuiti scan exit/duration: `0`, `3179 s`
-- Report generated at: `2026-05-25T21:22:05`
+- Report generated at: `2026-05-25T22:34:03`
 
 ## Small scan vs production scan
 
@@ -160,20 +160,22 @@ The fine sweep resolves the steep transition: `R425=0.954 diffuse` is close to V
 
 This `R425` is an effective model reflectivity near 425 nm, not a measured physical reflectivity of the TiO2+epoxy mixture. It still needs calibration against experimental data.
 
-## Intermediate TiO2+epoxy position scan
+## TiO2+epoxy production candidate
 
-A `17 x 17` intermediate scan was run for the two effective TiO2+epoxy candidates selected by the central sweep.
+Intermediate and production scans were run for effective TiO2+epoxy reflector candidates selected by the central sweep. `R425=0.956 diffuse` was chosen for production because it improved threshold efficiency in the intermediate scan while staying below the Vikuiti production mean nph.
 
-- Configuration: `dx=dy=2 mm`, `20` events per point, `HODO_THREADS=16`
-- Grid: `x,y = -16,-14,...,+16 mm`
-- Models: `R425=0.954 diffuse` and `R425=0.956 diffuse`
+- Intermediate scans available: `2`
+- Production scans available: `1`
+- Production candidate configuration: `R425=0.956 diffuse`, `dx=dy=1 mm`, `33 x 33`, `20` events per point, `HODO_THREADS=16`
 
-| Model | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| TiO2+epoxy R425=0.954 diffuse | 5780 | 26.7709 | 0.845156 | 0.421107 | 0.958444 | 0.487111 | 0.469286 | 0.671046 |
-| TiO2+epoxy R425=0.956 diffuse | 5780 | 36.3042 | 0.881315 | 0.634429 | 0.995778 | 0.736889 | 0.333494 | 0.643959 |
+| Model | Scan | Entries | Mean nph | Eff >=1 | Eff >=5 | Central eff >=1 | Central eff >=5 | sigma_x [mm] | sigma_y [mm] | est. npe@30% |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| TiO2+epoxy R425=0.954 diffuse intermediate | intermediate | 5780 | 26.7709 | 0.845156 | 0.421107 | 0.958444 | 0.487111 | 0.469286 | 0.671046 | 8.03128 |
+| TiO2+epoxy R425=0.956 diffuse intermediate | intermediate | 5780 | 36.3042 | 0.881315 | 0.634429 | 0.995778 | 0.736889 | 0.333494 | 0.643959 | 10.8912 |
+| TiO2+epoxy R425=0.956 diffuse production | production | 21780 | 54.1326 | 0.93719 | 0.792011 | 0.997681 | 0.862069 | 0.0823667 | 0.12355 | 16.2398 |
 
-`R425=0.954 diffuse` is the conservative full-scan bracket. `R425=0.956 diffuse` is the stronger single production candidate because it improves threshold efficiency and remains below the Vikuiti production mean nph. Run both if the next production campaign should bracket systematic reflector uncertainty.
+`R425=0.956 diffuse` production entries: `21780`.
+`R425=0.956 diffuse` remains the production candidate. `R425=0.954 diffuse` should stay as a conservative systematic bracket for a later run rather than being run automatically here.
 
 The `R425` values are effective model reflectivities near 425 nm, not measured material reflectivities.
 
